@@ -5,7 +5,7 @@ pub mod year2022;
 fn main()
 {
     examples::test();
-    //run_aoc();
+    run_aoc();
 }
 
 fn run_aoc()
