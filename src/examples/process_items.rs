@@ -6,7 +6,7 @@ use std::sync::*;
 use std::thread::*;
 use std::time::*;
 
-pub fn test()
+pub fn main()
 {
     print_data(process_items("ABCDEF".chars().collect(), 5));
     print_data(process_items("ABCDEFGHIJKLMNOPQRSTU".chars().collect(), 14));
