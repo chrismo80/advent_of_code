@@ -19,12 +19,9 @@ where
         let used_threads = chunks.len();
 
         std::thread::scope(|scope| {
-            for chunk in chunks
-            {
-                scope.spawn(|| {
-                    chunk.iter().for_each(|item| action(item));
-                });
-            }
+            chunks.into_iter().for_each(|chunk| {
+                scope.spawn(|| chunk.iter().for_each(|item| action(item)));
+            });
         });
 
         used_threads

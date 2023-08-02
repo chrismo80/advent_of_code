@@ -8,17 +8,16 @@ use std::time::*;
 
 pub fn test()
 {
-    print_data(process_items("ABCDEF".chars().collect(), 4));
     print_data(process_items("ABCDEF".chars().collect(), 5));
     print_data(process_items("ABCDEFGHIJKLMNOPQRSTU".chars().collect(), 14));
 
-    print_data(process_items((1..=6).collect(), 3));
     print_data(process_items((8..=13).collect(), 3));
     print_data(process_items((1..=17).collect(), 7));
     print_data(process_items((1..=50).collect(), 13));
 
+    print_data(process_items(vec!["First item", "Item N", "Last item"], 5));
     print_data(process_items(vec!["AB", "CD", "EF"], 4));
-    print_data(process_items(vec!["Hans", "Karl", "Heinz"], 2));
+    print_data(process_items(vec!["Peter", "Paul", "Mary"], 2));
 }
 
 fn print_data<K, V>(data: HashMap<K, V>)
