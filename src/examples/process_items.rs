@@ -8,6 +8,8 @@ use std::time::*;
 
 pub fn main()
 {
+    let start = std::time::Instant::now();
+
     print_data(process_items("ABCDEF".chars().collect(), 5));
     print_data(process_items("ABCDEFGHIJKLMNOPQRSTU".chars().collect(), 14));
 
@@ -18,6 +20,8 @@ pub fn main()
     print_data(process_items(vec!["First item", "Item N", "Last item"], 5));
     print_data(process_items(vec!["AB", "CD", "EF"], 4));
     print_data(process_items(vec!["Peter", "Paul", "Mary"], 2));
+
+    println!("Duration: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
 }
 
 fn print_data<K, V>(data: HashMap<K, V>)
@@ -51,9 +55,9 @@ where
     data
 }
 
-impl ProcessItem for i32
+impl ProcessItem for i64
 {
-    type Output = i32;
+    type Output = i64;
     fn process(&self) -> Self::Output
     {
         wait();

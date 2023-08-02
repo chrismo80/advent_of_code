@@ -4,9 +4,9 @@ pub mod year2022;
 
 fn main()
 {
-    examples::process_items::main();
-
     run_aoc();
+
+    examples::process_items::main();
 }
 
 fn run_aoc()
