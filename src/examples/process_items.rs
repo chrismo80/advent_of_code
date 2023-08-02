@@ -10,6 +10,7 @@ pub fn main()
 {
     let start = std::time::Instant::now();
 
+    print_data(process_items("ABCDEF".chars().collect(), 0));
     print_data(process_items("ABCDEF".chars().collect(), 5));
     print_data(process_items("ABCDEFGHIJKLMNOPQRSTU".chars().collect(), 14));
 
@@ -17,9 +18,10 @@ pub fn main()
     print_data(process_items((1..=17).collect(), 7));
     print_data(process_items((1..=50).collect(), 13));
 
-    print_data(process_items(vec!["First item", "Item N", "Last item"], 5));
     print_data(process_items(vec!["AB", "CD", "EF"], 4));
     print_data(process_items(vec!["Peter", "Paul", "Mary"], 2));
+    print_data(process_items(vec!["First item", "Item N", "Last item"], 5));
+    print_data(process_items(vec!["First item", "Item N", "Last item"], 0));
 
     println!("Duration: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
 }
@@ -32,7 +34,7 @@ where
     data.iter().for_each(|(key, value)| println!("{key}: {value}"));
 }
 
-fn process_items<T>(items: Vec<T>, threads: i32) -> HashMap<T, T::Output>
+fn process_items<T>(items: Vec<T>, threads: u8) -> HashMap<T, T::Output>
 where
     T: ProcessItem + Send + Sync + Copy + Eq + Hash,
     T::Output: Send,
@@ -45,7 +47,12 @@ where
         data.lock().unwrap().insert(*item, result);
     };
 
-    let threads_used = items.parallel_foreach(threads as usize, &function);
+    let threads_used = match items.parallel_foreach(threads, &function)
+    {
+        Ok(result) => result,
+        Err(_) => 0,
+    };
+
     let data = data.into_inner().unwrap();
 
     print!("processed {} items", data.len());

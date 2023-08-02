@@ -3,7 +3,7 @@ pub trait ParallelForEach
     type Type;
     type Output;
 
-    fn parallel_foreach(&self, threads: usize, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output;
+    fn parallel_foreach(&self, threads: u8, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output;
 }
 
 impl<T> ParallelForEach for Vec<T>
@@ -11,11 +11,16 @@ where
     T: Sync,
 {
     type Type = T;
-    type Output = usize;
+    type Output = Result<usize, String>;
 
-    fn parallel_foreach(&self, threads: usize, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output
+    fn parallel_foreach(&self, threads: u8, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output
     {
-        let chunks = self.chunks(self.len() / threads + (self.len() % threads != 0) as usize);
+        if threads == 0
+        {
+            return Err(String::from("Cannot use 0 threads"));
+        }
+
+        let chunks = self.chunks(self.len() / threads as usize + (self.len() % threads as usize != 0) as usize);
         let used_threads = chunks.len();
 
         std::thread::scope(|scope| {
@@ -24,6 +29,6 @@ where
             });
         });
 
-        used_threads
+        Ok(used_threads)
     }
 }
