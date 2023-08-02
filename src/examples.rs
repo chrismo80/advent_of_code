@@ -21,14 +21,18 @@ pub fn test()
     print_data(process_items(vec!["Hans", "Karl", "Heinz"], 2));
 }
 
-fn print_data<K: Display, V: Display>(data: HashMap<K, V>)
+fn print_data<K, V>(data: HashMap<K, V>)
+where
+    K: Display,
+    V: Display,
 {
     data.iter().for_each(|(key, value)| println!("{key}: {value}"));
 }
 
-fn process_items<T: ProcessItem + Send + Sync + Copy + Eq + Hash>(items: Vec<T>, threads: i32) -> HashMap<T, T::Output>
+fn process_items<T>(items: Vec<T>, threads: i32) -> HashMap<T, T::Output>
 where
-    <T as ProcessItem>::Output: Send,
+    T: ProcessItem + Send + Sync + Copy + Eq + Hash,
+    T::Output: Send,
 {
     let start = Instant::now();
     let data: Mutex<HashMap<T, <T as ProcessItem>::Output>> = Mutex::new(HashMap::new());

@@ -6,7 +6,9 @@ pub trait ParallelForEach
     fn parallel_foreach(self, threads: usize, action: &(dyn Fn(&Self::Item) + Send + Sync)) -> Self::Output;
 }
 
-impl<T: Sync> ParallelForEach for Vec<T>
+impl<T> ParallelForEach for Vec<T>
+where
+    T: Sync,
 {
     type Item = T;
     type Output = usize;
