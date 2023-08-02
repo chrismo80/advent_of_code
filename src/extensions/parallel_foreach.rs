@@ -1,19 +1,19 @@
 pub trait ParallelForEach
 {
-    type Item;
+    type Type;
     type Output;
 
-    fn parallel_foreach(&self, threads: usize, action: &(dyn Fn(&Self::Item) + Send + Sync)) -> Self::Output;
+    fn parallel_foreach(&self, threads: usize, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output;
 }
 
 impl<T> ParallelForEach for Vec<T>
 where
     T: Sync,
 {
-    type Item = T;
+    type Type = T;
     type Output = usize;
 
-    fn parallel_foreach(&self, threads: usize, action: &(dyn Fn(&Self::Item) + Send + Sync)) -> Self::Output
+    fn parallel_foreach(&self, threads: usize, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output
     {
         let chunks = self.chunks(self.len() / threads + (self.len() % threads != 0) as usize);
         let used_threads = chunks.len();
