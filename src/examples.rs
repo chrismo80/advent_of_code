@@ -1,4 +1,4 @@
-use crate::extensions::*;
+use crate::extensions::parallel_foreach::*;
 use std::collections::*;
 use std::fmt::*;
 use std::hash::*;
