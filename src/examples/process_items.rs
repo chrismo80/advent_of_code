@@ -47,11 +47,7 @@ where
         data.lock().unwrap().insert(*item, result);
     };
 
-    let threads_used = match items.parallel_foreach(threads, &function)
-    {
-        Ok(result) => result,
-        Err(_) => 0,
-    };
+    let threads_used = items.parallel_foreach(threads, &function);
 
     let data = data.into_inner().unwrap();
 
