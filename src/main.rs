@@ -14,8 +14,7 @@ fn run_aoc()
     let times = 1;
     let start = std::time::Instant::now();
 
-    for _ in 0..times
-    {
+    for _ in 0..times {
         year2022::day1::solve();
         year2022::day2::solve();
     }
