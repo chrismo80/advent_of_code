@@ -38,11 +38,11 @@ fn halves_if_even(i: i32) -> Result<i32>
 fn do_the_thing(i: i32) -> Result<i32>
 {
     let i = match halves_if_even(i) {
-        Ok(i) => i,
+        Ok(i) => i.pow(2),
         Err(e) => return Err(e),
     };
 
-    return Ok(i.pow(2));
+    return Ok(i);
 }
 
 fn do_the_thing_short(i: i32) -> Result<i32>
