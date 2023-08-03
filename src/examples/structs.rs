@@ -19,7 +19,7 @@ pub fn main()
 }
 
 #[derive(Debug)]
-struct Person
+pub struct Person
 {
     name: String,
     birth_year: i32,
@@ -28,7 +28,7 @@ struct Person
 
 impl Person
 {
-    fn new(name: String, birth_year: i32) -> Self
+    pub fn new(name: String, birth_year: i32) -> Self
     {
         Person {
             name,
@@ -37,7 +37,7 @@ impl Person
         }
     }
 
-    fn moldi() -> Person
+    pub fn moldi() -> Person
     {
         Person::new(String::from("Moldi"), 1980)
     }
@@ -45,22 +45,22 @@ impl Person
 
 impl Person
 {
-    fn get_age(&self) -> i32
+    pub fn get_age(&self) -> i32
     {
         chrono::Local::now().year() - self.birth_year
     }
 
-    fn rename(&mut self, name: String)
+    pub fn rename(&mut self, name: String)
     {
         self.name = name;
     }
 
-    fn go_to_work(&mut self)
+    pub fn go_to_work(&mut self)
     {
         self.working = true;
     }
 
-    fn go_home(&mut self)
+    pub fn go_home(&mut self)
     {
         self.working = false;
     }
