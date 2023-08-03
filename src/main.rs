@@ -6,7 +6,7 @@ fn main()
 {
     run_aoc();
 
-    examples::structs::main();
+    examples::errors::main();
 }
 
 fn run_aoc()
