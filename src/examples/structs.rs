@@ -2,20 +2,20 @@ use chrono::*;
 
 pub fn main()
 {
-    let mut moldi = Person::new(String::from("Moldi"), 1980);
-    println!("{:?}", moldi);
+    let mut p = Person::new(String::from("Max Mustermann"), 1986);
+    println!("{:?}, age: {}", p, p.get_age());
 
-    moldi.go_to_work();
-    println!("{:?}", moldi);
+    p.go_to_work();
+    println!("{:?}, age: {}", p, p.get_age());
 
-    moldi.go_home();
-    println!("{:?}", moldi);
+    p.go_home();
+    println!("{:?}, age: {}", p, p.get_age());
 
-    moldi.rename(String::from("Verena"));
-    println!("{:?}", moldi);
+    p.rename(String::from("Michael Mustermann"));
+    println!("{:?}, age: {}", p, p.get_age());
 
     let myself = Person::moldi();
-    println!("{:?}", myself);
+    println!("{:?}, age: {}", myself, myself.get_age());
 }
 
 #[derive(Debug)]
@@ -23,7 +23,6 @@ struct Person
 {
     name: String,
     birth_year: i32,
-    age: i32,
     working: bool,
 }
 
@@ -34,7 +33,6 @@ impl Person
         Person {
             name,
             birth_year,
-            age: chrono::Utc::now().year() - birth_year,
             working: false,
         }
     }
@@ -47,6 +45,11 @@ impl Person
 
 impl Person
 {
+    fn get_age(&self) -> i32
+    {
+        chrono::Local::now().year() - self.birth_year
+    }
+
     fn rename(&mut self, name: String)
     {
         self.name = name;
