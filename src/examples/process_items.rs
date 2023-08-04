@@ -90,7 +90,7 @@ impl ProcessItem for char
 
 fn wait()
 {
-    sleep(Duration::new(1, 0));
+    sleep(Duration::from_secs(1));
 }
 
 trait ProcessItem

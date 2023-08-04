@@ -3,7 +3,7 @@ pub trait ParallelForEach
     type Type;
     type Output;
 
-    fn parallel_foreach(&self, threads: u8, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output;
+    fn parallel_foreach(&self, threads: u8, action: &(dyn Fn(&Self::Type) + Sync)) -> Self::Output;
 }
 
 impl<T> ParallelForEach for Vec<T>
@@ -13,7 +13,7 @@ where
     type Type = T;
     type Output = u8;
 
-    fn parallel_foreach(&self, threads: u8, action: &(dyn Fn(&Self::Type) + Send + Sync)) -> Self::Output
+    fn parallel_foreach(&self, threads: u8, action: &(dyn Fn(&Self::Type) + Sync)) -> Self::Output
     {
         if threads == 0 {
             return 0;

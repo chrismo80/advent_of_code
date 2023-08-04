@@ -6,7 +6,7 @@ fn main()
 {
     run_aoc();
 
-    examples::references::main();
+    examples::process_items::main();
 }
 
 fn run_aoc()
