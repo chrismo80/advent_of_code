@@ -4,9 +4,12 @@ pub mod year2022;
 
 fn main()
 {
-    run_aoc();
+    // enable callstack for panics, must be set before the panic occurs
+    std::env::set_var("RUST_BACKTRACE", "1");
 
     examples::count_items::main();
+
+    run_aoc();
 }
 
 fn run_aoc()

@@ -8,7 +8,7 @@ pub trait CountItems
 
 impl<T> CountItems for Vec<T>
 where
-    T: PartialEq + PartialOrd + Eq + Ord + std::hash::Hash + Clone,
+    T: PartialEq + Eq + Clone + std::hash::Hash,
 {
     type Type = T;
     type Output = std::collections::HashMap<T, i32>;
@@ -18,8 +18,8 @@ where
         let mut map: std::collections::HashMap<T, i32> = std::collections::HashMap::new();
 
         for item in self {
-            let count = map.entry(item.clone()).or_insert(0);
-            *count += 1;
+            let count = map.entry(item.clone()).or_insert(0); // 0 is the default value if the key doesn't exist
+            *count += 1; // increment the value if the key exists
         }
 
         map
