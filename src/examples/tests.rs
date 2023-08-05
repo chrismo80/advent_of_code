@@ -4,10 +4,10 @@ pub fn prints_and_returns_10(a: i32) -> i32
     10
 }
 
-#[cfg(test)]
+#[cfg(test)] // only compiles when running tests (cargo test)
 mod tests
 {
-    use super::*;
+    use super::*; // import parent module items
 
     #[test]
     fn this_test_will_pass()
@@ -17,7 +17,7 @@ mod tests
     }
 
     #[test]
-    #[should_panic(expected = "values don't match")]
+    #[should_panic = "values don't match"]
     fn this_test_will_fail()
     {
         let value = prints_and_returns_10(8);

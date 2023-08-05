@@ -6,7 +6,7 @@ fn main()
 {
     run_aoc();
 
-    examples::tests::prints_and_returns_10(6);
+    examples::count_items::main();
 }
 
 fn run_aoc()
