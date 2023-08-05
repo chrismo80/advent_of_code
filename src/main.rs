@@ -6,7 +6,7 @@ fn main()
 {
     run_aoc();
 
-    examples::macros::main();
+    examples::tests::prints_and_returns_10(6);
 }
 
 fn run_aoc()
