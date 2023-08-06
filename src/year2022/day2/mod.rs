@@ -1,4 +1,4 @@
-pub fn solve()
+pub fn solve() -> (i32, i32)
 {
     let input = include_str!("input.txt").lines();
 
@@ -20,4 +20,18 @@ pub fn solve()
         .sum();
 
     println!("2\t{result1}\t{result2}");
+
+    (result1, result2)
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn verify()
+    {
+        assert_eq!(solve(), (15523, 15702));
+    }
 }

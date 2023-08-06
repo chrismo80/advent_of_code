@@ -1,20 +1,12 @@
 use std::collections::HashSet;
 
-pub fn solve()
+pub fn solve() -> (i32, i32)
 {
     let input: Vec<&str> = include_str!("input.txt").lines().collect();
 
-    let result1 = part_1(&input);
-    let result2 = part_2(&input);
-
-    println!("3\t{result1}\t{result2}");
-}
-
-fn part_1(input: &Vec<&str>) -> i32
-{
     let mut result1 = 0;
 
-    for line in input {
+    for line in &input {
         let packs = line.split_at(line.len() / 2);
 
         let left: HashSet<char> = packs.0.chars().collect();
@@ -25,11 +17,6 @@ fn part_1(input: &Vec<&str>) -> i32
         result1 += get_priority(overlap);
     }
 
-    result1
-}
-
-fn part_2(input: &Vec<&str>) -> i32
-{
     let mut result2 = 0;
 
     for chunks in input.chunks(3).into_iter() {
@@ -51,7 +38,9 @@ fn part_2(input: &Vec<&str>) -> i32
         result2 += get_priority(overlap);
     }
 
-    result2
+    println!("3\t{result1}\t{result2}");
+
+    (result1, result2)
 }
 
 fn get_priority(c: char) -> i32
@@ -68,20 +57,8 @@ mod tests
     use super::*;
 
     #[test]
-    fn solve_input()
+    fn verify()
     {
-        let input: Vec<&str> = include_str!("input.txt").lines().collect();
-
-        assert_eq!(part_1(&input), 7674);
-        assert_eq!(part_2(&input), 2805);
-    }
-
-    #[test]
-    fn solve_test()
-    {
-        let input: Vec<&str> = include_str!("test.txt").lines().collect();
-
-        assert_eq!(part_1(&input), 157);
-        assert_eq!(part_2(&input), 70);
+        assert_eq!(solve(), (7674, 2805));
     }
 }
