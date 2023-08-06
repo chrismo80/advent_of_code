@@ -5,7 +5,7 @@ pub mod year2022;
 fn main()
 {
     // enable callstack for panics, must be set before the panic occurs
-    std::env::set_var("RUST_BACKTRACE", "1");
+    //std::env::set_var("RUST_BACKTRACE", "1");
 
     examples::count_items::main();
 
