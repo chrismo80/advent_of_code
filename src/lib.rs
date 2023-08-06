@@ -17,6 +17,7 @@ pub fn run_all()
 
     year2022::day1::solve();
     year2022::day2::solve();
+    year2022::day3::solve();
 
     end(start);
 }

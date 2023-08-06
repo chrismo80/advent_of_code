@@ -1,30 +1,50 @@
-use std::collections::*;
-use to_vec::*;
+use std::collections::HashSet;
 
 pub fn solve()
 {
-    let input = include_str!("test.txt")
-        .lines()
-        .map(|line| line.chars().collect())
-        .collect::<Vec<Vec<char>>>();
+    let input: Vec<&str> = include_str!("input.txt").lines().collect();
 
-    for line in input.iter() {
-        let mut chunks = line.chunks(line.len() / 2);
+    let mut result1 = 0;
 
-        let left = chunks.next().iter().to_set();
-        let right = chunks.next().iter().to_set();
+    for line in &input {
+        let packs = line.split_at(line.len() / 2);
 
-        let u = left.intersection(&right).to_set();
+        let left: HashSet<char> = packs.0.chars().collect();
+        let right: HashSet<char> = packs.1.chars().collect();
 
-        println!("{:?}", left);
-        println!("{:?}", right);
+        let overlap = left.intersection(&right).into_iter().next().unwrap().clone();
 
-        println!("{:?}", u);
-        println!("");
+        result1 += get_priority(overlap);
     }
 
-    let result1 = 0;
-    let result2 = 0;
+    let mut result2 = 0;
+
+    for chunks in input.chunks(3).into_iter() {
+        let c1: HashSet<char> = chunks[0].chars().collect();
+        let c2: HashSet<char> = chunks[1].chars().collect();
+        let c3: HashSet<char> = chunks[2].chars().collect();
+
+        let overlap = c1
+            .intersection(&c2)
+            .into_iter()
+            .copied()
+            .collect::<HashSet<char>>()
+            .intersection(&c3)
+            .into_iter()
+            .next()
+            .unwrap()
+            .clone();
+
+        result2 += get_priority(overlap);
+    }
 
     println!("3\t{result1}\t{result2}");
+}
+
+fn get_priority(c: char) -> i32
+{
+    match c.is_uppercase() {
+        true => c as i32 - 'A' as i32 + 27,
+        false => c as i32 - 'a' as i32 + 1,
+    }
 }
