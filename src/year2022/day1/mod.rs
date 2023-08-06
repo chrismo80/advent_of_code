@@ -20,11 +20,9 @@ pub fn solve() -> (i32, i32)
 #[cfg(test)]
 mod tests
 {
-    use super::*;
-
     #[test]
     fn verify()
     {
-        assert_eq!(solve(), (72602, 207410));
+        assert_eq!(super::solve(), (72602, 207410));
     }
 }
