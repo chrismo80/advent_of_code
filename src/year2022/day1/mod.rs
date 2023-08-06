@@ -1,3 +1,5 @@
+use crate::extensions::parallel_foreach::ParallelForEach;
+
 pub fn solve()
 {
     let input = include_str!("input.txt");
