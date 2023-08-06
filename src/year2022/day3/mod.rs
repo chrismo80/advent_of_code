@@ -1,4 +1,5 @@
 use std::collections::*;
+use to_vec::*;
 
 pub fn solve()
 {
@@ -7,18 +8,22 @@ pub fn solve()
         .map(|line| line.chars().collect())
         .collect::<Vec<Vec<char>>>();
 
-    let result1 = input
-        .iter()
-        .map(|line| line.chunks(2).into_iter())
-        .map(|chunks| {
-            (
-                HashSet::from_iter(chunks.clone().map(|chunk| chunk[0])),
-                HashSet::from_iter(chunks.clone().map(|chunk| chunk[1])),
-            )
-        })
-        .collect::<Vec<(HashSet<char>, HashSet<char>)>>()
-        .len();
+    for line in input.iter() {
+        let mut chunks = line.chunks(line.len() / 2);
 
+        let left = chunks.next().iter().to_set();
+        let right = chunks.next().iter().to_set();
+
+        let u = left.intersection(&right).to_set();
+
+        println!("{:?}", left);
+        println!("{:?}", right);
+
+        println!("{:?}", u);
+        println!("");
+    }
+
+    let result1 = 0;
     let result2 = 0;
 
     println!("3\t{result1}\t{result2}");

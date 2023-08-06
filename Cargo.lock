@@ -7,6 +7,7 @@ name = "advent_of_code"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "to_vec",
 ]
 
 [[package]]
@@ -170,6 +171,12 @@ dependencies = [
  "wasi",
  "winapi",
 ]
+
+[[package]]
+name = "to_vec"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0e78d504a6bccd4b4f3dcd7006f1674877e329655b1ec34d5fd7a640681a45ad"
 
 [[package]]
 name = "unicode-ident"
