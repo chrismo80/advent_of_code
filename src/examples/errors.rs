@@ -47,7 +47,16 @@ pub fn main()
     println!("4: {:?}", do_the_thing_short(4));
     println!("5: {:?}", do_the_thing_short(5));
     println!("6: {:?}", do_the_thing_short(6));
-    println!("7: {:?}", do_the_thing_short(7));
+
+    let value = match do_the_thing_short(7) {
+        Ok(v) => v,
+        Err(e) => {
+            println!("Error: {}", e.message);
+            0
+        }
+    };
+
+    println!("7: {:?}", value);
 }
 
 fn get_item_int<'a>(v: &'a Vec<i32>, pos: usize) -> &'a i32
