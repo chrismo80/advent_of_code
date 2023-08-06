@@ -19,5 +19,5 @@ pub fn solve()
         .map(|x| ((4 + x.1 - x.0) % 3 * 3) + x.1 + 1)
         .sum();
 
-    println!("Part 1: {result1}, Part 2: {result2}");
+    println!("2\t{result1}\t{result2}");
 }
