@@ -12,7 +12,7 @@ pub fn solve() -> (i32, i32)
         let left: HashSet<char> = packs.0.chars().collect();
         let right: HashSet<char> = packs.1.chars().collect();
 
-        let overlap = left.intersection(&right).into_iter().next().unwrap().clone();
+        let overlap = left.intersection(&right).next().unwrap().clone();
 
         result1 += get_priority(overlap);
     }
@@ -26,11 +26,9 @@ pub fn solve() -> (i32, i32)
 
         let overlap = c1
             .intersection(&c2)
-            .into_iter()
             .copied()
             .collect::<HashSet<char>>()
             .intersection(&c3)
-            .into_iter()
             .next()
             .unwrap()
             .clone();
