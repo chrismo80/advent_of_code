@@ -24,14 +24,8 @@ pub fn solve() -> (i32, i32)
         let c2 = chunks[1].chars().collect::<HashSet<char>>();
         let c3 = chunks[2].chars().collect::<HashSet<char>>();
 
-        let overlap = c1
-            .intersection(&c2)
-            .copied()
-            .collect::<HashSet<char>>()
-            .intersection(&c3)
-            .next()
-            .unwrap()
-            .clone();
+        let temp = c1.intersection(&c2).copied().collect::<HashSet<char>>();
+        let overlap = temp.intersection(&c3).next().unwrap().clone();
 
         result2 += get_priority(overlap);
     }
