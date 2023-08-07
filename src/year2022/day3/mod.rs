@@ -12,20 +12,20 @@ pub fn solve() -> (i32, i32)
         let left = packs.0.chars().collect::<HashSet<char>>();
         let right = packs.1.chars().collect::<HashSet<char>>();
 
-        let overlap = left.intersection(&right).next().unwrap().clone();
+        let overlap = *left.intersection(&right).next().unwrap();
 
         result1 += get_priority(overlap);
     }
 
     let mut result2 = 0;
 
-    for chunks in input.chunks(3).into_iter() {
+    for chunks in input.chunks(3) {
         let c1 = chunks[0].chars().collect::<HashSet<char>>();
         let c2 = chunks[1].chars().collect::<HashSet<char>>();
         let c3 = chunks[2].chars().collect::<HashSet<char>>();
 
         let temp = c1.intersection(&c2).copied().collect::<HashSet<char>>();
-        let overlap = temp.intersection(&c3).next().unwrap().clone();
+        let overlap = *temp.intersection(&c3).next().unwrap();
 
         result2 += get_priority(overlap);
     }

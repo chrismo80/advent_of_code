@@ -102,7 +102,7 @@ fn do_the_thing(i: i32) -> Result<i32>
         Err(e) => return Err(e),
     };
 
-    return Ok(i);
+    Ok(i)
 }
 
 fn do_the_thing_short(i: i32) -> Result<i32>
