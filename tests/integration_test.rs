@@ -1,7 +1,5 @@
 mod common;
 
-use advent_of_code;
-
 #[test]
 fn do_it()
 {

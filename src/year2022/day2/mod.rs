@@ -5,7 +5,7 @@ pub fn solve() -> (i32, i32)
     let data: Vec<(i32, i32)> = input
         .map(|line| {
             (
-                line.chars().nth(0).unwrap() as i32 - 'A' as i32,
+                line.chars().next().unwrap() as i32 - 'A' as i32,
                 line.chars().nth(2).unwrap() as i32 - 'X' as i32,
             )
         })

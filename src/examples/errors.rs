@@ -10,15 +10,8 @@ pub fn main()
 {
     let numbers = vec![1, 2, 3, 4, 5];
 
-    let mut colors: Vec<&str> = Vec::new();
-    colors.push("Red");
-    colors.push("Green");
-    colors.push("Blue");
-
-    let mut cars: Vec<String> = Vec::new();
-    cars.push(String::from("Ford"));
-    cars.push(String::from("Audi"));
-    cars.push(String::from("Tesla"));
+    let colors = vec!["Red", "Green", "Blue"];
+    let cars: Vec<String> = vec!["Ford".to_string(), "Audi".to_string(), "Tesla".to_string()];
 
     println!("item {} is {}", 3, get_item_int(&numbers, 3));
     println!("item {} is {}", 30, get_item_int(&numbers, 30));
@@ -59,7 +52,7 @@ pub fn main()
     println!("7: {:?}", value);
 }
 
-fn get_item_int<'a>(v: &'a Vec<i32>, pos: usize) -> &'a i32
+fn get_item_int(v: &[i32], pos: usize) -> &i32
 {
     match v.get(pos) {
         Some(r) => r,
@@ -67,7 +60,7 @@ fn get_item_int<'a>(v: &'a Vec<i32>, pos: usize) -> &'a i32
     }
 }
 
-fn get_item_str<'a>(v: &'a Vec<&str>, pos: usize) -> &'a str
+fn get_item_str<'a>(v: &'a [&str], pos: usize) -> &'a str
 {
     match v.get(pos) {
         Some(r) => r,
@@ -75,7 +68,7 @@ fn get_item_str<'a>(v: &'a Vec<&str>, pos: usize) -> &'a str
     }
 }
 
-fn get_item_string<'a>(v: &'a Vec<String>, pos: usize) -> &'a String
+fn get_item_string(v: &[String], pos: usize) -> &String
 {
     match v.get(pos) {
         Some(r) => r,
