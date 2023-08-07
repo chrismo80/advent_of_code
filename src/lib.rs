@@ -6,7 +6,7 @@ pub fn run()
 {
     let start = begin();
 
-    year2022::day3::solve();
+    year2022::day4::solve();
 
     end(start);
 }
@@ -18,6 +18,7 @@ pub fn run_all()
     year2022::day1::solve();
     year2022::day2::solve();
     year2022::day3::solve();
+    year2022::day4::solve();
 
     end(start);
 }
