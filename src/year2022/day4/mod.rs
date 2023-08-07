@@ -17,13 +17,8 @@ pub fn solve() -> (i32, i32)
         let right_min = right[0].parse::<i32>().unwrap();
         let right_max = right[1].parse::<i32>().unwrap();
 
-        if overlap_fully(left_min, left_max, right_min, right_max) {
-            result1 += 1;
-        }
-
-        if overlap_at_all(left_min, left_max, right_min, right_max) {
-            result2 += 1;
-        }
+        result1 += overlap_fully(left_min, left_max, right_min, right_max) as i32;
+        result2 += overlap_at_all(left_min, left_max, right_min, right_max) as i32;
     }
 
     println!("4\t{result1}\t{result2}");
