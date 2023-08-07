@@ -2,15 +2,15 @@ use std::collections::HashSet;
 
 pub fn solve() -> (i32, i32)
 {
-    let input: Vec<&str> = include_str!("input.txt").lines().collect();
+    let input = include_str!("input.txt").lines().collect::<Vec<&str>>();
 
     let mut result1 = 0;
 
     for line in &input {
         let packs = line.split_at(line.len() / 2);
 
-        let left: HashSet<char> = packs.0.chars().collect();
-        let right: HashSet<char> = packs.1.chars().collect();
+        let left = packs.0.chars().collect::<HashSet<char>>();
+        let right = packs.1.chars().collect::<HashSet<char>>();
 
         let overlap = left.intersection(&right).next().unwrap().clone();
 
@@ -20,9 +20,9 @@ pub fn solve() -> (i32, i32)
     let mut result2 = 0;
 
     for chunks in input.chunks(3).into_iter() {
-        let c1: HashSet<char> = chunks[0].chars().collect();
-        let c2: HashSet<char> = chunks[1].chars().collect();
-        let c3: HashSet<char> = chunks[2].chars().collect();
+        let c1 = chunks[0].chars().collect::<HashSet<char>>();
+        let c2 = chunks[1].chars().collect::<HashSet<char>>();
+        let c3 = chunks[2].chars().collect::<HashSet<char>>();
 
         let overlap = c1
             .intersection(&c2)
