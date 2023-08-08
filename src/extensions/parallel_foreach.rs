@@ -24,7 +24,7 @@ where
 
         std::thread::scope(|scope| {
             chunks.into_iter().for_each(|chunk| {
-                scope.spawn(|| chunk.iter().for_each(|item| action(item)));
+                scope.spawn(|| chunk.iter().for_each(action));
             });
         });
 
