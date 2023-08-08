@@ -10,7 +10,7 @@ pub fn solve() -> (String, String)
 
     for line in &input {
         if line.starts_with("move") {
-            let split = line.split(' ').collect::<Vec<&str>>();
+            let split = line.split_whitespace().collect::<Vec<&str>>();
 
             let count = split[1].parse::<usize>().unwrap();
             let from = split[3].parse::<usize>().unwrap();
