@@ -22,32 +22,30 @@ pub fn solve() -> (i32, i32)
 
 fn visible_from_outside(forest: &[Vec<char>], x: usize, y: usize) -> bool
 {
-    view_t(forest, x, y).iter().all(|tree| tree < &forest[x][y])
-        || view_l(forest, x, y).iter().all(|tree| tree < &forest[x][y])
-        || view_b(forest, x, y).iter().all(|tree| tree < &forest[x][y])
-        || view_r(forest, x, y).iter().all(|tree| tree < &forest[x][y])
+    let visible_t = view_t(forest, x, y).iter().all(|tree| tree < &forest[x][y]);
+    let visible_l = view_l(forest, x, y).iter().all(|tree| tree < &forest[x][y]);
+    let visible_b = view_b(forest, x, y).iter().all(|tree| tree < &forest[x][y]);
+    let visible_r = view_r(forest, x, y).iter().all(|tree| tree < &forest[x][y]);
+
+    visible_t || visible_l || visible_b || visible_r
 }
 
 fn scenic_score(forest: &[Vec<char>], x: usize, y: usize) -> usize
 {
-    let score_t = match view_t(forest, x, y).iter().position(|tree| tree >= &forest[x][y]) {
-        Some(i) => i + 1,
-        None => view_t(forest, x, y).len(),
-    };
-    let score_l = match view_l(forest, x, y).iter().position(|tree| tree >= &forest[x][y]) {
-        Some(i) => i + 1,
-        None => view_l(forest, x, y).len(),
-    };
-    let score_b = match view_b(forest, x, y).iter().position(|tree| tree >= &forest[x][y]) {
-        Some(i) => i + 1,
-        None => view_b(forest, x, y).len(),
-    };
-    let score_r = match view_r(forest, x, y).iter().position(|tree| tree >= &forest[x][y]) {
-        Some(i) => i + 1,
-        None => view_r(forest, x, y).len(),
-    };
+    let score_t = view_score(forest, view_t(forest, x, y), x, y);
+    let score_l = view_score(forest, view_l(forest, x, y), x, y);
+    let score_b = view_score(forest, view_b(forest, x, y), x, y);
+    let score_r = view_score(forest, view_r(forest, x, y), x, y);
 
     score_t * score_l * score_b * score_r
+}
+
+fn view_score(forest: &[Vec<char>], view: Vec<char>, x: usize, y: usize) -> usize
+{
+    match view.iter().position(|tree| tree >= &forest[x][y]) {
+        Some(i) => i + 1,
+        None => view.len(),
+    }
 }
 
 fn view_t(forest: &[Vec<char>], x: usize, y: usize) -> Vec<char>
