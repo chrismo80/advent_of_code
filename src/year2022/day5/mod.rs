@@ -80,7 +80,7 @@ fn mover_9001(stacks: &mut HashMap<usize, Vec<char>>, count: usize, from: usize,
 mod tests
 {
     #[test]
-    fn verify()
+    fn solve()
     {
         assert_eq!(super::solve(), ("SHMSDGZVC".to_string(), "VRZGHDFBQ".to_string()));
     }

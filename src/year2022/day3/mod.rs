@@ -47,7 +47,7 @@ fn get_priority(c: char) -> i32
 mod tests
 {
     #[test]
-    fn verify()
+    fn solve()
     {
         assert_eq!(super::solve(), (7674, 2805));
     }

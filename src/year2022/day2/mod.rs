@@ -28,7 +28,7 @@ pub fn solve() -> (i32, i32)
 mod tests
 {
     #[test]
-    fn verify()
+    fn solve()
     {
         assert_eq!(super::solve(), (15523, 15702));
     }

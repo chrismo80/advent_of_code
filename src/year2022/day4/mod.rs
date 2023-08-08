@@ -40,7 +40,7 @@ fn overlap_fully(min1: i32, max1: i32, min2: i32, max2: i32) -> bool
 mod tests
 {
     #[test]
-    fn verify()
+    fn solve()
     {
         assert_eq!(super::solve(), (556, 876));
     }
