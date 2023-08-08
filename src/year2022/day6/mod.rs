@@ -1,6 +1,6 @@
 use std::collections::*;
 
-pub fn solve() -> (i32, i32)
+pub fn solve() -> (usize, usize)
 {
     let input = include_str!("input.txt").chars().collect::<Vec<char>>();
 
@@ -9,7 +9,7 @@ pub fn solve() -> (i32, i32)
             .windows(size)
             .position(|w| w.iter().copied().collect::<HashSet<char>>().len() == size);
 
-        (pos.unwrap_or(stream.len()) + size) as i32
+        pos.unwrap_or(stream.len()) + size
     };
 
     let result1 = find_marker(4, &input);
