@@ -1,13 +1,19 @@
+use std::collections::*;
+
 pub fn solve() -> (i32, i32)
 {
-    let input = include_str!("test.txt");
+    let input = include_str!("input.txt").chars().collect::<Vec<char>>();
 
-    for i in (3..input.len()) {
-        println!("{}", input[(i - 4)..i]);
-    }
+    let find_marker = |size: usize, stream: &Vec<char>| {
+        let pos = stream
+            .windows(size)
+            .position(|w| w.iter().copied().collect::<HashSet<char>>().len() == size);
 
-    let mut result1 = 0;
-    let mut result2 = 0;
+        (pos.unwrap_or(stream.len()) + size) as i32
+    };
+
+    let result1 = find_marker(4, &input);
+    let result2 = find_marker(14, &input);
 
     println!("6\t{result1}\t{result2}");
 
@@ -20,6 +26,6 @@ mod tests
     #[test]
     fn solve()
     {
-        assert_eq!(super::solve(), (7, 19));
+        assert_eq!(super::solve(), (1238, 3037));
     }
 }
