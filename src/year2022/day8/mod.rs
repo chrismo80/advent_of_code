@@ -30,22 +30,17 @@ fn visible_from_outside(forest: &[Vec<char>], x: usize, y: usize) -> bool
 
 fn scenic_score(forest: &[Vec<char>], x: usize, y: usize) -> usize
 {
-    view_score(forest, view_t(forest, x, y), x, y)
-        * view_score(forest, view_l(forest, x, y), x, y)
-        * view_score(forest, view_b(forest, x, y), x, y)
-        * view_score(forest, view_r(forest, x, y), x, y)
+    view_score(forest[x][y], view_t(forest, x, y))
+        * view_score(forest[x][y], view_l(forest, x, y))
+        * view_score(forest[x][y], view_b(forest, x, y))
+        * view_score(forest[x][y], view_r(forest, x, y))
 }
 
-fn view_score(
-    forest: &[Vec<char>],
-    mut view: impl std::iter::ExactSizeIterator<Item = char>,
-    x: usize,
-    y: usize,
-) -> usize
+fn view_score(height: char, mut view: impl std::iter::ExactSizeIterator<Item = char>) -> usize
 {
     let length = view.len();
 
-    match view.position(|tree| tree >= forest[x][y]) {
+    match view.position(|tree| tree >= height) {
         Some(pos) => pos + 1,
         None => length,
     }
