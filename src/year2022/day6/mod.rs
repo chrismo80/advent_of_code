@@ -5,11 +5,11 @@ pub fn solve() -> (usize, usize)
     let input = include_str!("input.txt").chars().collect::<Vec<char>>();
 
     let find_marker = |size: usize, stream: &Vec<char>| {
-        let pos = stream
+        stream
             .windows(size)
-            .position(|w| w.iter().copied().collect::<HashSet<char>>().len() == size);
-
-        pos.unwrap_or(stream.len()) + size
+            .position(|w| w.iter().copied().collect::<HashSet<char>>().len() == size)
+            .unwrap_or(stream.len())
+            + size
     };
 
     let result1 = find_marker(4, &input);
