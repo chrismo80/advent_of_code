@@ -50,7 +50,7 @@ fn view_score(forest: &[Vec<char>], view: Vec<char>, x: usize, y: usize) -> usiz
 
 fn view_t(forest: &[Vec<char>], x: usize, y: usize) -> Vec<char>
 {
-    (0..x).map(|i| forest[i][y]).rev().collect::<Vec<char>>()
+    (0..x).map(|i| forest[i][y]).rev().collect()
 }
 
 fn view_l(forest: &[Vec<char>], x: usize, y: usize) -> Vec<char>
