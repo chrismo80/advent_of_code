@@ -1,17 +1,41 @@
-pub fn solve() -> (i32, i32)
+pub fn solve() -> (usize, usize)
 {
     let input = include_str!("input.txt")
         .lines()
         .map(|l| l.chars().collect::<Vec<char>>())
         .collect::<Vec<Vec<char>>>();
 
+    // let mut result1 = std::sync::Mutex::new(0);
+    // let mut result2 = std::sync::Mutex::new(0);
+
+    // std::thread::scope(|scope| {
+    //     let input = &input; // shadowing to enable move only for x
+    //     let result1 = &result1;
+    //     let result2 = &result2;
+
+    //     for x in 0..input.len() {
+    //         scope.spawn(move || {
+    //             for y in 0..input[0].len() {
+    //                 let mut result1 = result1.lock().unwrap();
+    //                 let mut result2 = result2.lock().unwrap();
+
+    //                 *result1 += visible_from_outside(input, x, y) as usize;
+    //                 *result2 = (*result2).max(scenic_score(input, x, y));
+    //             }
+    //         });
+    //     }
+    // });
+
+    // let result1 = result1.lock().unwrap().to_owned();
+    // let result2 = result2.lock().unwrap().to_owned();
+
     let mut result1 = 0;
     let mut result2 = 0;
 
     for x in 0..input.len() {
         for y in 0..input[0].len() {
-            result1 += visible_from_outside(&input, x, y) as i32;
-            result2 = result2.max(scenic_score(&input, x, y) as i32);
+            result1 += visible_from_outside(&input, x, y) as usize;
+            result2 = result2.max(scenic_score(&input, x, y));
         }
     }
 
