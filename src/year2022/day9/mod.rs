@@ -24,7 +24,7 @@ fn run(moves: &[(&str, i32)], rope: &mut [(i32, i32)]) -> usize
 {
     moves
         .iter()
-        .flat_map(|m| (0..m.1).map(|_| move_rope(rope, &m.0)).collect::<Vec<(i32, i32)>>())
+        .flat_map(|m| (0..m.1).map(|_| move_rope(rope, m.0)).collect::<Vec<(i32, i32)>>())
         .collect::<HashSet<(i32, i32)>>()
         .len()
 }
