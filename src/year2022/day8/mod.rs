@@ -73,29 +73,3 @@ mod tests
         assert_eq!(super::solve(), (1845, 230112));
     }
 }
-
-// Mutithreaded solution:
-
-// let mut result1 = std::sync::Mutex::new(0);
-// let mut result2 = std::sync::Mutex::new(0);
-
-// std::thread::scope(|scope| {
-//     let input = &input; // shadowing to enable move only for x
-//     let result1 = &result1;
-//     let result2 = &result2;
-
-//     for x in 0..input.len() {
-//         scope.spawn(move || {
-//             for y in 0..input[0].len() {
-//                 let mut result1 = result1.lock().unwrap();
-//                 let mut result2 = result2.lock().unwrap();
-
-//                 *result1 += visible_from_outside(input, x, y) as usize;
-//                 *result2 = (*result2).max(scenic_score(input, x, y));
-//             }
-//         });
-//     }
-// });
-
-// let result1 = result1.lock().unwrap().to_owned();
-// let result2 = result2.lock().unwrap().to_owned();
