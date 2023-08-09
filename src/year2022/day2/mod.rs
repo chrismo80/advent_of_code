@@ -1,11 +1,11 @@
-pub fn solve()
+pub fn solve() -> (i32, i32)
 {
     let input = include_str!("input.txt").lines();
 
     let data: Vec<(i32, i32)> = input
         .map(|line| {
             (
-                line.chars().nth(0).unwrap() as i32 - 'A' as i32,
+                line.chars().next().unwrap() as i32 - 'A' as i32,
                 line.chars().nth(2).unwrap() as i32 - 'X' as i32,
             )
         })
@@ -19,5 +19,17 @@ pub fn solve()
         .map(|x| ((4 + x.1 - x.0) % 3 * 3) + x.1 + 1)
         .sum();
 
-    println!("Part 1: {result1}, Part 2: {result2}");
+    println!("2\t{result1}\t{result2}");
+
+    (result1, result2)
+}
+
+#[cfg(test)]
+mod tests
+{
+    #[test]
+    fn solve()
+    {
+        assert_eq!(super::solve(), (15523, 15702));
+    }
 }
