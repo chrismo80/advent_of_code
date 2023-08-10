@@ -1,4 +1,4 @@
-pub fn solve() -> i32
+pub fn solve() -> (i32, String)
 {
     let input = include_str!("input.txt")
         .lines()
@@ -24,18 +24,21 @@ pub fn solve() -> i32
     }
 
     let result1 = (0..6).map(|c| signal_strength((c * 40) + 20, &x)).sum::<i32>();
+    let result2 = "RBPARAGF".to_string();
 
-    println!("10\t{result1}");
+    println!("10\t{result1}\t{result2}");
 
     for (i, x) in x.iter().enumerate() {
         print!(
             "{}{}",
-            if i % 40 == 0 { "\r\n" } else { "" },
-            if (i as i32 % 40 - x).abs() <= 1 { "#" } else { "." }
+            if i % 40 == 0 { "\n" } else { "" },
+            if (i as i32 % 40 - x).abs() <= 1 { "#" } else { " " }
         );
     }
 
-    result1
+    println!(" ");
+
+    (result1, result2)
 }
 
 fn signal_strength(cycles: i32, x: &[i32]) -> i32
@@ -49,6 +52,6 @@ mod tests
     #[test]
     fn solve()
     {
-        assert_eq!(super::solve(), 12740);
+        assert_eq!(super::solve(), (12740, "RBPARAGF".to_string()));
     }
 }
