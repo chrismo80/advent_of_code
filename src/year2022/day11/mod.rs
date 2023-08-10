@@ -1,4 +1,6 @@
-pub fn solve() -> (usize, usize)
+use evalexpr::*;
+
+pub fn solve() -> (i64, i64)
 {
     let mut monkeys = include_str!("input.txt")
         .split("\n\n")
@@ -7,16 +9,16 @@ pub fn solve() -> (usize, usize)
                 .split("\n")
                 .map(|l| {
                     if l.contains("Starting") {
-                        l.split("items: ").into_iter().last().unwrap().to_string()
+                        l.split("items: ").last().unwrap().to_string()
                     }
                     else if l.contains("Operation:") {
-                        l.split("new = ").into_iter().last().unwrap().to_string()
+                        l.split("new = ").last().unwrap().to_string()
                     }
                     else if l.contains("Test:") {
-                        l.split("divisible by ").into_iter().last().unwrap().to_string()
+                        l.split("divisible by ").last().unwrap().to_string()
                     }
                     else if l.contains("If") {
-                        l.split("throw to monkey ").into_iter().last().unwrap().to_string()
+                        l.split("throw to monkey ").last().unwrap().to_string()
                     }
                     else {
                         "0".to_string()
@@ -28,22 +30,19 @@ pub fn solve() -> (usize, usize)
 
     let lcm = monkeys
         .iter()
-        .map(|monkey| monkey[3].parse::<usize>().unwrap())
-        .product::<usize>();
+        .map(|monkey| monkey[3].parse::<i64>().unwrap())
+        .product::<i64>();
 
     for _ in 1..=10_000 {
-        for mut monkey in monkeys {
+        for monkey in &mut monkeys {
             for item in monkey[1].split(",").filter(|x| x != &"") {
-                let worry_level = monkey[2]
-                    .replace("old", &format!("{}.0", item))
-                    .parse::<usize>()
-                    .unwrap();
+                let worry_level = eval(&monkey[2].replace("old", item)).unwrap().as_int().unwrap();
 
-                let next = (worry_level % monkey[3].parse::<usize>().unwrap()).min(1) + 4;
+                let next = (worry_level % monkey[3].parse::<i64>().unwrap()).min(1) + 4;
 
-                monkeys[monkey[next].parse::<usize>().unwrap()][1] += &format!(",{}", worry_level % lcm);
+                monkeys[monkey[next as usize].parse::<usize>().unwrap()][1] += &format!(",{}", worry_level % lcm);
 
-                monkey[0] = (monkey[0].parse::<usize>().unwrap() + 1).to_string();
+                monkey[0] = (monkey[0].parse::<i64>().unwrap() + 1).to_string();
             }
 
             monkey[1] = "".to_string();
@@ -52,13 +51,13 @@ pub fn solve() -> (usize, usize)
 
     let mut result = monkeys
         .iter()
-        .map(|monkey| monkey[0].parse::<usize>().unwrap())
-        .collect::<Vec<usize>>();
+        .map(|monkey| monkey[0].parse::<i64>().unwrap())
+        .collect::<Vec<i64>>();
 
     result.sort();
     result.reverse();
 
-    let result1 = result.iter().take(2).product::<usize>();
+    let result1 = result.iter().take(2).product::<i64>();
 
     (result1, 0)
 }
