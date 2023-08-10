@@ -6,11 +6,11 @@ pub fn solve() -> (usize, usize)
         .lines()
         .map(|l| {
             (
-                l.split_whitespace().collect::<Vec<&str>>()[0],
+                l.split_whitespace().collect::<Vec<&str>>()[0].chars().next().unwrap(),
                 l.split_whitespace().collect::<Vec<&str>>()[1].parse::<i32>().unwrap(),
             )
         })
-        .collect::<Vec<(&str, i32)>>();
+        .collect::<Vec<(char, i32)>>();
 
     let result1 = run(&input, &mut [(0, 0); 2]);
     let result2 = run(&input, &mut [(0, 0); 10]);
@@ -20,7 +20,7 @@ pub fn solve() -> (usize, usize)
     (result1, result2)
 }
 
-fn run(moves: &[(&str, i32)], rope: &mut [(i32, i32)]) -> usize
+fn run(moves: &[(char, i32)], rope: &mut [(i32, i32)]) -> usize
 {
     moves
         .iter()
@@ -29,7 +29,7 @@ fn run(moves: &[(&str, i32)], rope: &mut [(i32, i32)]) -> usize
         .len()
 }
 
-fn move_rope(rope: &mut [(i32, i32)], direction: &str) -> (i32, i32)
+fn move_rope(rope: &mut [(i32, i32)], direction: char) -> (i32, i32)
 {
     rope[0] = move_head(rope[0], direction);
 
@@ -40,13 +40,13 @@ fn move_rope(rope: &mut [(i32, i32)], direction: &str) -> (i32, i32)
     *rope.last().unwrap()
 }
 
-fn move_head(pos: (i32, i32), direction: &str) -> (i32, i32)
+fn move_head(pos: (i32, i32), direction: char) -> (i32, i32)
 {
     match direction {
-        "U" => (pos.0 - 1, pos.1),
-        "D" => (pos.0 + 1, pos.1),
-        "L" => (pos.0, pos.1 - 1),
-        "R" => (pos.0, pos.1 + 1),
+        'U' => (pos.0 - 1, pos.1),
+        'D' => (pos.0 + 1, pos.1),
+        'L' => (pos.0, pos.1 - 1),
+        'R' => (pos.0, pos.1 + 1),
         _ => panic!("Invalid direction"),
     }
 }
