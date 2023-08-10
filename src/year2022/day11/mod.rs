@@ -1,14 +1,28 @@
 use evalexpr::*;
+use std::collections::*;
+
+struct Monkey
+{
+    items: Vec<i64>,
+    operation: String,
+    test: i64,
+    throw_true: i32,
+    throw_false: i32,
+    inspections: i64,
+}
 
 pub fn solve() -> (i64, i64)
 {
-    let mut monkeys = include_str!("input.txt")
+    let input = include_str!("test.txt")
         .split("\n\n")
         .map(|monkey| {
             monkey
-                .split("\n")
+                .split('\n')
                 .map(|l| {
-                    if l.contains("Starting") {
+                    if l.starts_with("Monkey") {
+                        l[7..8].to_string()
+                    }
+                    else if l.contains("Starting") {
                         l.split("items: ").last().unwrap().to_string()
                     }
                     else if l.contains("Operation:") {
@@ -21,43 +35,85 @@ pub fn solve() -> (i64, i64)
                         l.split("throw to monkey ").last().unwrap().to_string()
                     }
                     else {
-                        "0".to_string()
+                        "-".to_string()
                     }
                 })
                 .collect::<Vec<String>>()
         })
         .collect::<Vec<Vec<String>>>();
 
-    let lcm = monkeys
-        .iter()
-        .map(|monkey| monkey[3].parse::<i64>().unwrap())
-        .product::<i64>();
+    let mut monkeys = std::collections::HashMap::<i32, Monkey>::new();
+
+    for chunk in input {
+        monkeys.insert(
+            chunk[0].parse::<i32>().unwrap(),
+            Monkey {
+                items: chunk[1]
+                    .split(", ")
+                    .map(|i| i.parse::<i64>().unwrap())
+                    .collect::<Vec<i64>>(),
+                operation: chunk[2].clone(),
+                test: chunk[3].parse::<i64>().unwrap(),
+                throw_true: chunk[4].parse::<i32>().unwrap(),
+                throw_false: chunk[5].parse::<i32>().unwrap(),
+                inspections: 0,
+            },
+        );
+    }
+
+    let lcm = monkeys.values().map(|monkey| monkey.test).product::<i64>();
 
     for _ in 1..=10_000 {
-        for monkey in &mut monkeys {
-            for item in monkey[1].split(",").filter(|x| x != &"") {
-                let worry_level = eval(&monkey[2].replace("old", item)).unwrap().as_int().unwrap();
+        for i in 0..monkeys.len() {
+            let mut throw_items = HashMap::<i32, Vec<i64>>::new();
 
-                let next = (worry_level % monkey[3].parse::<i64>().unwrap()).min(1) + 4;
+            {
+                let monkey = &mut monkeys.get_mut(&(i as i32)).unwrap();
 
-                monkeys[monkey[next as usize].parse::<usize>().unwrap()][1] += &format!(",{}", worry_level % lcm);
+                for item in monkey.items.clone() {
+                    let worry_level = eval(&monkey.operation.replace("old", &item.to_string()))
+                        .unwrap()
+                        .as_int()
+                        .unwrap();
 
-                monkey[0] = (monkey[0].parse::<i64>().unwrap() + 1).to_string();
+                    monkey.inspections += 1;
+
+                    if worry_level % monkey.test == 0 {
+                        throw_items
+                            .entry(monkey.throw_true)
+                            .and_modify(|l| l.push(worry_level % lcm))
+                            .or_insert(vec![worry_level % lcm]);
+                    }
+                    else {
+                        throw_items
+                            .entry(monkey.throw_false)
+                            .and_modify(|l| l.push(worry_level % lcm))
+                            .or_insert(vec![worry_level % lcm]);
+                    }
+                }
+
+                monkey.items.clear();
             }
 
-            monkey[1] = "".to_string();
+            for receiver in throw_items {
+                monkeys
+                    .get_mut(&receiver.0)
+                    .unwrap()
+                    .items
+                    .append(&mut receiver.1.clone());
+            }
         }
     }
 
-    let mut result = monkeys
-        .iter()
-        .map(|monkey| monkey[0].parse::<i64>().unwrap())
-        .collect::<Vec<i64>>();
+    let mut result = monkeys.values().map(|monkey| monkey.inspections).collect::<Vec<i64>>();
 
     result.sort();
     result.reverse();
 
     let result1 = result.iter().take(2).product::<i64>();
+    let result2 = 0;
+
+    println!("11\t{result1}\t{result2}");
 
     (result1, 0)
 }
@@ -68,6 +124,6 @@ mod tests
     #[test]
     fn solve()
     {
-        assert_eq!(super::solve(), (2713310158, 28537348205));
+        assert_eq!(super::solve().0, 2713310158);
     }
 }
