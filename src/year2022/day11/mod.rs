@@ -10,7 +10,7 @@ struct Monkey
 
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("test.txt")
+    let input = include_str!("input.txt")
         .split("\n\n")
         .map(|monkey| {
             monkey
