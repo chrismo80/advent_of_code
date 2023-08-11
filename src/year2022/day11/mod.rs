@@ -1,6 +1,7 @@
 use evalexpr::*;
 use std::collections::*;
 
+#[derive(Clone, Debug)]
 struct Monkey
 {
     items: Vec<i64>,
@@ -42,7 +43,7 @@ pub fn solve() -> (i64, i64)
         })
         .collect::<Vec<Vec<String>>>();
 
-    let mut monkeys = std::collections::HashMap::<i32, Monkey>::new();
+    let mut monkeys = HashMap::<i32, Monkey>::new();
 
     for chunk in input {
         monkeys.insert(
@@ -61,61 +62,54 @@ pub fn solve() -> (i64, i64)
         );
     }
 
-    let lcm = monkeys.values().map(|monkey| monkey.test).product::<i64>();
+    let lcm: i64 = monkeys.values().map(|monkey| monkey.test).product();
 
-    for _ in 1..=10_000 {
+    let result1 = play(monkeys.clone(), lcm, 20);
+    let result2 = play(monkeys.clone(), lcm, 10_000);
+
+    println!("11\t{result1}\t{result2}");
+
+    (result1, result2)
+}
+
+fn play(mut monkeys: HashMap<i32, Monkey>, lcm: i64, rounds: i32) -> i64
+{
+    for _ in 0..rounds {
         for i in 0..monkeys.len() {
-            let mut throw_items = HashMap::<i32, Vec<i64>>::new();
+            let mut throw_items: HashMap<i32, Vec<i64>> = HashMap::new();
 
-            {
-                let monkey = &mut monkeys.get_mut(&(i as i32)).unwrap();
+            let monkey = monkeys.get_mut(&(i as i32)).unwrap();
 
-                for item in monkey.items.clone() {
-                    let worry_level = eval(&monkey.operation.replace("old", &item.to_string()))
-                        .unwrap()
-                        .as_int()
-                        .unwrap();
+            for item in &monkey.items {
+                let worry_level = eval(&monkey.operation.replace("old", &item.to_string()))
+                    .unwrap()
+                    .as_int()
+                    .unwrap();
 
-                    monkey.inspections += 1;
+                monkey.inspections += 1;
 
-                    if worry_level % monkey.test == 0 {
-                        throw_items
-                            .entry(monkey.throw_true)
-                            .and_modify(|l| l.push(worry_level % lcm))
-                            .or_insert(vec![worry_level % lcm]);
-                    }
-                    else {
-                        throw_items
-                            .entry(monkey.throw_false)
-                            .and_modify(|l| l.push(worry_level % lcm))
-                            .or_insert(vec![worry_level % lcm]);
-                    }
-                }
-
-                monkey.items.clear();
+                throw_items
+                    .entry(match worry_level % monkey.test == 0 {
+                        true => monkey.throw_true,
+                        false => monkey.throw_false,
+                    })
+                    .and_modify(|l| l.push(worry_level % lcm))
+                    .or_insert(vec![worry_level % lcm]);
             }
 
-            for receiver in throw_items {
-                monkeys
-                    .get_mut(&receiver.0)
-                    .unwrap()
-                    .items
-                    .append(&mut receiver.1.clone());
+            monkey.items.clear();
+
+            for mut receiver in throw_items {
+                monkeys.get_mut(&receiver.0).unwrap().items.append(&mut receiver.1);
             }
         }
     }
 
-    let mut result = monkeys.values().map(|monkey| monkey.inspections).collect::<Vec<i64>>();
+    let mut result: Vec<i64> = monkeys.values().map(|monkey| monkey.inspections).collect();
 
     result.sort();
-    result.reverse();
 
-    let result1 = result.iter().take(2).product::<i64>();
-    let result2 = 0;
-
-    println!("11\t{result1}\t{result2}");
-
-    (result1, 0)
+    result.iter().rev().take(2).product::<i64>()
 }
 
 #[cfg(test)]
@@ -124,6 +118,7 @@ mod tests
     #[test]
     fn solve()
     {
-        assert_eq!(super::solve().0, 2713310158);
+        //assert_eq!(super::solve(), (10605, 2713310158)); // 10197
+        assert_eq!(super::solve(), (100345, 28537348205)); // 105210
     }
 }
