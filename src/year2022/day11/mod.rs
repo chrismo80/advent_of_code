@@ -1,4 +1,4 @@
-use evalexpr::*;
+use fasteval::*;
 use std::collections::*;
 
 #[derive(Clone, Debug)]
@@ -74,36 +74,45 @@ pub fn solve() -> (i64, i64)
 
 fn play(mut monkeys: HashMap<i32, Monkey>, lcm: i64, rounds: i32) -> i64
 {
+    let mut ns = fasteval::EmptyNamespace;
+
     for _ in 0..rounds {
         for i in 0..monkeys.len() {
-            let mut throw_items: HashMap<i32, Vec<i64>> = HashMap::new();
+            let mut items_true: (i32, Vec<i64>) = (-1, Vec::new());
+            let mut items_false: (i32, Vec<i64>) = (-1, Vec::new());
 
             {
                 let monkey = monkeys.get_mut(&(i as i32)).unwrap();
 
-                while let Some(item) = monkey.items.pop() {
-                    let mut worry_level = eval(&monkey.operation.replace("old", format!("{}", item).as_str()))
-                        .unwrap()
-                        .as_int()
-                        .unwrap();
+                monkey.inspections += monkey.items.len() as i64;
 
-                    if rounds == 20 {
+                items_true.0 = monkey.throw_true;
+                items_false.0 = monkey.throw_false;
+
+                while let Some(item) = monkey.items.pop() {
+                    let mut worry_level =
+                        fasteval::ez_eval(&monkey.operation.replace("old", format!("{}", item).as_str()), &mut ns)
+                            .unwrap() as i64;
+
+                    if rounds < 1000 {
                         worry_level /= 3;
                     }
-                    monkey.inspections += 1;
 
-                    throw_items
-                        .entry(match worry_level % monkey.test == 0 {
-                            true => monkey.throw_true,
-                            false => monkey.throw_false,
-                        })
-                        .and_modify(|l| l.push(worry_level % lcm))
-                        .or_insert(vec![worry_level % lcm]);
+                    if worry_level % monkey.test == 0 {
+                        items_true.1.push(worry_level % lcm);
+                    }
+                    else {
+                        items_false.1.push(worry_level % lcm);
+                    }
                 }
             }
 
-            for mut receiver in throw_items {
-                monkeys.get_mut(&receiver.0).unwrap().items.append(&mut receiver.1);
+            for item in items_true.1 {
+                monkeys.get_mut(&items_true.0).unwrap().items.push(item);
+            }
+
+            for item in items_false.1 {
+                monkeys.get_mut(&items_false.0).unwrap().items.push(item);
             }
         }
     }
