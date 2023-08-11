@@ -1,8 +1,8 @@
-#[derive(Clone, Debug)]
 struct Monkey
 {
     items: Vec<i64>,
     operation: String,
+    //    operation: Box<dyn Fn(i64) -> i64>,
     test: i64,
     throw_true: usize,
     throw_false: usize,
@@ -40,34 +40,18 @@ pub fn solve() -> (usize, usize)
         })
         .collect::<Vec<Vec<String>>>();
 
-    let mut monkeys: Vec<Monkey> = Vec::new();
-
-    for chunk in input {
-        monkeys.push(Monkey {
-            items: chunk[1]
-                .split(", ")
-                .map(|i| i.parse::<i64>().unwrap())
-                .collect::<Vec<i64>>(),
-            operation: chunk[2].clone(),
-            test: chunk[3].parse::<i64>().unwrap(),
-            throw_true: chunk[4].parse::<usize>().unwrap(),
-            throw_false: chunk[5].parse::<usize>().unwrap(),
-            inspections: 0,
-        });
-    }
-
-    let lcm: i64 = monkeys.iter().map(|monkey| monkey.test).product();
-
-    let result1 = play(monkeys.clone(), lcm, 20);
-    let result2 = play(monkeys.clone(), lcm, 10_000);
+    let result1 = play(create_monkeys(&input), 20);
+    let result2 = play(create_monkeys(&input), 10_000);
 
     println!("11\t{result1}\t{result2}");
 
     (result1, result2)
 }
 
-fn play(mut monkeys: Vec<Monkey>, lcm: i64, rounds: i32) -> usize
+fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
 {
+    let lcm: i64 = monkeys.iter().map(|monkey| monkey.test).product();
+
     for _ in 0..rounds {
         for i in 0..monkeys.len() {
             let monkey = &mut monkeys[i];
@@ -108,6 +92,26 @@ fn play(mut monkeys: Vec<Monkey>, lcm: i64, rounds: i32) -> usize
     result.iter().rev().take(2).product::<usize>()
 }
 
+fn create_monkeys(input: &Vec<Vec<String>>) -> Vec<Monkey>
+{
+    let mut monkeys: Vec<Monkey> = Vec::new();
+
+    for chunk in input {
+        monkeys.push(Monkey {
+            items: chunk[1]
+                .split(", ")
+                .map(|i| i.parse::<i64>().unwrap())
+                .collect::<Vec<i64>>(),
+            operation: chunk[2].clone(),
+            test: chunk[3].parse::<i64>().unwrap(),
+            throw_true: chunk[4].parse::<usize>().unwrap(),
+            throw_false: chunk[5].parse::<usize>().unwrap(),
+            inspections: 0,
+        });
+    }
+
+    monkeys
+}
 #[cfg(test)]
 mod tests
 {
