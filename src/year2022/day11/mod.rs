@@ -62,7 +62,6 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
 
             while let Some(item) = monkey.items.pop() {
                 let mut worry_level = (monkey.operation)(item);
-                //mexe::eval(&monkey.operation.replace("old", item.to_string().as_str())).unwrap() as i64;
 
                 if rounds < 1000 {
                     worry_level /= 3;
@@ -101,7 +100,7 @@ fn create_monkeys(input: &Vec<Vec<String>>) -> Vec<Monkey>
                 .split(", ")
                 .map(|i| i.parse::<i64>().unwrap())
                 .collect::<Vec<i64>>(),
-            operation: get_operation(chunk[2].clone()),
+            operation: get_operation(chunk[2].to_string()),
             test: chunk[3].parse::<i64>().unwrap(),
             throw_true: chunk[4].parse::<usize>().unwrap(),
             throw_false: chunk[5].parse::<usize>().unwrap(),
@@ -114,8 +113,6 @@ fn create_monkeys(input: &Vec<Vec<String>>) -> Vec<Monkey>
 
 fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
 {
-    println!("{}", expression);
-
     let parts = expression.split_whitespace().collect::<Vec<&str>>();
     let operand = parts[2].to_string();
 
