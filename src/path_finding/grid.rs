@@ -22,6 +22,7 @@ where
     {
         let mut queue = VecDeque::new();
         queue.push_back(vec![start]);
+
         let mut visited = HashMap::new();
         visited.insert(start, start);
 
@@ -37,6 +38,7 @@ where
                     && (self.walkable)(&self.map[current.1][current.0], &self.map[neighbor.1][neighbor.0])
                 {
                     visited.insert(neighbor, *current);
+
                     let mut new_path = path.clone();
                     new_path.push(neighbor);
                     queue.push_back(new_path);
