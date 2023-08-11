@@ -1,10 +1,10 @@
 use evalexpr::*;
-use std::{arch::x86_64::_MM_ROUND_TOWARD_ZERO, collections::*};
+use std::collections::*;
 
 #[derive(Clone, Debug)]
 struct Monkey
 {
-    items: String,
+    items: Vec<i64>,
     operation: String,
     test: i64,
     throw_true: i32,
@@ -14,7 +14,7 @@ struct Monkey
 
 pub fn solve() -> (i64, i64)
 {
-    let input = include_str!("input.txt")
+    let input = include_str!("test.txt")
         .split("\n\n")
         .map(|monkey| {
             monkey
@@ -49,7 +49,10 @@ pub fn solve() -> (i64, i64)
         monkeys.insert(
             chunk[0].parse::<i32>().unwrap(),
             Monkey {
-                items: chunk[1].clone(),
+                items: chunk[1]
+                    .split(", ")
+                    .map(|i| i.parse::<i64>().unwrap())
+                    .collect::<Vec<i64>>(),
                 operation: chunk[2].clone(),
                 test: chunk[3].parse::<i64>().unwrap(),
                 throw_true: chunk[4].parse::<i32>().unwrap(),
@@ -71,17 +74,18 @@ pub fn solve() -> (i64, i64)
 
 fn play(mut monkeys: HashMap<i32, Monkey>, lcm: i64, rounds: i32) -> i64
 {
-    for r in 0..rounds {
+    for _ in 0..rounds {
         for i in 0..monkeys.len() {
-            let mut throw_items: HashMap<i32, String> = HashMap::new();
+            let mut throw_items: HashMap<i32, Vec<i64>> = HashMap::new();
 
             {
                 let monkey = monkeys.get_mut(&(i as i32)).unwrap();
 
-                let id = &monkey.items;
-
-                for item in monkey.items.split(", ").filter(|s| !s.is_empty()) {
-                    let mut worry_level = eval(&monkey.operation.replace("old", item)).unwrap().as_int().unwrap();
+                while let Some(item) = monkey.items.pop() {
+                    let mut worry_level = eval(&monkey.operation.replace("old", format!("{}", item).as_str()))
+                        .unwrap()
+                        .as_int()
+                        .unwrap();
 
                     if rounds == 20 {
                         worry_level /= 3;
@@ -93,19 +97,13 @@ fn play(mut monkeys: HashMap<i32, Monkey>, lcm: i64, rounds: i32) -> i64
                             true => monkey.throw_true,
                             false => monkey.throw_false,
                         })
-                        .and_modify(|e| e.extend(vec![", ", (worry_level % lcm).to_string().as_str()]))
-                        .or_insert((worry_level % lcm).to_string());
+                        .and_modify(|l| l.push(worry_level % lcm))
+                        .or_insert(vec![worry_level % lcm]);
                 }
-
-                monkey.items = "".to_string();
             }
 
-            for receiver in throw_items {
-                monkeys
-                    .get_mut(&receiver.0)
-                    .unwrap()
-                    .items
-                    .push_str(format!(", {}", (receiver.1)).as_str());
+            for mut receiver in throw_items {
+                monkeys.get_mut(&receiver.0).unwrap().items.append(&mut receiver.1);
             }
         }
     }
