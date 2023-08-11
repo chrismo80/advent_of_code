@@ -34,12 +34,15 @@ pub fn run_all()
 
 fn begin() -> std::time::Instant
 {
-    println!("Day\tPart 1\t\tPart 2");
+    println!("Day\tPart 1\t\tPart 2\n---------------------------------------");
 
     std::time::Instant::now()
 }
 
 fn end(start: std::time::Instant)
 {
-    println!("Duration: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
+    println!(
+        "---------------------------------------\nDuration: {:.1} ms",
+        start.elapsed().as_micros() as f32 / 1000.0
+    );
 }
