@@ -48,7 +48,7 @@ pub fn solve() -> (usize, usize)
         .min()
         .unwrap();
 
-    println!("12\t{result1}\t{result2}");
+    println!("12\t{result1}\t\t{result2}");
 
     (result1, result2)
 }

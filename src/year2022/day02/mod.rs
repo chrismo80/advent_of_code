@@ -19,7 +19,7 @@ pub fn solve() -> (i32, i32)
         .map(|x| ((4 + x.1 - x.0) % 3 * 3) + x.1 + 1)
         .sum();
 
-    println!("2\t{result1}\t{result2}");
+    println!("2\t{result1}\t\t{result2}");
 
     (result1, result2)
 }

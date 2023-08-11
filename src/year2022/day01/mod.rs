@@ -12,7 +12,7 @@ pub fn solve() -> (i32, i32)
     let result1 = *data.last().unwrap();
     let result2 = data.iter().rev().take(3).sum::<i32>();
 
-    println!("1\t{result1}\t{result2}");
+    println!("1\t{result1}\t\t{result2}");
 
     (result1, result2)
 }

@@ -30,7 +30,7 @@ pub fn solve() -> (i32, i32)
         result2 += get_priority(overlap);
     }
 
-    println!("3\t{result1}\t{result2}");
+    println!("3\t{result1}\t\t{result2}");
 
     (result1, result2)
 }

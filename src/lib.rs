@@ -34,7 +34,7 @@ pub fn run_all()
 
 fn begin() -> std::time::Instant
 {
-    println!("Day\tPart 1\tPart 2");
+    println!("Day\tPart 1\t\tPart 2");
 
     std::time::Instant::now()
 }

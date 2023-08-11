@@ -57,7 +57,7 @@ pub fn solve() -> (isize, isize)
         .last()
         .unwrap();
 
-    println!("7\t{result1}\t{result2}");
+    println!("7\t{result1}\t\t{result2}");
 
     (result1, result2)
 }

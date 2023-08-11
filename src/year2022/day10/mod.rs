@@ -26,7 +26,7 @@ pub fn solve() -> (i32, String)
     let result1 = (0..6).map(|c| signal_strength((c * 40) + 20, &x)).sum::<i32>();
     let result2 = "RBPARAGF".to_string();
 
-    println!("10\t{result1}\t{result2}");
+    println!("10\t{result1}\t\t{result2}");
 
     for (i, x) in x.iter().enumerate() {
         print!(
