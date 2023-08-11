@@ -1,8 +1,7 @@
 struct Monkey
 {
     items: Vec<i64>,
-    operation: String,
-    //    operation: Box<dyn Fn(i64) -> i64>,
+    operation: Box<dyn Fn(i64) -> i64>,
     test: i64,
     throw_true: usize,
     throw_false: usize,
@@ -62,8 +61,8 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
             let mut items_false = vec![];
 
             while let Some(item) = monkey.items.pop() {
-                let mut worry_level =
-                    mexe::eval(&monkey.operation.replace("old", item.to_string().as_str())).unwrap() as i64;
+                let mut worry_level = (monkey.operation)(item);
+                //mexe::eval(&monkey.operation.replace("old", item.to_string().as_str())).unwrap() as i64;
 
                 if rounds < 1000 {
                     worry_level /= 3;
@@ -102,7 +101,7 @@ fn create_monkeys(input: &Vec<Vec<String>>) -> Vec<Monkey>
                 .split(", ")
                 .map(|i| i.parse::<i64>().unwrap())
                 .collect::<Vec<i64>>(),
-            operation: chunk[2].clone(),
+            operation: get_operation(chunk[2].clone()),
             test: chunk[3].parse::<i64>().unwrap(),
             throw_true: chunk[4].parse::<usize>().unwrap(),
             throw_false: chunk[5].parse::<usize>().unwrap(),
@@ -112,6 +111,30 @@ fn create_monkeys(input: &Vec<Vec<String>>) -> Vec<Monkey>
 
     monkeys
 }
+
+fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
+{
+    println!("{}", expression);
+
+    let parts = expression.split_whitespace().collect::<Vec<&str>>();
+    let operand = parts[2].to_string();
+
+    if operand == "old" {
+        match parts[1] {
+            "+" => Box::new(move |old| old + old),
+            "*" => Box::new(move |old| old * old),
+            _ => panic!("Unknown operation"),
+        }
+    }
+    else {
+        match parts[1] {
+            "+" => Box::new(move |old| old + operand.parse::<i64>().unwrap()),
+            "*" => Box::new(move |old| old * operand.parse::<i64>().unwrap()),
+            _ => panic!("Unknown operation"),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
