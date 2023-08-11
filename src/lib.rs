@@ -6,7 +6,7 @@ pub fn run()
 {
     let start = begin();
 
-    year2022::day8::solve();
+    year2022::day11::solve();
 
     end(start);
 }
@@ -15,15 +15,15 @@ pub fn run_all()
 {
     let start = begin();
 
-    year2022::day1::solve();
-    year2022::day2::solve();
-    year2022::day3::solve();
-    year2022::day4::solve();
-    year2022::day5::solve();
-    year2022::day6::solve();
-    year2022::day7::solve();
-    year2022::day8::solve();
-    year2022::day9::solve();
+    year2022::day01::solve();
+    year2022::day02::solve();
+    year2022::day03::solve();
+    year2022::day04::solve();
+    year2022::day05::solve();
+    year2022::day06::solve();
+    year2022::day07::solve();
+    year2022::day08::solve();
+    year2022::day09::solve();
     year2022::day10::solve();
     year2022::day11::solve();
 
