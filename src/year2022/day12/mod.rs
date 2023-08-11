@@ -1,4 +1,5 @@
 use crate::path_finding::grid::*;
+use rayon::prelude::*;
 
 pub fn solve() -> (usize, usize)
 {
@@ -10,12 +11,12 @@ pub fn solve() -> (usize, usize)
     let mut start = Coord(0, 0);
     let mut end = Coord(0, 0);
 
-    let mut starts: Vec<Coord> = Vec::new();
+    let mut starts: Vec<(Coord, Vec<Vec<char>>)> = Vec::new();
 
     for row in 0..map.len() {
         for col in 0..map[0].len() {
             match map[row][col] {
-                'a' => starts.push(Coord(col, row)),
+                'a' => starts.push((Coord(col, row), map.clone())),
                 'S' => {
                     start = Coord(col, row);
                     map[row][col] = 'a';
@@ -33,15 +34,19 @@ pub fn solve() -> (usize, usize)
     let grid = Grid::new(map, walkable);
 
     let result1 = grid.bfs(start, end).unwrap().len() - 1;
-    let result2 = 512;
-
-    // let result2 = starts
-    //     .iter()
-    //     .map(|start| grid.bfs(*start, end))
-    //     .filter(|path| path.is_some())
-    //     .map(|path| path.unwrap().len() - 1)
-    //     .min()
-    //     .unwrap();
+    let result2 = starts
+        .par_iter()
+        .map(|start| {
+            Grid::new(
+                start.1.clone(),
+                Box::new(|current: &char, neighbor: &char| *neighbor as i32 - *current as i32 <= 1),
+            )
+            .bfs(start.0, end)
+        })
+        .filter(|path| path.is_some())
+        .map(|path| path.unwrap().len() - 1)
+        .min()
+        .unwrap();
 
     println!("12\t{result1}\t{result2}");
 

@@ -8,3 +8,4 @@ authors = ["Christian Moldenhauer"]
 chrono = "0.4"
 to_vec = "0.1"
 mexe = "0.2.0"
+rayon = "1.7.0"
