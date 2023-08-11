@@ -6,7 +6,7 @@ pub fn run()
 {
     let start = begin();
 
-    year2022::day11::solve();
+    year2022::day12::solve();
 
     end(start);
 }
