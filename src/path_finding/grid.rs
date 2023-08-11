@@ -1,8 +1,3 @@
-use std::collections::*;
-
-#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
-pub struct Coord(pub usize, pub usize);
-
 pub struct Grid<T>
 {
     map: Vec<Vec<T>>,
@@ -18,12 +13,12 @@ where
         Grid { map, walkable }
     }
 
-    pub fn bfs(&self, start: Coord, end: Coord) -> Option<Vec<Coord>>
+    pub fn bfs(&self, start: (usize, usize), end: (usize, usize)) -> Option<Vec<(usize, usize)>>
     {
-        let mut queue = VecDeque::new();
+        let mut queue = std::collections::VecDeque::new();
         queue.push_back(vec![start]);
 
-        let mut visited = HashMap::new();
+        let mut visited = std::collections::HashMap::new();
         visited.insert(start, start);
 
         while let Some(path) = queue.pop_front() {
@@ -49,22 +44,22 @@ where
         None
     }
 
-    fn neighbors(&self, coord: Coord) -> Vec<Coord>
+    fn neighbors(&self, coord: (usize, usize)) -> Vec<(usize, usize)>
     {
         let mut neighbors = Vec::new();
-        let (x, y) = (coord.0, coord.1);
+        let (x, y) = coord;
 
         if y > 0 {
-            neighbors.push(Coord(x, y - 1));
+            neighbors.push((x, y - 1));
         }
         if x > 0 {
-            neighbors.push(Coord(x - 1, y));
+            neighbors.push((x - 1, y));
         }
         if y < self.map.len() - 1 {
-            neighbors.push(Coord(x, y + 1));
+            neighbors.push((x, y + 1));
         }
         if x < self.map[0].len() - 1 {
-            neighbors.push(Coord(x + 1, y));
+            neighbors.push((x + 1, y));
         }
 
         neighbors

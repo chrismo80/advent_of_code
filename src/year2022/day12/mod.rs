@@ -8,21 +8,21 @@ pub fn solve() -> (usize, usize)
         .map(|l| l.chars().collect::<Vec<char>>())
         .collect::<Vec<Vec<char>>>();
 
-    let mut start = Coord(0, 0);
-    let mut end = Coord(0, 0);
+    let mut start = (0, 0);
+    let mut end = (0, 0);
 
-    let mut starts: Vec<(Coord, Vec<Vec<char>>)> = Vec::new();
+    let mut starts: Vec<((usize, usize), Vec<Vec<char>>)> = Vec::new();
 
     for row in 0..map.len() {
         for col in 0..map[0].len() {
             match map[row][col] {
-                'a' => starts.push((Coord(col, row), map.clone())),
+                'a' => starts.push(((col, row), map.clone())),
                 'S' => {
-                    start = Coord(col, row);
+                    start = (col, row);
                     map[row][col] = 'a';
                 }
                 'E' => {
-                    end = Coord(col, row);
+                    end = (col, row);
                     map[row][col] = 'z';
                 }
                 _ => {}
