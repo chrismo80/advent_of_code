@@ -11,7 +11,7 @@ struct Monkey
 
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt")
+    let input = include_str!("test.txt")
         .split("\n\n")
         .map(|monkey| {
             monkey
@@ -68,8 +68,6 @@ pub fn solve() -> (usize, usize)
 
 fn play(mut monkeys: Vec<Monkey>, lcm: i64, rounds: i32) -> usize
 {
-    let mut ns = fasteval::EmptyNamespace;
-
     for _ in 0..rounds {
         for i in 0..monkeys.len() {
             let monkey = &mut monkeys[i];
@@ -81,8 +79,7 @@ fn play(mut monkeys: Vec<Monkey>, lcm: i64, rounds: i32) -> usize
 
             while let Some(item) = monkey.items.pop() {
                 let mut worry_level =
-                    fasteval::ez_eval(&monkey.operation.replace("old", item.to_string().as_str()), &mut ns).unwrap()
-                        as i64;
+                    mexe::eval(&monkey.operation.replace("old", item.to_string().as_str())).unwrap() as i64;
 
                 if rounds < 1000 {
                     worry_level /= 3;

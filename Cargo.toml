@@ -7,5 +7,4 @@ authors = ["Christian Moldenhauer"]
 [dependencies]
 chrono = "0.4"
 to_vec = "0.1"
-evalexpr = "11.0.1"
-fasteval = "0.2.4"
+mexe = "0.2.0"
