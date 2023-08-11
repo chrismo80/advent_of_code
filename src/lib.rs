@@ -1,5 +1,6 @@
 pub mod examples;
 pub mod extensions;
+pub mod path_finding;
 pub mod year2022;
 
 pub fn run()
@@ -26,6 +27,7 @@ pub fn run_all()
     year2022::day09::solve();
     year2022::day10::solve();
     year2022::day11::solve();
+    year2022::day12::solve();
 
     end(start);
 }
