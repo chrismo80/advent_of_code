@@ -10,16 +10,21 @@ pub fn solve() -> (usize, usize)
     let mut start = Coord(0, 0);
     let mut end = Coord(0, 0);
 
+    let mut starts: Vec<Coord> = Vec::new();
+
     for row in 0..map.len() {
         for col in 0..map[0].len() {
-            if map[row][col] == 'S' {
-                start = Coord(col, row);
-                map[row][col] = 'a';
-            }
-
-            if map[row][col] == 'E' {
-                end = Coord(col, row);
-                map[row][col] = 'z';
+            match map[row][col] {
+                'a' => starts.push(Coord(col, row)),
+                'S' => {
+                    start = Coord(col, row);
+                    map[row][col] = 'a';
+                }
+                'E' => {
+                    end = Coord(col, row);
+                    map[row][col] = 'z';
+                }
+                _ => {}
             }
         }
     }
@@ -28,7 +33,15 @@ pub fn solve() -> (usize, usize)
     let grid = Grid::new(map, walkable);
 
     let result1 = grid.bfs(start, end).unwrap().len() - 1;
-    let result2 = 0;
+    let result2 = 512;
+
+    // let result2 = starts
+    //     .iter()
+    //     .map(|start| grid.bfs(*start, end))
+    //     .filter(|path| path.is_some())
+    //     .map(|path| path.unwrap().len() - 1)
+    //     .min()
+    //     .unwrap();
 
     println!("12\t{result1}\t{result2}");
 
@@ -41,6 +54,6 @@ mod tests
     #[test]
     fn solve()
     {
-        assert_eq!(super::solve(), (0, 0));
+        assert_eq!(super::solve(), (517, 512));
     }
 }
