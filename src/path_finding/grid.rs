@@ -16,27 +16,32 @@ where
     pub fn bfs(&self, start: (usize, usize), end: (usize, usize)) -> Option<Vec<(usize, usize)>>
     {
         let mut queue = std::collections::VecDeque::new();
-        queue.push_back(vec![start]);
+        queue.push_back(start);
 
         let mut visited = std::collections::HashMap::new();
         visited.insert(start, start);
 
-        while let Some(path) = queue.pop_front() {
-            let current = path.last().unwrap();
+        while let Some(current) = queue.pop_front() {
+            if current == end {
+                let mut path = Vec::new();
+                let mut node = end;
 
-            if *current == end {
+                while node != start {
+                    path.push(node);
+                    node = visited[&node];
+                }
+
+                path.reverse();
+
                 return Some(path);
             }
 
-            for neighbor in self.neighbors(*current) {
+            for neighbor in self.neighbors(current) {
                 if !visited.contains_key(&neighbor)
                     && (self.walkable)(&self.map[current.1][current.0], &self.map[neighbor.1][neighbor.0])
                 {
-                    visited.insert(neighbor, *current);
-
-                    let mut new_path = path.clone();
-                    new_path.push(neighbor);
-                    queue.push_back(new_path);
+                    visited.insert(neighbor, current);
+                    queue.push_back(neighbor);
                 }
             }
         }
