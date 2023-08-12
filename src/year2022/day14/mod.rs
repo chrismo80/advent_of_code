@@ -7,6 +7,7 @@ pub fn solve() -> (usize, usize)
     let walls = build_walls(&lines);
     let result1 = run_sand(&walls).len();
 
+    //lines.push("485,11 -> 515,11");
     lines.push("300,173 -> 700,173");
 
     let walls = build_walls(&lines);
@@ -27,23 +28,24 @@ fn run_sand(walls: &HashSet<(i32, i32)>) -> HashSet<(i32, i32)>
 
     while top > 0 && bottom > &unit.1 {
         unit.1 += 1;
-        if !walls.contains(&unit) && !sand.contains(&unit) {
+        if !sand.contains(&unit) && !walls.contains(&unit) {
             continue;
         }
 
         unit.0 -= 1;
-        if !walls.contains(&unit) && !sand.contains(&unit) {
+        if !sand.contains(&unit) && !walls.contains(&unit) {
             continue;
         }
 
         unit.0 += 2;
-        if !walls.contains(&unit) && !sand.contains(&unit) {
+        if !sand.contains(&unit) && !walls.contains(&unit) {
             continue;
         }
 
         unit.0 -= 1;
         unit.1 -= 1;
         sand.insert(unit);
+        //print_map(walls, &sand);
 
         top = top.min(unit.1);
 
@@ -92,4 +94,37 @@ mod tests
     {
         assert_eq!(super::solve(), (1068, 27936));
     }
+}
+
+fn print_map(walls: &HashSet<(i32, i32)>, sand: &HashSet<(i32, i32)>)
+{
+    let mut output = Vec::new();
+
+    let min_x = walls.iter().map(|(x, _)| *x).min().unwrap_or(0);
+    let max_x = walls.iter().map(|(x, _)| *x).max().unwrap_or(0);
+    let max_y = walls.iter().map(|(_, y)| *y).max().unwrap_or(0);
+
+    for y in 0..=max_y {
+        let mut row = Vec::new();
+
+        for x in min_x..=max_x {
+            row.push(if walls.contains(&(x, y)) {
+                '#'
+            }
+            else if sand.contains(&(x, y)) {
+                'o'
+            }
+            else {
+                '.'
+            });
+        }
+
+        output.push(row.iter().collect::<String>());
+    }
+
+    for line in output {
+        println!("{}", line);
+    }
+
+    std::thread::sleep(std::time::Duration::from_millis(100));
 }
