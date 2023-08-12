@@ -18,12 +18,12 @@ pub fn solve() -> (usize, usize)
     (result1, result2)
 }
 
-fn run_sand(walls: &HashSet<(i32, i32)>) -> usize
+fn run_sand(walls: &HashSet<(usize, usize)>) -> usize
 {
     let mut grid = vec![vec![false; 1000]; 1000];
 
     for (x, y) in walls {
-        grid[*x as usize][*y as usize] = true;
+        grid[*x][*y] = true;
     }
 
     let bottom = *walls.iter().map(|(_, y)| y).max().unwrap();
@@ -31,27 +31,31 @@ fn run_sand(walls: &HashSet<(i32, i32)>) -> usize
 
     let mut unit = (500, 0);
 
-    while top > 0 && bottom > unit.1 {
+    while bottom > unit.1 {
         unit.1 += 1;
-        if !grid[unit.0 as usize][unit.1 as usize] {
+        if !grid[unit.0][unit.1] {
             continue;
         }
 
         unit.0 -= 1;
-        if !grid[unit.0 as usize][unit.1 as usize] {
+        if !grid[unit.0][unit.1] {
             continue;
         }
 
         unit.0 += 2;
-        if !grid[unit.0 as usize][unit.1 as usize] {
+        if !grid[unit.0][unit.1] {
             continue;
         }
 
         unit.0 -= 1;
         unit.1 -= 1;
-        grid[unit.0 as usize][unit.1 as usize] = true;
+        grid[unit.0][unit.1] = true;
 
         top = top.min(unit.1);
+
+        if top == 0 {
+            break;
+        }
 
         unit = (500, top - 1);
     }
@@ -60,7 +64,7 @@ fn run_sand(walls: &HashSet<(i32, i32)>) -> usize
     for x in 0..grid.len() {
         for y in 0..grid[0].len() {
             if grid[x][y] {
-                sand.insert((x as i32, y as i32));
+                sand.insert((x, y));
             }
         }
     }
@@ -68,25 +72,22 @@ fn run_sand(walls: &HashSet<(i32, i32)>) -> usize
     sand.len() - walls.len()
 }
 
-fn build_walls(lines: &Vec<&str>) -> HashSet<(i32, i32)>
+fn build_walls(lines: &Vec<&str>) -> HashSet<(usize, usize)>
 {
     let mut walls = HashSet::new();
 
     for row in lines {
-        let points: Vec<(i32, i32)> = row
+        let points: Vec<(usize, usize)> = row
             .split(" -> ")
             .map(|point| {
-                let coords: Vec<i32> = point.split(',').map(|coord| coord.parse().unwrap()).collect();
+                let coords: Vec<usize> = point.split(',').map(|coord| coord.parse().unwrap()).collect();
                 (coords[0], coords[1])
             })
             .collect();
 
         for i in 1..points.len() {
-            let x_range = std::cmp::min(points[i].0, points[i - 1].0)..=std::cmp::max(points[i].0, points[i - 1].0);
-            let y_range = std::cmp::min(points[i].1, points[i - 1].1)..=std::cmp::max(points[i].1, points[i - 1].1);
-
-            for x in x_range {
-                for y in y_range.clone() {
+            for x in points[i].0.min(points[i - 1].0)..=points[i].0.max(points[i - 1].0) {
+                for y in points[i].1.min(points[i - 1].1)..=points[i].1.max(points[i - 1].1) {
                     walls.insert((x, y));
                 }
             }
