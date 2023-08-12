@@ -9,16 +9,16 @@ pub fn solve() -> (usize, usize)
         .map(|row| row.chars().collect())
         .collect();
 
-    let search = Grid::new(&map, Box::new(|_, next| next != &'#'));
-
-    let mut distances: HashMap<(usize, usize), usize> = HashMap::new();
-
     // get node positions from map (for BFS start/end)
     let nodes: HashMap<usize, (usize, usize)> = (0..map.len())
         .flat_map(|y| (0..map[0].len()).map(move |x| (x, y)))
         .filter(|(x, y)| map[*y][*x].is_ascii_digit())
         .map(|(x, y)| (map[y][x].to_digit(10).unwrap() as usize, (x, y)))
         .collect();
+
+    let search = Grid::new(&map, Box::new(|_, next| *next != '#'));
+
+    let mut distances: HashMap<(usize, usize), usize> = HashMap::new();
 
     // calculate the distances for all possible edges
     for (from, to) in nodes
@@ -45,10 +45,10 @@ pub fn solve() -> (usize, usize)
     for permutation in permutations_of(&routes) {
         let mut route: VecDeque<usize> = permutation.copied().collect::<VecDeque<usize>>();
 
-        route.push_front(0);
+        route.push_back(0);
         routes1.push(total_distance(&route.clone().into_iter().collect::<Vec<usize>>()));
 
-        route.push_back(0);
+        route.push_front(0);
         routes2.push(total_distance(&route.clone().into_iter().collect::<Vec<usize>>()));
     }
 

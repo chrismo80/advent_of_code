@@ -51,7 +51,7 @@ pub fn run_all()
 
 fn begin() -> std::time::Instant
 {
-    println!("\n\n\n\nDay\tPart 1\t\tPart 2\n---------------------------------------");
+    println!("\n\nDay\tPart 1\t\tPart 2\n---------------------------------------");
 
     std::time::Instant::now()
 }
@@ -59,7 +59,7 @@ fn begin() -> std::time::Instant
 fn end(start: std::time::Instant)
 {
     println!(
-        "---------------------------------------\nYear 2022: {:.1} ms",
+        "---------------------------------------\nYear 2022: {:.1} ms\n\n",
         start.elapsed().as_micros() as f32 / 1000.0
     );
 }
