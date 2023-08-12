@@ -33,10 +33,10 @@ pub fn solve() -> (usize, usize)
     let walkable = Box::new(|current: &char, neighbor: &char| *neighbor as i32 - *current as i32 <= 1);
     let grid = Grid::new(map, walkable);
 
-    let result1 = grid.bfs(start, end).unwrap().len();
+    let result1 = grid.dfs(start, end).unwrap().len();
     let result2 = part2_starts
         .par_iter()
-        .map(|s| Grid::new(s.1.clone(), Box::new(|c: &char, n: &char| *n as i32 - *c as i32 <= 1)).bfs(s.0, end))
+        .map(|s| Grid::new(s.1.clone(), Box::new(|c: &char, n: &char| *n as i32 - *c as i32 <= 1)).dfs(s.0, end))
         .filter(|path| path.is_some())
         .map(|path| path.unwrap().len())
         .min()

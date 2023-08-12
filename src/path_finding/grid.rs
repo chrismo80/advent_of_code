@@ -13,10 +13,10 @@ where
         Grid { map, walkable }
     }
 
-    pub fn bfs(&self, start: (usize, usize), end: (usize, usize)) -> Option<Vec<(usize, usize)>>
+    pub fn dfs(&self, start: (usize, usize), end: (usize, usize)) -> Option<Vec<(usize, usize)>>
     {
         let mut queue = std::collections::VecDeque::new();
-        queue.push_back(start);
+        queue.push_front(start);
 
         let mut visited = std::collections::HashMap::new();
         visited.insert(start, start);
@@ -41,7 +41,7 @@ where
                     && (self.walkable)(&self.map[current.1][current.0], &self.map[neighbor.1][neighbor.0])
                 {
                     visited.insert(neighbor, current);
-                    queue.push_back(neighbor);
+                    queue.push_front(neighbor);
                 }
             }
         }
