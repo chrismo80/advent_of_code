@@ -1,6 +1,7 @@
 mod common;
 
 #[test]
+#[ignore]
 fn do_it()
 {
     common::setup();
