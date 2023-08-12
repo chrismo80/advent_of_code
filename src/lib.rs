@@ -7,7 +7,7 @@ pub fn run()
 {
     let start = begin();
 
-    for i in 0..1 {
+    for _ in 0..1 {
         year2022::day12::solve();
     }
 
