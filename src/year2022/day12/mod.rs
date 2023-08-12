@@ -32,8 +32,6 @@ pub fn solve() -> (usize, usize)
         }
     }
 
-    let map = map; // make immutable again
-
     let walkable = Box::new(|current: &char, neighbor: &char| *neighbor as i32 - *current as i32 <= 1);
 
     let result1 = Grid::new(&map, walkable).bfs(start, end).unwrap().len();
