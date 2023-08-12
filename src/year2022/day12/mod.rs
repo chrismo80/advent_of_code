@@ -1,6 +1,5 @@
 use crate::path_finding::grid::*;
 use rayon::prelude::*;
-use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
@@ -12,13 +11,13 @@ pub fn solve() -> (usize, usize)
     let mut start = (0, 0);
     let mut end = (0, 0);
 
-    let mut part2_starts: HashMap<(usize, usize), Vec<Vec<char>>> = HashMap::new();
+    let mut part2_starts: Vec<(usize, usize)> = Vec::new();
 
     for row in 0..map.len() {
         for col in 0..map[0].len() {
             match map[row][col] {
                 'a' => {
-                    part2_starts.insert((col, row), map.clone());
+                    part2_starts.push((col, row));
                 }
                 'S' => {
                     start = (col, row);
@@ -33,13 +32,15 @@ pub fn solve() -> (usize, usize)
         }
     }
 
-    let walkable = Box::new(|current: &char, neighbor: &char| *neighbor as i32 - *current as i32 <= 1);
-    let grid = Grid::new(map, walkable);
+    let map = map; // make immutable again
 
-    let result1 = grid.bfs(start, end).unwrap().len();
+    let walkable = Box::new(|current: &char, neighbor: &char| *neighbor as i32 - *current as i32 <= 1);
+
+    let result1 = Grid::new(&map, walkable).bfs(start, end).unwrap().len();
+
     let result2 = part2_starts
         .par_iter()
-        .map(|s| Grid::new(s.1.clone(), Box::new(|c: &char, n: &char| *n as i32 - *c as i32 <= 1)).bfs(*s.0, end))
+        .map(|s| Grid::new(&map, Box::new(|c: &char, n: &char| *n as i32 - *c as i32 <= 1)).bfs(*s, end))
         .filter(|path| path.is_some())
         .map(|path| path.unwrap().len())
         .min()

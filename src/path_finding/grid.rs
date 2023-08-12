@@ -1,5 +1,3 @@
-use std::collections::*;
-
 pub struct Grid<T>
 {
     map: Vec<Vec<T>>,
@@ -8,19 +6,22 @@ pub struct Grid<T>
 
 impl<T> Grid<T>
 where
-    T: std::fmt::Debug,
+    T: Clone + std::fmt::Debug,
 {
-    pub fn new(map: Vec<Vec<T>>, walkable: Box<dyn Fn(&T, &T) -> bool>) -> Self
+    pub fn new(map: &[Vec<T>], walkable: Box<dyn Fn(&T, &T) -> bool>) -> Self
     {
-        Grid { map, walkable }
+        Grid {
+            map: map.to_owned(),
+            walkable,
+        }
     }
 
     pub fn bfs(&self, start: (usize, usize), end: (usize, usize)) -> Option<Vec<(usize, usize)>>
     {
-        let mut queue = VecDeque::new();
+        let mut queue = std::collections::VecDeque::new();
         queue.push_front(start);
 
-        let mut visited = HashMap::new();
+        let mut visited = std::collections::HashMap::new();
         visited.insert(start, start);
 
         while let Some(current) = queue.pop_front() {
