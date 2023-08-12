@@ -63,12 +63,9 @@ fn build_walls(lines: &Vec<&str>) -> HashSet<(i32, i32)>
         let points: Vec<(i32, i32)> = row
             .split(" -> ")
             .map(|point| {
-                point
-                    .split(',')
-                    .map(|coord| coord.parse::<i32>().unwrap())
-                    .collect::<Vec<i32>>()
+                let coords: Vec<i32> = point.split(',').map(|coord| coord.parse().unwrap()).collect();
+                (coords[0], coords[1])
             })
-            .map(|point| (point[0], point[1]))
             .collect();
 
         for i in 1..points.len() {
