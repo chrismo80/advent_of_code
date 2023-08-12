@@ -51,7 +51,6 @@ pub fn run_all()
 
 fn begin() -> std::time::Instant
 {
-    println!("Advent of code 2022\n");
     println!("Day\tPart 1\t\tPart 2\n---------------------------------------");
 
     std::time::Instant::now()
@@ -60,7 +59,7 @@ fn begin() -> std::time::Instant
 fn end(start: std::time::Instant)
 {
     println!(
-        "---------------------------------------\nDuration: {:.1} ms",
+        "---------------------------------------\nYear 2022: {:.1} ms",
         start.elapsed().as_micros() as f32 / 1000.0
     );
 }
