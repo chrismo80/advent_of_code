@@ -29,47 +29,49 @@ fn run_sand(walls: &HashSet<(usize, usize)>) -> usize
     let bottom = *walls.iter().map(|(_, y)| y).max().unwrap();
     let mut top = bottom;
 
-    let mut unit = (500, 0);
+    let (mut x, mut y) = (500, 0);
 
-    while bottom > unit.1 {
-        unit.1 += 1;
-        if !grid[unit.0][unit.1] {
+    while bottom > y {
+        y += 1;
+        if !grid[x][y] {
             continue;
         }
 
-        unit.0 -= 1;
-        if !grid[unit.0][unit.1] {
+        x -= 1;
+        if !grid[x][y] {
             continue;
         }
 
-        unit.0 += 2;
-        if !grid[unit.0][unit.1] {
+        x += 2;
+        if !grid[x][y] {
             continue;
         }
 
-        unit.0 -= 1;
-        unit.1 -= 1;
-        grid[unit.0][unit.1] = true;
+        x -= 1;
+        y -= 1;
+        grid[x][y] = true;
 
-        top = top.min(unit.1);
-
-        if top == 0 {
+        if y == 0 {
             break;
         }
 
-        unit = (500, top - 1);
+        top = top.min(y);
+
+        x = 500;
+        y = top - 1;
     }
 
-    let mut sand = HashSet::new();
+    let mut count = 0;
+
     for x in 0..grid.len() {
         for y in 0..grid[0].len() {
             if grid[x][y] {
-                sand.insert((x, y));
+                count += 1;
             }
         }
     }
 
-    sand.len() - walls.len()
+    count - walls.len()
 }
 
 fn build_walls(lines: &Vec<&str>) -> HashSet<(usize, usize)>
