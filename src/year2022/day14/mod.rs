@@ -23,10 +23,10 @@ fn run_sand(walls: &HashSet<(i32, i32)>) -> HashSet<(i32, i32)>
     let mut sand: HashSet<(i32, i32)> = HashSet::new();
     let mut unit = (500, 0);
 
-    let bottom = walls.iter().map(|(_, y)| y).max().unwrap();
-    let mut top = *bottom;
+    let bottom = *walls.iter().map(|(_, y)| y).max().unwrap();
+    let mut top = bottom;
 
-    while top > 0 && bottom > &unit.1 {
+    while top > 0 && bottom > unit.1 {
         unit.1 += 1;
         if !sand.contains(&unit) && !walls.contains(&unit) {
             continue;
