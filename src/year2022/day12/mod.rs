@@ -11,12 +11,12 @@ pub fn solve() -> (usize, usize)
     let mut start = (0, 0);
     let mut end = (0, 0);
 
-    let mut starts: Vec<((usize, usize), Vec<Vec<char>>)> = Vec::new();
+    let mut part2_starts: Vec<((usize, usize), Vec<Vec<char>>)> = Vec::new();
 
     for row in 0..map.len() {
         for col in 0..map[0].len() {
             match map[row][col] {
-                'a' => starts.push(((col, row), map.clone())),
+                'a' => part2_starts.push(((col, row), map.clone())),
                 'S' => {
                     start = (col, row);
                     map[row][col] = 'a';
@@ -34,15 +34,9 @@ pub fn solve() -> (usize, usize)
     let grid = Grid::new(map, walkable);
 
     let result1 = grid.bfs(start, end).unwrap().len();
-    let result2 = starts
+    let result2 = part2_starts
         .par_iter()
-        .map(|start| {
-            Grid::new(
-                start.1.clone(),
-                Box::new(|current: &char, neighbor: &char| *neighbor as i32 - *current as i32 <= 1),
-            )
-            .bfs(start.0, end)
-        })
+        .map(|s| Grid::new(s.1.clone(), Box::new(|c: &char, n: &char| *n as i32 - *c as i32 <= 1)).bfs(s.0, end))
         .filter(|path| path.is_some())
         .map(|path| path.unwrap().len())
         .min()
