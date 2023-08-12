@@ -1,3 +1,5 @@
+use std::collections::*;
+
 pub struct Grid<T>
 {
     map: Vec<Vec<T>>,
@@ -15,13 +17,13 @@ where
 
     pub fn dfs(&self, start: (usize, usize), end: (usize, usize)) -> Option<Vec<(usize, usize)>>
     {
-        let mut queue = std::collections::VecDeque::new();
-        queue.push_front(start);
+        let mut queue = Vec::new();
+        queue.push(start);
 
-        let mut visited = std::collections::HashMap::new();
+        let mut visited = HashMap::new();
         visited.insert(start, start);
 
-        while let Some(current) = queue.pop_front() {
+        while let Some(current) = queue.pop() {
             if current == end {
                 let mut path = Vec::new();
                 let mut node = end;
@@ -41,7 +43,7 @@ where
                     && (self.walkable)(&self.map[current.1][current.0], &self.map[neighbor.1][neighbor.0])
                 {
                     visited.insert(neighbor, current);
-                    queue.push_front(neighbor);
+                    queue.push(neighbor);
                 }
             }
         }
