@@ -2,12 +2,12 @@ use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
-    let mut lines = include_str!("input.txt").lines().collect::<Vec<_>>();
+    let mut lines = include_str!("input.txt").lines().collect();
 
     let walls = build_walls(&lines);
     let result1 = run_sand(&walls);
 
-    //lines.push("485,11 -> 515,11");
+    //lines.push("485,11 -> 515,11"); // test.txt
     lines.push("300,173 -> 700,173");
 
     let walls = build_walls(&lines);
@@ -32,22 +32,22 @@ fn run_sand(walls: &HashSet<(usize, usize)>) -> usize
     let (mut x, mut y) = (500, 0);
 
     while bottom > y {
-        y += 1;
+        y += 1; // 1 down
         if !grid[x][y] {
             continue;
         }
 
-        x -= 1;
+        x -= 1; // 1 left
         if !grid[x][y] {
             continue;
         }
 
-        x += 2;
+        x += 2; // 1 right
         if !grid[x][y] {
             continue;
         }
 
-        x -= 1;
+        x -= 1; // go back
         y -= 1;
         grid[x][y] = true;
 
