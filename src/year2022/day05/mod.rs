@@ -51,7 +51,7 @@ pub fn solve() -> (String, String)
     let result1 = res1.iter().collect::<String>();
     let result2 = res2.iter().collect::<String>();
 
-    println!("5\t{result1}\t{result2}");
+    println!("5\t{result1:<15}\t{result2:<15}");
 
     (result1, result2)
 }

@@ -42,7 +42,7 @@ pub fn solve() -> (usize, usize)
     let result1 = (x.abs() + y.abs()) as usize;
     let result2 = (result2.0.abs() + result2.1.abs()) as usize;
 
-    println!("1\t{result1}\t\t{result2}");
+    println!("1\t{result1:<15}\t{result2:<15}");
 
     (result1, result2)
 }

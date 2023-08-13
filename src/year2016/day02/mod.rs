@@ -31,7 +31,7 @@ pub fn solve() -> (String, String)
         result2 += format!("{:X}", key2).as_str();
     }
 
-    println!("2\t{result1}\t\t{result2}");
+    println!("2\t{result1:<15}\t{result2:<15}");
 
     (result1, result2)
 }

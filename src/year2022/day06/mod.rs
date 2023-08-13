@@ -15,7 +15,7 @@ pub fn solve() -> (usize, usize)
     let result1 = find_marker(4, &input);
     let result2 = find_marker(14, &input);
 
-    println!("6\t{result1}\t\t{result2}");
+    println!("6\t{result1:<15}\t{result2:<15}");
 
     (result1, result2)
 }
