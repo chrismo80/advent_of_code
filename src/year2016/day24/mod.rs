@@ -1,12 +1,10 @@
-use crate::path_finding::grid::*;
-use permute::*;
 use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
     let map: Vec<Vec<char>> = include_str!("input.txt").lines().map(|l| l.chars().collect()).collect();
 
-    let grid = Grid::new(&map, Box::new(|_, next| *next != '#'));
+    let grid = crate::path_finding::grid::Grid::new(&map, Box::new(|_, next| *next != '#'));
 
     // get node positions from map (for BFS start/end)
     let nodes: HashMap<usize, (usize, usize)> = (0..map.len())
@@ -40,7 +38,7 @@ pub fn solve() -> (usize, usize)
     let total_distance = |route: Vec<usize>| -> usize { route.windows(2).map(|w| distances[&(w[0], w[1])]).sum() };
 
     // get all node permutations except node 0 (append/prepend it later as start/end points)
-    for permutation in permutations_of(&locations) {
+    for permutation in permute::permutations_of(&locations) {
         let mut route: VecDeque<usize> = permutation.copied().collect();
 
         route.push_back(0);
