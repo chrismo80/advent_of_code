@@ -18,17 +18,10 @@ pub fn solve() -> (usize, usize)
         rooms.push((name, sector_id, checksum));
     }
 
-    let result1 = rooms
-        .iter()
-        .filter(|(name, _, checksum)| check(name) == *checksum)
-        .map(|(_, sector_id, _)| sector_id)
-        .sum();
+    let location = "northpole object storage";
 
-    let result2 = rooms
-        .iter()
-        .find(|(name, sector_id, _)| shift(name, *sector_id) == "northpole object storage")
-        .unwrap()
-        .1;
+    let result1 = rooms.iter().filter(|(n, _, c)| check(n) == *c).map(|(_, s, _)| s).sum();
+    let result2 = rooms.iter().find(|(n, s, _)| shift(n, *s) == location).unwrap().1;
 
     println!("4\t{result1:<15}\t{result2:<15}");
 
