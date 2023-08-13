@@ -1,36 +1,23 @@
 pub mod day24;
 
+static YEAR: &str = "2016";
+
 pub fn run()
 {
-    let start = begin();
+    let start = super::begin();
 
     for _ in 0..1 {
         day24::solve();
     }
 
-    end(start);
+    super::end(start, YEAR);
 }
 
 pub fn run_all()
 {
-    let start = begin();
+    let start = super::begin();
 
     day24::solve();
 
-    end(start);
-}
-
-fn begin() -> std::time::Instant
-{
-    println!("\n\nDay\tPart 1\t\tPart 2\n---------------------------------------");
-
-    std::time::Instant::now()
-}
-
-fn end(start: std::time::Instant)
-{
-    println!(
-        "---------------------------------------\nYear 2016: {:.1} ms\n\n",
-        start.elapsed().as_micros() as f32 / 1000.0
-    );
+    super::end(start, YEAR);
 }

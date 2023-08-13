@@ -4,4 +4,6 @@ fn main()
     //std::env::set_var("RUST_BACKTRACE", "1");
 
     advent_of_code::run();
+
+    //advent_of_code::year2016::day24::solve();
 }
