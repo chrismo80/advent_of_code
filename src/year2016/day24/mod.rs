@@ -37,17 +37,17 @@ pub fn solve() -> (usize, usize)
     let mut routes2: Vec<usize> = Vec::new();
 
     // closure for calculating total distance for a route
-    let total_distance = |route: &[usize]| -> usize { route.windows(2).map(|w| distances[&(w[0], w[1])]).sum() };
+    let total_distance = |route: Vec<usize>| -> usize { route.windows(2).map(|w| distances[&(w[0], w[1])]).sum() };
 
     // get all node permutations except node 0 (append/prepend it later as start/end points)
     for permutation in permutations_of(&locations) {
-        let mut route: VecDeque<usize> = permutation.copied().collect::<VecDeque<usize>>();
+        let mut route: VecDeque<usize> = permutation.copied().collect();
 
         route.push_back(0);
-        routes1.push(total_distance(&route.clone().into_iter().collect::<Vec<usize>>()));
+        routes1.push(total_distance(route.clone().into_iter().collect()));
 
         route.push_front(0);
-        routes2.push(total_distance(&route.clone().into_iter().collect::<Vec<usize>>()));
+        routes2.push(total_distance(route.clone().into_iter().collect()));
     }
 
     let result1 = *routes1.iter().min().unwrap();
