@@ -7,9 +7,9 @@ pub fn solve() -> (usize, usize)
     let mut rooms: Vec<(Vec<String>, usize, String)> = Vec::new();
 
     for line in input {
-        let mut parts = line.split(['-', '[', ']'].as_ref()).collect::<Vec<&str>>();
+        let mut parts = line.split(['-', '[', ']']).collect::<Vec<&str>>();
 
-        parts.pop();
+        parts.pop(); // skip last empty one
 
         let checksum = parts.pop().unwrap().parse().unwrap();
         let sector_id: usize = parts.pop().unwrap().parse().unwrap();
