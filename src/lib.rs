@@ -11,19 +11,23 @@ pub fn run()
     year2016::run_all();
     year2022::run_all();
 
-    end(start, "All years");
+    end(start, "Total");
 }
 
 fn begin() -> std::time::Instant
 {
     println!("\n\nDay\tPart 1\t\tPart 2");
-    println!("---------------------------------------");
-
+    print_line();
     std::time::Instant::now()
 }
 
 fn end(start: std::time::Instant, scope: &str)
 {
-    println!("---------------------------------------");
+    print_line();
     println!("{scope}: {:.1} ms\n\n", start.elapsed().as_micros() as f32 / 1000.0);
+}
+
+fn print_line()
+{
+    println!("---------------------------------------");
 }
