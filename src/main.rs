@@ -5,5 +5,5 @@ fn main()
 
     advent_of_code::run();
 
-    //advent_of_code::year2016::day24::solve();
+    //advent_of_code::year2016::run();
 }

@@ -5,8 +5,9 @@ pub fn solve() -> (usize, usize)
     let input: Vec<&str> = include_str!("input.txt").split(", ").collect();
 
     let (mut x, mut y) = (0, 0);
-    let mut trail: HashSet<(i32, i32)> = HashSet::new();
     let mut view = 0;
+
+    let mut trail: HashSet<(i32, i32)> = HashSet::new();
     let mut result2 = (0, 0);
 
     for step in input {
@@ -18,14 +19,14 @@ pub fn solve() -> (usize, usize)
 
         for _ in 0..step[1..].parse::<i32>().unwrap() {
             x = match view {
-                1 => x + 1,
-                3 => x - 1,
+                1 => x + 1, // right
+                3 => x - 1, // left
                 _ => x,
             };
 
             y = match view {
-                0 => y - 1,
-                2 => y + 1,
+                0 => y - 1, // up
+                2 => y + 1, // down
                 _ => y,
             };
 
