@@ -4,10 +4,9 @@ use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
-    let map: Vec<Vec<char>> = include_str!("input.txt")
-        .lines()
-        .map(|row| row.chars().collect())
-        .collect();
+    let map: Vec<Vec<char>> = include_str!("input.txt").lines().map(|l| l.chars().collect()).collect();
+
+    let grid = Grid::new(&map, Box::new(|_, next| *next != '#'));
 
     // get node positions from map (for BFS start/end)
     let nodes: HashMap<usize, (usize, usize)> = (0..map.len())
@@ -15,8 +14,6 @@ pub fn solve() -> (usize, usize)
         .filter(|(x, y)| map[*y][*x].is_ascii_digit())
         .map(|(x, y)| (map[y][x].to_digit(10).unwrap() as usize, (x, y)))
         .collect();
-
-    let search = Grid::new(&map, Box::new(|_, next| *next != '#'));
 
     let mut distances: HashMap<(usize, usize), usize> = HashMap::new();
 
@@ -26,14 +23,15 @@ pub fn solve() -> (usize, usize)
         .flat_map(|f| nodes.keys().map(move |t| (f, t)))
         .filter(|(f, t)| f < t)
     {
-        let distance = search.bfs(nodes[from], nodes[to]).unwrap().len();
+        let distance = grid.bfs(nodes[from], nodes[to]).unwrap().len();
 
+        // store for both directions
         distances.insert((*from, *to), distance);
         distances.insert((*to, *from), distance);
     }
 
-    // get nodes except 0 (start/end)
-    let routes: Vec<usize> = nodes.keys().filter(|n| **n != 0).copied().collect();
+    // get nodes as list except 0 (start/end)
+    let locations: Vec<usize> = nodes.keys().filter(|n| **n != 0).copied().collect();
 
     let mut routes1: Vec<usize> = Vec::new();
     let mut routes2: Vec<usize> = Vec::new();
@@ -42,7 +40,7 @@ pub fn solve() -> (usize, usize)
     let total_distance = |route: &[usize]| -> usize { route.windows(2).map(|w| distances[&(w[0], w[1])]).sum() };
 
     // get all node permutations except node 0 (append/prepend it later as start/end points)
-    for permutation in permutations_of(&routes) {
+    for permutation in permutations_of(&locations) {
         let mut route: VecDeque<usize> = permutation.copied().collect::<VecDeque<usize>>();
 
         route.push_back(0);
