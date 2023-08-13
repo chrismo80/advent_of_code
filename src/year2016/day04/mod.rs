@@ -2,11 +2,9 @@ use iter_tools::Itertools;
 
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt").lines();
-
     let mut rooms: Vec<(Vec<String>, usize, String)> = Vec::new();
 
-    for line in input {
+    for line in include_str!("input.txt").lines() {
         let mut parts = line.split(['-', '[', ']']).collect::<Vec<&str>>();
 
         parts.pop(); // skip last empty one
@@ -48,15 +46,11 @@ fn check(name: &[String]) -> String
                     .count(),
             )
         })
-        .collect::<Vec<(&char, usize)>>()
-        .iter()
         .sorted()
         .sorted_by(|(_, count1), (_, count2)| count2.cmp(count1))
         .map(|(c, _)| c)
         .take(5)
-        .collect::<Vec<&&char>>()
-        .iter()
-        .map(|c| **c)
+        .copied()
         .collect::<String>()
 }
 
