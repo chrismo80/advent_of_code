@@ -8,6 +8,34 @@ struct Monkey
     inspections: usize,
 }
 
+impl Monkey
+{
+    fn throw(&mut self, divide: bool) -> Option<(i64, usize)>
+    {
+        let item = self.items.pop()?;
+
+        self.inspections += 1;
+
+        let mut worry_level = (self.operation)(item);
+
+        if divide {
+            worry_level /= 3;
+        }
+
+        if worry_level % self.test == 0 {
+            Some((worry_level, self.throw_true))
+        }
+        else {
+            Some((worry_level, self.throw_false))
+        }
+    }
+
+    fn catch(&mut self, item: i64)
+    {
+        self.items.push(item);
+    }
+}
+
 impl std::str::FromStr for Monkey
 {
     type Err = ();
@@ -52,33 +80,9 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
 
     for _ in 0..rounds {
         for i in 0..monkeys.len() {
-            let monkey = &mut monkeys[i];
-
-            monkey.inspections += monkey.items.len();
-
-            let mut items_true = vec![];
-            let mut items_false = vec![];
-
-            while let Some(item) = monkey.items.pop() {
-                let mut worry_level = (monkey.operation)(item);
-
-                if rounds < 1000 {
-                    worry_level /= 3;
-                }
-
-                if worry_level % monkey.test == 0 {
-                    items_true.push(worry_level % lcm);
-                }
-                else {
-                    items_false.push(worry_level % lcm);
-                }
+            while let Some(item) = monkeys[i].throw(rounds < 1000) {
+                monkeys[item.1].catch(item.0 % lcm);
             }
-
-            let monkey_true = monkey.throw_true;
-            let monkey_false = monkey.throw_false;
-
-            monkeys[monkey_true].items.extend(items_true);
-            monkeys[monkey_false].items.extend(items_false);
         }
     }
 
