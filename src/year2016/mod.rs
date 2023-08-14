@@ -10,8 +10,8 @@ pub fn run()
 {
     let start = super::begin();
 
-    for _ in 0..1 {
-        day03::solve();
+    for _ in 0..10 {
+        day04::solve();
     }
 
     super::end(start, YEAR);

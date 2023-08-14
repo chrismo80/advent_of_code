@@ -28,42 +28,29 @@ pub fn solve() -> (usize, usize)
 
 fn check(name: &[String]) -> String
 {
-    name.iter()
-        .flat_map(|part| part.chars().collect::<Vec<char>>())
-        .fold(vec![], |mut acc, c| {
-            if !acc.contains(&c) {
-                acc.push(c);
-            }
-            acc
-        })
-        .iter()
-        .map(|c| {
-            (
-                c,
-                name.iter()
-                    .flat_map(|part| part.chars().collect::<Vec<char>>())
-                    .filter(|&c2| c2 == *c)
-                    .count(),
-            )
-        })
-        .sorted()
-        .sorted_by(|(_, count1), (_, count2)| count2.cmp(count1))
-        .map(|(c, _)| c)
-        .take(5)
-        .copied()
-        .collect::<String>()
+    // closure to count the number of occurrences of a character in a name
+    let count = |name: &[String], char: char| name.iter().flat_map(|n| n.chars()).filter(|&c| c == char).count();
+
+    let chars = name.iter().flat_map(|part| part.chars()).fold(vec![], |mut acc, c| {
+        if !acc.contains(&c) {
+            acc.push(c);
+        }
+        acc
+    });
+
+    let counts = chars.iter().map(|char| (char, count(name, *char)));
+
+    let sorted = counts.sorted().sorted_by(|(_, c1), (_, c2)| c2.cmp(c1));
+
+    sorted.map(|(c, _)| c).take(5).copied().collect::<String>()
 }
 
 fn shift(name: &[String], sector_id: usize) -> String
 {
-    name.iter()
-        .map(|word| {
-            word.chars()
-                .map(|c| (((c as usize - 'a' as usize + sector_id) % 26) + 'a' as usize) as u8 as char)
-                .collect::<String>()
-        })
-        .collect::<Vec<String>>()
-        .join(" ")
+    // closure to calculate the new character after shifting
+    let calc = |c| (((c as usize - 'a' as usize + sector_id) % 26) + 'a' as usize) as u8 as char;
+
+    name.iter().map(|n| n.chars().map(calc).collect::<String>()).join(" ")
 }
 
 #[cfg(test)]
