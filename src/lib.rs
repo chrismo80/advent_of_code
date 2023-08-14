@@ -8,10 +8,17 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    year2016::run_all();
-    year2022::run_all();
+    //year2016::day04::solve();
+
+    run_all();
 
     end(start, "Total");
+}
+
+fn run_all()
+{
+    year2016::run_all();
+    year2022::run_all();
 }
 
 fn begin() -> std::time::Instant

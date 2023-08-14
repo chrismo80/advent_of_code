@@ -15,17 +15,6 @@ pub mod day25;
 
 static YEAR: &str = "2022";
 
-pub fn run()
-{
-    let start = super::begin();
-
-    for _ in 0..1 {
-        day14::solve();
-    }
-
-    super::end(start, YEAR);
-}
-
 pub fn run_all()
 {
     let start = super::begin();
