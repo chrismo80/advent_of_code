@@ -3,8 +3,7 @@ pub fn solve() -> (String, String)
     let input = include_str!("input.txt");
 
     let result1 = get_check_sum(input, 272);
-    // let result2 = get_check_sum(input, 35651584);
-    let result2 = "ABC".to_string();
+    let result2 = get_check_sum(input, 35651584);
 
     println!("16\t{result1:<20}\t{result2:<20}");
 

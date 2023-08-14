@@ -22,11 +22,9 @@ impl Monkey
             worry_level /= 3;
         }
 
-        if worry_level % self.test == 0 {
-            Some((worry_level, self.throw_true))
-        }
-        else {
-            Some((worry_level, self.throw_false))
+        match worry_level % self.test == 0 {
+            true => Some((worry_level, self.throw_true)),
+            false => Some((worry_level, self.throw_false)),
         }
     }
 
