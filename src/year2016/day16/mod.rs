@@ -12,22 +12,21 @@ pub fn solve() -> (String, String)
 
 fn get_check_sum(data: String, disk_length: usize) -> String
 {
-    let mut digits: Vec<bool> = data.chars().map(|c| c == '1').collect();
+    let mut bits: Vec<bool> = data.chars().map(|c| c == '1').collect();
 
-    while digits.len() < disk_length {
-        digits.push(false);
-        digits.extend(digits.iter().rev().skip(1).map(|b| !b).collect::<Vec<bool>>());
+    while bits.len() < disk_length {
+        bits.push(false);
+        bits.extend(bits.iter().rev().skip(1).map(|b| !b).collect::<Vec<bool>>());
     }
 
-    digits = digits[..disk_length].to_vec();
+    bits = bits[..disk_length].to_vec();
 
-    while digits.len() % 2 == 0 {
-        digits = digits.chunks(2).map(|pair| pair[0] == pair[1]).collect();
+    while bits.len() % 2 == 0 {
+        bits = bits.chunks(2).map(|pair| pair[0] == pair[1]).collect();
     }
 
-    digits
-        .iter()
-        .map(|b| char::from_digit(*b as u32, 10).unwrap())
+    bits.iter()
+        .map(|b| char::from_digit(*b as u32, 2).unwrap())
         .collect::<String>()
 }
 
