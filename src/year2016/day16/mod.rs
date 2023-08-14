@@ -1,5 +1,3 @@
-//use iter_tools::Itertools;
-
 pub fn solve() -> (String, String)
 {
     let input = include_str!("input.txt");
