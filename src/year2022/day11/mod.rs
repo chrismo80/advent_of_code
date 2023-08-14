@@ -1,3 +1,5 @@
+use iter_tools::Itertools;
+
 struct Monkey
 {
     items: Vec<i64>,
@@ -78,17 +80,15 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
 
     for _ in 0..rounds {
         for i in 0..monkeys.len() {
-            while let Some(item) = monkeys[i].throw(rounds < 1000) {
+            while let Some(item) = monkeys[i].throw(rounds < 100) {
                 monkeys[item.1].catch(item.0 % lcm);
             }
         }
     }
 
-    let mut result: Vec<usize> = monkeys.iter().map(|monkey| monkey.inspections).collect();
+    let result: Vec<usize> = monkeys.iter().map(|monkey| monkey.inspections).collect();
 
-    result.sort();
-
-    result.iter().rev().take(2).product::<usize>()
+    result.iter().sorted().rev().take(2).product::<usize>()
 }
 
 fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
