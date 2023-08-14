@@ -15,7 +15,7 @@ pub fn solve() -> (usize, usize)
     let result1 = run(&input, &mut [(0, 0); 2]);
     let result2 = run(&input, &mut [(0, 0); 10]);
 
-    println!("9\t{result1:<15}\t{result2:<15}");
+    println!("9\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

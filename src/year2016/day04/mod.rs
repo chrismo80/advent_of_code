@@ -21,7 +21,7 @@ pub fn solve() -> (usize, usize)
     let result1 = rooms.iter().filter(|(n, _, c)| check(n) == *c).map(|(_, s, _)| s).sum();
     let result2 = rooms.iter().find(|(n, s, _)| shift(n, *s) == location).unwrap().1;
 
-    println!("4\t{result1:<15}\t{result2:<15}");
+    println!("4\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

@@ -42,7 +42,7 @@ pub fn solve() -> (usize, usize)
     let result1 = play(create_monkeys(&input), 20);
     let result2 = play(create_monkeys(&input), 10_000);
 
-    println!("11\t{result1:<15}\t{result2:<15}");
+    println!("11\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

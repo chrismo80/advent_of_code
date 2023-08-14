@@ -15,7 +15,7 @@ pub fn solve() -> (usize, usize)
         }
     }
 
-    println!("8\t{result1:<15}\t{result2:<15}");
+    println!("8\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

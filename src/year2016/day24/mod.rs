@@ -51,7 +51,7 @@ pub fn solve() -> (usize, usize)
     let result1 = *routes1.iter().min().unwrap();
     let result2 = *routes2.iter().min().unwrap();
 
-    println!("24\t{result1:<15}\t{result2:<15}");
+    println!("24\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

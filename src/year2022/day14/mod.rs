@@ -13,7 +13,7 @@ pub fn solve() -> (usize, usize)
     let walls = build_walls(&lines);
     let result2 = run_sand(&walls);
 
-    println!("14\t{result1:<15}\t{result2:<15}");
+    println!("14\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

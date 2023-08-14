@@ -7,7 +7,7 @@ pub fn solve() -> (String, String)
     let result1 = get_check_sum(input.to_string(), 272);
     let result2 = get_check_sum(input.to_string(), 35651584);
 
-    println!("16\t{result1:<15}\t{result2:<15}");
+    println!("16\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

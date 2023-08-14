@@ -27,7 +27,7 @@ pub fn solve() -> (i64, i64)
 
     result2 += 2_i64.pow(32) - 1 - last_blocked; // 4294967295 - lastBlocked
 
-    println!("20\t{result1:<15}\t{result2:<15}");
+    println!("20\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

@@ -8,9 +8,9 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    year2016::day16::solve();
+    //year2016::day16::solve();
 
-    //run_all();
+    run_all();
 
     end(start, "Total");
 }
@@ -23,7 +23,7 @@ fn run_all()
 
 fn begin() -> std::time::Instant
 {
-    println!("\n\nDay\tPart 1\t\tPart 2");
+    println!("\n\nDay\tPart 1\t\t\tPart 2");
     print_line();
     std::time::Instant::now()
 }
@@ -36,5 +36,5 @@ fn end(start: std::time::Instant, scope: &str)
 
 fn print_line()
 {
-    println!("---------------------------------------");
+    println!("---------------------------------------------------");
 }

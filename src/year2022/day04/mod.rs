@@ -21,7 +21,7 @@ pub fn solve() -> (i32, i32)
         result2 += overlap_at_all(left_min, left_max, right_min, right_max) as i32;
     }
 
-    println!("4\t{result1:<15}\t{result2:<15}");
+    println!("4\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

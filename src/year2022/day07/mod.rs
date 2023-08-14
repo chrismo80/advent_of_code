@@ -57,7 +57,7 @@ pub fn solve() -> (isize, isize)
         .last()
         .unwrap();
 
-    println!("7\t{result1:<15}\t{result2:<15}");
+    println!("7\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }
