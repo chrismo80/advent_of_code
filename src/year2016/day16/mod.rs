@@ -2,15 +2,16 @@ pub fn solve() -> (String, String)
 {
     let input = include_str!("input.txt");
 
-    let result1 = get_check_sum(input.to_string(), 272);
-    let result2 = get_check_sum(input.to_string(), 35651584);
+    let result1 = get_check_sum(input, 272);
+    // let result2 = get_check_sum(input, 35651584);
+    let result2 = "ABC".to_string();
 
     println!("16\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }
 
-fn get_check_sum(data: String, disk_length: usize) -> String
+fn get_check_sum(data: &str, disk_length: usize) -> String
 {
     let mut bits: Vec<bool> = data.chars().map(|c| c == '1').collect();
 

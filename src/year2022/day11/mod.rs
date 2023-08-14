@@ -8,39 +8,38 @@ struct Monkey
     inspections: usize,
 }
 
+impl std::str::FromStr for Monkey
+{
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err>
+    {
+        let parts = s.lines().collect::<Vec<&str>>();
+
+        Ok(Monkey {
+            items: parts[1]
+                .split_once(':')
+                .unwrap()
+                .1
+                .trim()
+                .split(", ")
+                .map(|i| i.parse::<i64>().unwrap())
+                .collect::<Vec<i64>>(),
+            operation: get_operation(parts[2].split_once('=').unwrap().1.trim().to_string()),
+            test: parts[3].split_once('y').unwrap().1.trim().parse::<i64>().unwrap(),
+            throw_true: parts[4].split_once('y').unwrap().1.trim().parse::<usize>().unwrap(),
+            throw_false: parts[5].split_once('y').unwrap().1.trim().parse::<usize>().unwrap(),
+            inspections: 0,
+        })
+    }
+}
+
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt")
-        .split("\n\n")
-        .map(|monkey| {
-            monkey
-                .split('\n')
-                .map(|l| {
-                    if l.starts_with("Monkey") {
-                        l[7..8].to_string()
-                    }
-                    else if l.contains("Starting") {
-                        l.split("items: ").last().unwrap().to_string()
-                    }
-                    else if l.contains("Operation:") {
-                        l.split("new = ").last().unwrap().to_string()
-                    }
-                    else if l.contains("Test:") {
-                        l.split("divisible by ").last().unwrap().to_string()
-                    }
-                    else if l.contains("If") {
-                        l.split("throw to monkey ").last().unwrap().to_string()
-                    }
-                    else {
-                        "-".to_string()
-                    }
-                })
-                .collect::<Vec<String>>()
-        })
-        .collect::<Vec<Vec<String>>>();
+    let input: Vec<&str> = include_str!("input.txt").split("\n\n").collect();
 
-    let result1 = play(create_monkeys(&input), 20);
-    let result2 = play(create_monkeys(&input), 10_000);
+    let result1 = play(input.iter().map(|m| m.parse::<Monkey>().unwrap()).collect(), 20);
+    let result2 = play(input.iter().map(|m| m.parse::<Monkey>().unwrap()).collect(), 10_000);
 
     println!("11\t{result1:<20}\t{result2:<20}");
 
@@ -88,27 +87,6 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
     result.sort();
 
     result.iter().rev().take(2).product::<usize>()
-}
-
-fn create_monkeys(input: &Vec<Vec<String>>) -> Vec<Monkey>
-{
-    let mut monkeys: Vec<Monkey> = Vec::new();
-
-    for chunk in input {
-        monkeys.push(Monkey {
-            items: chunk[1]
-                .split(", ")
-                .map(|i| i.parse::<i64>().unwrap())
-                .collect::<Vec<i64>>(),
-            operation: get_operation(chunk[2].to_string()),
-            test: chunk[3].parse::<i64>().unwrap(),
-            throw_true: chunk[4].parse::<usize>().unwrap(),
-            throw_false: chunk[5].parse::<usize>().unwrap(),
-            inspections: 0,
-        });
-    }
-
-    monkeys
 }
 
 fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
