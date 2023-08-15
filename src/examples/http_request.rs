@@ -2,14 +2,29 @@ use serde::Deserialize;
 
 pub fn main()
 {
-    let tickers = vec!["UPRO", "TMF", "18MF.DE", "IS04.DE"];
+    let exchange_rate = get_price("EUR=X");
 
-    for ticker in tickers {
-        println!("{}: {:0.2}", ticker, get_price(ticker));
+    let tickers = vec!["UPRO", "TMF", "18MF.DE", "IS04.DE", "VGVF.DE", "XMLC.DE", "WRLD.DE"];
+
+    for ticker in &tickers {
+        let price = get_price_euro(ticker, exchange_rate.0);
+
+        println!("{}: {:0.2}", ticker, price);
     }
 }
 
-fn get_price(stock: &str) -> f64
+fn get_price_euro(stock: &str, exchange_rate: f64) -> f64
+{
+    let stock = get_price(stock);
+
+    if stock.1 == "EUR" {
+        return stock.0;
+    }
+
+    stock.0 * exchange_rate
+}
+
+fn get_price(stock: &str) -> (f64, String)
 {
     let stock_info: Stock = reqwest::blocking::get(format!(
         "https://query1.finance.yahoo.com/v8/finance/chart/?symbol={stock}&range=1d&interval=1d"
@@ -18,7 +33,10 @@ fn get_price(stock: &str) -> f64
     .json()
     .unwrap();
 
-    stock_info.chart.result[0].indicators.quote[0].close[0]
+    let currency = stock_info.chart.result[0].meta.currency.parse().unwrap();
+    let price = stock_info.chart.result[0].indicators.quote[0].close[0];
+
+    (price, currency)
 }
 
 #[derive(Deserialize, Debug)]
