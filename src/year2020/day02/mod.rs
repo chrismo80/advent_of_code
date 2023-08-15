@@ -1,4 +1,4 @@
-struct Password
+struct ListEntry
 {
     left: usize,
     right: usize,
@@ -6,7 +6,7 @@ struct Password
     password: String,
 }
 
-impl std::str::FromStr for Password
+impl std::str::FromStr for ListEntry
 {
     type Err = ();
 
@@ -16,7 +16,7 @@ impl std::str::FromStr for Password
         let specs = parts.0.split_once(' ').unwrap();
         let range = specs.0.split_once('-').unwrap();
 
-        Ok(Password {
+        Ok(ListEntry {
             left: range.0.parse().unwrap(),
             right: range.1.parse::<usize>().unwrap(),
             char: specs.1.chars().next().unwrap(),
@@ -25,7 +25,7 @@ impl std::str::FromStr for Password
     }
 }
 
-impl Password
+impl ListEntry
 {
     fn is_valid_old_policy(&self) -> bool
     {
@@ -44,10 +44,10 @@ pub fn solve() -> (usize, usize)
 {
     let input: Vec<&str> = include_str!("input.txt").lines().collect();
 
-    let passwords: Vec<Password> = input.iter().map(|line| line.parse().unwrap()).collect();
+    let list: Vec<ListEntry> = input.iter().map(|line| line.parse().unwrap()).collect();
 
-    let result1 = passwords.iter().filter(|p| p.is_valid_old_policy()).count();
-    let result2 = passwords.iter().filter(|p| p.is_valid_new_policy()).count();
+    let result1 = list.iter().filter(|e| e.is_valid_old_policy()).count();
+    let result2 = list.iter().filter(|e| e.is_valid_new_policy()).count();
 
     println!("2\t{result1:<20}\t{result2:<20}");
 
