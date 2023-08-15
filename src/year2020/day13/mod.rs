@@ -1,5 +1,3 @@
-use crate::extensions::count_items::CountItems;
-
 pub fn solve() -> (usize, usize)
 {
     let mut input = include_str!("input.txt").lines();
