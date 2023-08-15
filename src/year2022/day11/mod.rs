@@ -86,9 +86,7 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
         }
     }
 
-    let result: Vec<usize> = monkeys.iter().map(|monkey| monkey.inspections).collect();
-
-    result.iter().sorted().rev().take(2).product::<usize>()
+    monkeys.iter().map(|m| m.inspections).sorted().rev().take(2).product()
 }
 
 fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
