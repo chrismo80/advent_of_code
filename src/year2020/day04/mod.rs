@@ -1,4 +1,25 @@
+use lazy_static::lazy_static;
 use regex::Regex;
+
+lazy_static! {
+    static ref REG_HGT: Regex = Regex::new(r"^(?<value>\d+)(?<unit>cm|in)$").unwrap();
+    static ref REG_HCL: Regex = Regex::new(r"^#[0-9a-f]{6}$").unwrap();
+    static ref REG_PID: Regex = Regex::new(r"^\d{9}$").unwrap();
+}
+
+pub fn solve() -> (usize, usize)
+{
+    let input = include_str!("input.txt").split("\n\n");
+
+    let passports: Vec<Passport> = input.map(|passport| passport.parse::<Passport>().unwrap()).collect();
+
+    let result1 = passports.iter().filter(|passport| passport.has_all_fields()).count();
+    let result2 = passports.iter().filter(|passport| passport.is_valid()).count();
+
+    println!("04\t{result1:<20}\t{result2:<20}");
+
+    (result1, result2)
+}
 
 #[derive(Debug, Default)]
 struct Passport
@@ -45,10 +66,8 @@ impl Passport
             && self.eyr.unwrap() >= 2020
             && self.eyr.unwrap() <= 2030
             && colors.contains(&self.ecl.as_ref().unwrap().as_str())
-            && Regex::new(r"^#[0-9a-f]{6}$")
-                .unwrap()
-                .is_match(self.hcl.as_ref().unwrap())
-            && Regex::new(r"^\d{9}$").unwrap().is_match(self.pid.as_ref().unwrap())
+            && REG_HCL.is_match(self.hcl.as_ref().unwrap())
+            && REG_PID.is_match(self.pid.as_ref().unwrap())
             && match self.hgt.as_ref().unwrap().unit.as_str() {
                 "cm" => self.hgt.as_ref().unwrap().value >= 150 && self.hgt.as_ref().unwrap().value <= 193,
                 "in" => self.hgt.as_ref().unwrap().value >= 59 && self.hgt.as_ref().unwrap().value <= 76,
@@ -74,8 +93,6 @@ impl std::str::FromStr for Passport
             cid: None,
         };
 
-        let reg_h = Regex::new(r"^(?<value>\d+)(?<unit>cm|in)$").unwrap();
-
         for field in s.split_whitespace() {
             let mut field = field.split(':');
             let key = field.next().unwrap();
@@ -86,7 +103,7 @@ impl std::str::FromStr for Passport
                 "iyr" => passport.iyr = Some(value.parse().unwrap()),
                 "eyr" => passport.eyr = Some(value.parse().unwrap()),
                 "hgt" => {
-                    if let Some(caps) = reg_h.captures(value) {
+                    if let Some(caps) = REG_HGT.captures(value) {
                         passport.hgt = Some(Height {
                             value: caps["value"].parse().unwrap(),
                             unit: caps["unit"].to_string(),
@@ -108,26 +125,12 @@ impl std::str::FromStr for Passport
     }
 }
 
-pub fn solve() -> (usize, usize)
-{
-    let input = include_str!("input.txt").split("\n\n");
-
-    let passports: Vec<Passport> = input.map(|passport| passport.parse::<Passport>().unwrap()).collect();
-
-    let result1 = passports.iter().filter(|passport| passport.has_all_fields()).count();
-    let result2 = passports.iter().filter(|passport| passport.is_valid()).count();
-
-    println!("04\t{result1:<20}\t{result2:<20}");
-
-    (result1, result2)
-}
-
 #[cfg(test)]
 mod tests
 {
     #[test]
     fn solve()
     {
-        assert_eq!(super::solve(), (0, 0));
+        assert_eq!(super::solve(), (260, 153));
     }
 }
