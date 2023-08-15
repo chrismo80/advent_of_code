@@ -5,6 +5,7 @@ lazy_static! {
     static ref REG_HGT: Regex = Regex::new(r"^(?<value>\d+)(?<unit>cm|in)$").unwrap();
     static ref REG_HCL: Regex = Regex::new(r"^#[0-9a-f]{6}$").unwrap();
     static ref REG_PID: Regex = Regex::new(r"^\d{9}$").unwrap();
+    static ref COLORS: Vec<&'static str> = vec!["amb", "blu", "brn", "gry", "grn", "hzl", "oth"];
 }
 
 pub fn solve() -> (usize, usize)
@@ -56,8 +57,6 @@ impl Passport
 
     fn is_valid(&self) -> bool
     {
-        let colors = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"];
-
         self.has_all_fields()
             && self.byr.unwrap() >= 1920
             && self.byr.unwrap() <= 2002
@@ -65,7 +64,7 @@ impl Passport
             && self.iyr.unwrap() <= 2020
             && self.eyr.unwrap() >= 2020
             && self.eyr.unwrap() <= 2030
-            && colors.contains(&self.ecl.as_ref().unwrap().as_str())
+            && COLORS.contains(&self.ecl.as_ref().unwrap().as_str())
             && REG_HCL.is_match(self.hcl.as_ref().unwrap())
             && REG_PID.is_match(self.pid.as_ref().unwrap())
             && match self.hgt.as_ref().unwrap().unit.as_str() {
