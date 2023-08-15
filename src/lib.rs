@@ -9,7 +9,7 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    //year2020::day02::solve();
+    //year2020::day01::solve();
 
     run_all();
 
