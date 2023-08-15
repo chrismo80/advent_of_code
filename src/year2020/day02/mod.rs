@@ -18,7 +18,7 @@ impl std::str::FromStr for ListEntry
 
         Ok(ListEntry {
             left: range.0.parse().unwrap(),
-            right: range.1.parse::<usize>().unwrap(),
+            right: range.1.parse().unwrap(),
             char: specs.1.chars().next().unwrap(),
             password: parts.1.to_string(),
         })
@@ -42,12 +42,10 @@ impl ListEntry
 
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<&str> = include_str!("input.txt").lines().collect();
+    let input: Vec<ListEntry> = include_str!("input.txt").lines().map(|l| l.parse().unwrap()).collect();
 
-    let list: Vec<ListEntry> = input.iter().map(|line| line.parse().unwrap()).collect();
-
-    let result1 = list.iter().filter(|e| e.is_valid_old_policy()).count();
-    let result2 = list.iter().filter(|e| e.is_valid_new_policy()).count();
+    let result1 = input.iter().filter(|e| e.is_valid_old_policy()).count();
+    let result2 = input.iter().filter(|e| e.is_valid_new_policy()).count();
 
     println!("2\t{result1:<20}\t{result2:<20}");
 
