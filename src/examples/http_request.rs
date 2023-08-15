@@ -12,8 +12,7 @@ pub fn main()
 fn get_price(stock: &str) -> f64
 {
     let stock_info: Stock = reqwest::blocking::get(format!(
-        "https://query1.finance.yahoo.com/v8/finance/chart/?symbol={}&range=1d&interval=1d",
-        stock
+        "https://query1.finance.yahoo.com/v8/finance/chart/?symbol={stock}&range=1d&interval=1d"
     ))
     .unwrap()
     .json()
@@ -42,6 +41,7 @@ struct Result
     indicators: Indicators,
 }
 
+#[allow(non_snake_case)]
 #[derive(Deserialize, Debug)]
 struct Meta
 {
