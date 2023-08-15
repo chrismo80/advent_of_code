@@ -9,7 +9,7 @@ pub fn main()
     for ticker in &tickers {
         let price = get_price_euro(ticker, exchange_rate.0);
 
-        println!("{}: {:0.2}", ticker, price);
+        println!("{:>7}: {:>8.2} €", ticker, price);
     }
 }
 
@@ -17,11 +17,10 @@ fn get_price_euro(stock: &str, exchange_rate: f64) -> f64
 {
     let stock = get_price(stock);
 
-    if stock.1 == "EUR" {
-        return stock.0;
+    match stock.1.as_str() {
+        "USD" => stock.0 * exchange_rate,
+        _ => stock.0,
     }
-
-    stock.0 * exchange_rate
 }
 
 fn get_price(stock: &str) -> (f64, String)
