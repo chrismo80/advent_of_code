@@ -9,9 +9,9 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    year2020::day13::solve();
+    //year2020::day13::solve();
 
-    //run_all();
+    run_all();
 
     end(start, "Total");
 }
@@ -19,6 +19,7 @@ pub fn run()
 fn run_all()
 {
     year2016::run_all();
+    year2020::run_all();
     year2022::run_all();
 }
 

@@ -1,3 +1,5 @@
+use crate::extensions::count_items::CountItems;
+
 pub fn solve() -> (usize, usize)
 {
     let mut input = include_str!("input.txt").lines();
@@ -20,18 +22,12 @@ pub fn solve() -> (usize, usize)
         .unwrap();
 
     let mut timestamp = 0;
-    let mut match_count = 0;
 
-    let mut stepsize = 1;
+    let mut matches: Vec<&(usize, usize)> = buses.iter().filter(|(lane, id)| (timestamp + lane) % id == 0).collect();
 
-    while match_count < buses.len() {
-        timestamp += stepsize;
-        match_count = buses.iter().filter(|(lane, id)| (timestamp + lane) % id == 0).count();
-        stepsize = buses
-            .iter()
-            .filter(|(lane, id)| (timestamp + lane) % id == 0)
-            .map(|(_, id)| id)
-            .product();
+    while matches.len() < buses.len() {
+        timestamp += matches.iter().map(|m| m.1).product::<usize>();
+        matches = buses.iter().filter(|(lane, id)| (timestamp + lane) % id == 0).collect();
     }
 
     let result1 = (time - arrival) * id;
