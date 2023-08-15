@@ -2,15 +2,16 @@ pub mod examples;
 pub mod extensions;
 pub mod path_finding;
 pub mod year2016;
+pub mod year2020;
 pub mod year2022;
 
 pub fn run()
 {
     let start = std::time::Instant::now();
 
-    //year2022::day11::solve();
+    year2020::day13::solve();
 
-    run_all();
+    //run_all();
 
     end(start, "Total");
 }
