@@ -26,15 +26,12 @@ fn get_price_euro(stock: &str, exchange_rate: f64) -> f64
 
 fn get_price(stock: &str) -> (f64, String)
 {
-    let stock_info: Stock = reqwest::blocking::get(format!(
-        "https://query1.finance.yahoo.com/v8/finance/chart/?symbol={stock}&range=1d&interval=1d"
-    ))
-    .unwrap()
-    .json()
-    .unwrap();
+    let url = format!("https://query1.finance.yahoo.com/v8/finance/chart/{stock}?range=1d&interval=1d");
+
+    let stock_info: Stock = reqwest::blocking::get(url).unwrap().json().unwrap();
 
     let currency = stock_info.chart.result[0].meta.currency.parse().unwrap();
-    let price = stock_info.chart.result[0].indicators.quote[0].close[0];
+    let price = stock_info.chart.result[0].indicators.adjclose[0].adjclose[0];
 
     (price, currency)
 }
