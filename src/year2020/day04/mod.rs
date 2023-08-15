@@ -17,7 +17,7 @@ pub fn solve() -> (usize, usize)
     let result1 = passports.iter().filter(|passport| passport.has_all_fields()).count();
     let result2 = passports.iter().filter(|passport| passport.is_valid()).count();
 
-    println!("04\t{result1:<20}\t{result2:<20}");
+    println!("4\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }
