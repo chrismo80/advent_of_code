@@ -2,41 +2,39 @@ use serde::Deserialize;
 
 pub fn main()
 {
-    let exchange_rate = get_price("EUR=X");
+    let exchange_rate = get_price("EUR=X").0;
 
     let tickers = vec!["UPRO", "TMF", "18MF.DE", "IS04.DE", "VGVF.DE", "XMLC.DE", "WRLD.DE"];
 
     for ticker in &tickers {
-        let price = get_price_euro(ticker, exchange_rate.0);
-
-        println!("{:>7}: {:>8.2} €", ticker, price);
+        println!("{:>7}: {:>8.2} €", ticker, get_price_euro(ticker, exchange_rate));
     }
 }
 
-fn get_price_euro(stock: &str, exchange_rate: f64) -> f64
+fn get_price_euro(ticker: &str, exchange_rate: f64) -> f64
 {
-    let stock = get_price(stock);
+    let price = get_price(ticker);
 
-    match stock.1.as_str() {
-        "USD" => stock.0 * exchange_rate,
-        _ => stock.0,
+    match price.1.as_str() {
+        "USD" => price.0 * exchange_rate,
+        _ => price.0,
     }
 }
 
-fn get_price(stock: &str) -> (f64, String)
+fn get_price(ticker: &str) -> (f64, String)
 {
-    let url = format!("https://query1.finance.yahoo.com/v8/finance/chart/{stock}?range=1d&interval=1d");
+    let url = format!("https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=1d&interval=1d");
 
-    let stock_info: Stock = reqwest::blocking::get(url).unwrap().json().unwrap();
+    let info: Info = reqwest::blocking::get(url).unwrap().json().unwrap();
 
-    let currency = stock_info.chart.result[0].meta.currency.parse().unwrap();
-    let price = stock_info.chart.result[0].indicators.adjclose[0].adjclose[0];
+    let currency = info.chart.result[0].meta.currency.parse().unwrap();
+    let price = info.chart.result[0].indicators.adjclose[0].adjclose[0];
 
     (price, currency)
 }
 
 #[derive(Deserialize, Debug)]
-struct Stock
+struct Info
 {
     chart: Chart,
 }
