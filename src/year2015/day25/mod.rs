@@ -1,4 +1,4 @@
-pub fn solve() -> usize
+pub fn solve() -> u64
 {
     let (mut code, row, col, mut diagonal, mut count) = (20151125, 3010, 3019, 1, 1);
 
@@ -12,7 +12,7 @@ pub fn solve() -> usize
         code = code * 252533 % 33554393;
     }
 
-    println!("1\t{code:<20}\t");
+    println!("25\t{code:<20}\t");
 
     code
 }
