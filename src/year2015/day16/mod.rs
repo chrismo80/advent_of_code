@@ -20,7 +20,7 @@ impl std::str::FromStr for Sue
 
     fn from_str(s: &str) -> Result<Self, Self::Err>
     {
-        let mut sue = Sue { ..Default::default() };
+        let mut sue: Sue = Default::default();
 
         let mut iter = s.split_whitespace();
         iter.next();
