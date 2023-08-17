@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct Sue
 {
     number: usize,
@@ -20,19 +20,7 @@ impl std::str::FromStr for Sue
 
     fn from_str(s: &str) -> Result<Self, Self::Err>
     {
-        let mut sue = Sue {
-            number: 0,
-            children: None,
-            cats: None,
-            samoyeds: None,
-            pomeranians: None,
-            akitas: None,
-            vizslas: None,
-            goldfish: None,
-            trees: None,
-            cars: None,
-            perfumes: None,
-        };
+        let mut sue = Sue { ..Default::default() };
 
         let mut iter = s.split_whitespace();
         iter.next();
