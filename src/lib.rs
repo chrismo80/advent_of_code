@@ -3,6 +3,7 @@ pub mod extensions;
 pub mod path_finding;
 pub mod year2015;
 pub mod year2016;
+pub mod year2019;
 pub mod year2020;
 pub mod year2022;
 
@@ -10,9 +11,9 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    //year2015::day16::solve();
+    year2019::day02::solve();
 
-    run_all();
+    //run_all();
 
     end(start, "Total");
 }
@@ -21,6 +22,7 @@ fn run_all()
 {
     year2015::run_all();
     year2016::run_all();
+    year2019::run_all();
     year2020::run_all();
     year2022::run_all();
 }
