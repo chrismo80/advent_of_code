@@ -43,16 +43,10 @@ impl std::str::FromStr for Monkey
     fn from_str(s: &str) -> Result<Self, Self::Err>
     {
         let parts = s.lines().collect::<Vec<&str>>();
+        let item_list = parts[1].split_once(':').unwrap().1.trim().split(", ");
 
         Ok(Monkey {
-            items: parts[1]
-                .split_once(':')
-                .unwrap()
-                .1
-                .trim()
-                .split(", ")
-                .map(|i| i.parse::<i64>().unwrap())
-                .collect::<Vec<i64>>(),
+            items: item_list.map(|i| i.parse::<i64>().unwrap()).collect::<Vec<i64>>(),
             operation: get_operation(parts[2].split_once('=').unwrap().1.trim().to_string()),
             test: parts[3].split_once('y').unwrap().1.trim().parse::<i64>().unwrap(),
             throw_true: parts[4].split_once('y').unwrap().1.trim().parse::<usize>().unwrap(),
