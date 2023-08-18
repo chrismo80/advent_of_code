@@ -28,16 +28,16 @@ fn amplifier_chain(memory: Vec<i64>, phases: Vec<char>) -> i64
     for phase in phases {
         let mut computer = IntCodeComputer::new(memory.clone(), phase.to_digit(10).unwrap() as i64, false);
         computer.inputs.lock().unwrap().push_front(input);
-        computer.start();
+        computer.run();
         input = computer.get_output();
     }
 
     input
 }
 
+#[derive(Clone)]
 struct IntCodeComputer
 {
-    program: Option<std::thread::JoinHandle<()>>,
     memory: std::collections::HashMap<i64, i64>,
     inputs: Arc<Mutex<VecDeque<i64>>>,
     outputs: Arc<Mutex<VecDeque<i64>>>,
@@ -62,7 +62,6 @@ impl IntCodeComputer
         inp.lock().unwrap().push_front(input);
 
         Self {
-            program: None,
             memory: mem,
             inputs: inp,
             outputs: Arc::new(Mutex::new(std::collections::VecDeque::new())),
@@ -73,7 +72,30 @@ impl IntCodeComputer
         }
     }
 
+    fn add_input(&mut self, input: i64)
+    {
+        self.inputs.lock().unwrap().push_back(input);
+    }
+
+    fn get_output(&mut self) -> i64
+    {
+        while self.outputs.lock().unwrap().is_empty() {
+            println!("waiting for output");
+        }
+
+        self.outputs.lock().unwrap().pop_front().unwrap()
+    }
+
     fn start(&mut self)
+    {
+        let mut me = self.clone();
+
+        spawn(move || {
+            me.run();
+        });
+    }
+
+    fn run(&mut self)
     {
         self.running = true;
 
@@ -133,15 +155,6 @@ impl IntCodeComputer
         }
 
         self.running = false;
-    }
-
-    fn get_output(&mut self) -> i64
-    {
-        while self.outputs.lock().unwrap().is_empty() {
-            println!("waiting for output");
-        }
-
-        self.outputs.lock().unwrap().pop_front().unwrap()
     }
 
     fn read(&self, offset: i64) -> i64
