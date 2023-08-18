@@ -10,7 +10,7 @@ pub fn run_all()
 
     day02::solve();
     day05::solve();
-    //day07::solve();
+    day07::solve();
 
     super::end(start, YEAR);
 }

@@ -1,3 +1,7 @@
+use std::collections::*;
+use std::sync::*;
+use std::thread::*;
+
 pub fn solve() -> (i64, i64)
 {
     let input: Vec<i64> = include_str!("input.txt")
@@ -23,7 +27,7 @@ fn amplifier_chain(memory: Vec<i64>, phases: Vec<char>) -> i64
 
     for phase in phases {
         let mut computer = IntCodeComputer::new(memory.clone(), phase.to_digit(10).unwrap() as i64, false);
-        computer.inputs.push_front(input);
+        computer.inputs.lock().unwrap().push_front(input);
         computer.start();
         input = computer.get_output();
     }
@@ -35,8 +39,8 @@ struct IntCodeComputer
 {
     program: Option<std::thread::JoinHandle<()>>,
     memory: std::collections::HashMap<i64, i64>,
-    inputs: std::collections::VecDeque<i64>,
-    outputs: std::collections::VecDeque<i64>,
+    inputs: Arc<Mutex<VecDeque<i64>>>,
+    outputs: Arc<Mutex<VecDeque<i64>>>,
     pointer: i64,
     phase: i64,
     relative_base: i64,
@@ -53,15 +57,15 @@ impl IntCodeComputer
             mem.insert(i as i64, *v);
         }
 
-        let mut inp = std::collections::VecDeque::new();
+        let inp = Arc::new(Mutex::new(std::collections::VecDeque::new()));
 
-        inp.push_front(input);
+        inp.lock().unwrap().push_front(input);
 
         Self {
             program: None,
             memory: mem,
             inputs: inp,
-            outputs: std::collections::VecDeque::new(),
+            outputs: Arc::new(Mutex::new(std::collections::VecDeque::new())),
             pointer: 0,
             phase: input,
             relative_base: 0,
@@ -86,14 +90,14 @@ impl IntCodeComputer
                     self.pointer += 4;
                 }
                 3 => {
-                    if !self.inputs.is_empty() {
-                        let input = self.inputs.pop_front().unwrap();
+                    if !self.inputs.lock().unwrap().is_empty() {
+                        let input = self.inputs.lock().unwrap().pop_front().unwrap();
                         self.write(1, input);
                         self.pointer += 2;
                     }
                 }
                 4 => {
-                    self.outputs.push_back(self.read(1));
+                    self.outputs.lock().unwrap().push_back(self.read(1));
                     self.pointer += 2;
                 }
                 5 => {
@@ -133,11 +137,11 @@ impl IntCodeComputer
 
     fn get_output(&mut self) -> i64
     {
-        while self.outputs.is_empty() {
+        while self.outputs.lock().unwrap().is_empty() {
             println!("waiting for output");
         }
 
-        self.outputs.pop_front().unwrap()
+        self.outputs.lock().unwrap().pop_front().unwrap()
     }
 
     fn read(&self, offset: i64) -> i64
