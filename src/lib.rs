@@ -11,7 +11,8 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    year2019::run_all();
+    year2022::day11::solve();
+    //year2019::run_all();
 
     //run_all();
 

@@ -88,19 +88,12 @@ fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
     let parts = expression.split_whitespace().collect::<Vec<&str>>();
     let operand = parts[2].to_string();
 
-    if operand == "old" {
-        match parts[1] {
-            "+" => Box::new(move |old| old + old),
-            "*" => Box::new(move |old| old * old),
-            _ => panic!("Unknown operation"),
-        }
-    }
-    else {
-        match parts[1] {
-            "+" => Box::new(move |old| old + operand.parse::<i64>().unwrap()),
-            "*" => Box::new(move |old| old * operand.parse::<i64>().unwrap()),
-            _ => panic!("Unknown operation"),
-        }
+    match (operand.as_str(), parts[1]) {
+        ("old", "+") => Box::new(move |old| old + old),
+        ("old", "*") => Box::new(move |old| old * old),
+        (_, "+") => Box::new(move |old| old + operand.parse::<i64>().unwrap()),
+        (_, "*") => Box::new(move |old| old * operand.parse::<i64>().unwrap()),
+        _ => panic!("Unknown operation"),
     }
 }
 
