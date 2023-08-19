@@ -19,12 +19,12 @@ pub struct IntCodeComputer
 
 impl IntCodeComputer
 {
-    pub fn new(memory: HashMap<i64, i64>, phase: i64) -> Self
+    pub fn new(memory: HashMap<i64, i64>) -> Self
     {
         Self {
             memory,
             pointer: 0,
-            inputs: VecDeque::from(vec![phase]),
+            inputs: VecDeque::new(),
             outputs: VecDeque::new(),
             relative_base: 0,
         }

@@ -25,9 +25,12 @@ fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
 {
     let mut amps: Vec<IntCodeComputer> = phases
         .iter()
-        .map(|phase| IntCodeComputer::new(memory.clone(), phase.to_digit(10).unwrap() as i64))
+        .map(|phase| IntCodeComputer::new(memory.clone()))
         .collect();
 
+    for i in 0..phases.len() {
+        amps[i].add_input(phases[i].to_digit(10).unwrap() as i64);
+    }
     amps[0].add_input(0);
 
     let count = phases.len();
