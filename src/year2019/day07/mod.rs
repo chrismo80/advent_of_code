@@ -1,12 +1,11 @@
 use std::collections::*;
-use std::sync::*;
-use std::thread::*;
 
 pub fn solve() -> (i64, i64)
 {
-    let input: Vec<i64> = include_str!("input.txt")
+    let input: HashMap<i64, i64> = include_str!("input.txt")
         .split(',')
-        .map(|x| x.parse().unwrap())
+        .enumerate()
+        .map(|(i, x)| (i as i64, x.parse().unwrap()))
         .collect();
 
     let result1 = permute::permutations_of(&"01234".chars().collect::<Vec<char>>())
@@ -14,91 +13,87 @@ pub fn solve() -> (i64, i64)
         .max()
         .unwrap();
 
-    let result2 = 0;
+    let result2 = permute::permutations_of(&"56789".chars().collect::<Vec<char>>())
+        .map(|setting| amplifier_chain(input.clone(), setting.copied().collect()))
+        .max()
+        .unwrap();
 
-    println!("5\t{result1:<20}\t{result2:<20}");
+    println!("7\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }
 
-fn amplifier_chain(memory: Vec<i64>, phases: Vec<char>) -> i64
+fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
 {
-    let mut input = 0;
+    let count = phases.len();
 
-    for phase in phases {
-        let mut computer = IntCodeComputer::new(memory.clone(), phase.to_digit(10).unwrap() as i64, false);
-        computer.inputs.lock().unwrap().push_front(input);
-        computer.run();
-        input = computer.get_output();
+    let mut amps: Vec<IntCodeComputer> = phases
+        .iter()
+        .map(|phase| IntCodeComputer::new(memory.clone(), phase.to_digit(10).unwrap() as i64))
+        .collect();
+
+    amps[0].add_input(0);
+
+    let mut states: Vec<State> = (0..count).map(|i| amps[i].run()).collect();
+
+    while states.iter().any(|state| *state == State::Waiting) {
+        for i in 0..count {
+            if states[i] == State::Waiting {
+                if let Some(input) = amps[(count + i - 1) % count].get_output() {
+                    amps[i].add_input(input);
+                    states[i] = amps[i].run();
+                }
+            }
+        }
     }
 
-    input
+    amps.last_mut().unwrap().get_output().unwrap()
+}
+
+#[derive(PartialEq)]
+enum State
+{
+    Finished,
+    Waiting,
 }
 
 #[derive(Clone)]
 struct IntCodeComputer
 {
-    memory: std::collections::HashMap<i64, i64>,
-    inputs: Arc<Mutex<VecDeque<i64>>>,
-    outputs: Arc<Mutex<VecDeque<i64>>>,
+    memory: HashMap<i64, i64>,
+    inputs: VecDeque<i64>,
+    outputs: VecDeque<i64>,
     pointer: i64,
     phase: i64,
     relative_base: i64,
-    running: bool,
 }
 
 impl IntCodeComputer
 {
-    fn new(memory: Vec<i64>, input: i64, wait: bool) -> Self
+    fn new(memory: HashMap<i64, i64>, input: i64) -> Self
     {
-        let mut mem = std::collections::HashMap::new();
-
-        for (i, v) in memory.iter().enumerate() {
-            mem.insert(i as i64, *v);
-        }
-
-        let inp = Arc::new(Mutex::new(std::collections::VecDeque::new()));
-
-        inp.lock().unwrap().push_front(input);
-
         Self {
-            memory: mem,
-            inputs: inp,
-            outputs: Arc::new(Mutex::new(std::collections::VecDeque::new())),
+            memory,
+            inputs: VecDeque::from(vec![input]),
+            outputs: VecDeque::new(),
             pointer: 0,
             phase: input,
             relative_base: 0,
-            running: false,
         }
     }
 
     fn add_input(&mut self, input: i64)
     {
-        self.inputs.lock().unwrap().push_back(input);
+        self.inputs.push_back(input);
     }
 
-    fn get_output(&mut self) -> i64
+    fn get_output(&mut self) -> Option<i64>
     {
-        while self.outputs.lock().unwrap().is_empty() {
-            println!("waiting for output");
-        }
-
-        self.outputs.lock().unwrap().pop_front().unwrap()
+        self.outputs.pop_front()
     }
 
-    fn start(&mut self)
+    fn run(&mut self) -> State
     {
-        let mut me = self.clone();
-
-        spawn(move || {
-            me.run();
-        });
-    }
-
-    fn run(&mut self)
-    {
-        self.running = true;
-
         while self.memory[&self.pointer] != 99 {
             let m = self.memory[&self.pointer] % 100;
 
@@ -112,14 +107,16 @@ impl IntCodeComputer
                     self.pointer += 4;
                 }
                 3 => {
-                    if !self.inputs.lock().unwrap().is_empty() {
-                        let input = self.inputs.lock().unwrap().pop_front().unwrap();
+                    if let Some(input) = self.inputs.pop_front() {
                         self.write(1, input);
                         self.pointer += 2;
                     }
+                    else {
+                        return State::Waiting;
+                    }
                 }
                 4 => {
-                    self.outputs.lock().unwrap().push_back(self.read(1));
+                    self.outputs.push_back(self.read(1));
                     self.pointer += 2;
                 }
                 5 => {
@@ -154,7 +151,7 @@ impl IntCodeComputer
             }
         }
 
-        self.running = false;
+        State::Finished
     }
 
     fn read(&self, offset: i64) -> i64
