@@ -2,21 +2,18 @@ use std::collections::*;
 
 pub fn solve() -> (i64, i64)
 {
-    let input: HashMap<i64, i64> = include_str!("input.txt")
-        .split(',')
-        .enumerate()
-        .map(|(i, x)| (i as i64, x.parse().unwrap()))
-        .collect();
+    let input = include_str!("input.txt").split(',');
 
-    let result1 = permute::permutations_of(&"01234".chars().collect::<Vec<char>>())
-        .map(|setting| amplifier_chain(input.clone(), setting.copied().collect()))
-        .max()
-        .unwrap();
+    let memory: HashMap<i64, i64> = input.enumerate().map(|(i, x)| (i as i64, x.parse().unwrap())).collect();
 
-    let result2 = permute::permutations_of(&"56789".chars().collect::<Vec<char>>())
-        .map(|setting| amplifier_chain(input.clone(), setting.copied().collect()))
-        .max()
-        .unwrap();
+    let result = |phase_setting: &str| {
+        permute::permutations_of(&phase_setting.chars().collect::<Vec<char>>())
+            .map(|setting| amplifier_chain(memory.clone(), setting.copied().collect()))
+            .max()
+    };
+
+    let result1 = result("01234").unwrap();
+    let result2 = result("56789").unwrap();
 
     println!("7\t{result1:<20}\t{result2:<20}");
 
@@ -25,14 +22,14 @@ pub fn solve() -> (i64, i64)
 
 fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
 {
-    let count = phases.len();
-
     let mut amps: Vec<IntCodeComputer> = phases
         .iter()
         .map(|phase| IntCodeComputer::new(memory.clone(), phase.to_digit(10).unwrap() as i64))
         .collect();
 
     amps[0].add_input(0);
+
+    let count = phases.len();
 
     let mut states: Vec<State> = (0..count).map(|i| amps[i].run()).collect();
 
@@ -53,7 +50,7 @@ fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
 #[derive(PartialEq)]
 enum State
 {
-    Finished,
+    Done,
     Waiting,
 }
 
@@ -61,23 +58,21 @@ enum State
 struct IntCodeComputer
 {
     memory: HashMap<i64, i64>,
+    pointer: i64,
     inputs: VecDeque<i64>,
     outputs: VecDeque<i64>,
-    pointer: i64,
-    phase: i64,
     relative_base: i64,
 }
 
 impl IntCodeComputer
 {
-    fn new(memory: HashMap<i64, i64>, input: i64) -> Self
+    fn new(memory: HashMap<i64, i64>, phase: i64) -> Self
     {
         Self {
             memory,
-            inputs: VecDeque::from(vec![input]),
-            outputs: VecDeque::new(),
             pointer: 0,
-            phase: input,
+            inputs: VecDeque::from(vec![phase]),
+            outputs: VecDeque::new(),
             relative_base: 0,
         }
     }
@@ -95,8 +90,6 @@ impl IntCodeComputer
     fn run(&mut self) -> State
     {
         while self.memory[&self.pointer] != 99 {
-            let m = self.memory[&self.pointer] % 100;
-
             match self.memory[&self.pointer] % 100 {
                 1 => {
                     self.write(3, self.read(1) + self.read(2));
@@ -151,7 +144,7 @@ impl IntCodeComputer
             }
         }
 
-        State::Finished
+        State::Done
     }
 
     fn read(&self, offset: i64) -> i64
@@ -166,10 +159,8 @@ impl IntCodeComputer
 
     fn parameter(&self, offset: i64) -> i64
     {
-        let mode = format!("{:0>5}", self.memory.get(&(self.pointer)).unwrap())
-            .chars()
-            .nth(3 - offset as usize)
-            .unwrap();
+        let left_pad = format!("{:0>5}", self.memory.get(&(self.pointer)).unwrap());
+        let mode = left_pad.chars().nth(3 - offset as usize).unwrap();
 
         match mode {
             '0' => *self.memory.get(&(self.pointer + offset)).unwrap_or(&0),
