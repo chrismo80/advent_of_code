@@ -1,5 +1,3 @@
-use std::collections::*;
-
 #[derive(Debug, PartialEq)]
 pub enum State
 {
@@ -10,17 +8,17 @@ pub enum State
 #[derive(Clone, Default)]
 pub struct IntCodeComputer
 {
-    memory: HashMap<i64, i64>,
+    memory: std::collections::HashMap<i64, i64>,
     pointer: i64,
-    pub inputs: VecDeque<i64>,
-    pub outputs: VecDeque<i64>,
+    pub inputs: std::collections::VecDeque<i64>,
+    pub outputs: std::collections::VecDeque<i64>,
     relative_base: i64,
     parameter_modes: Vec<i64>,
 }
 
 impl IntCodeComputer
 {
-    pub fn new(memory: HashMap<i64, i64>) -> Self
+    pub fn new(memory: std::collections::HashMap<i64, i64>) -> Self
     {
         Self {
             memory,
