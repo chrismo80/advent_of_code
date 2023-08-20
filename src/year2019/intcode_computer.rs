@@ -45,6 +45,9 @@ impl IntCodeComputer
             match opcode {
                 1 => self.write(3, self.read(1) + self.read(2)),
                 2 => self.write(3, self.read(1) * self.read(2)),
+                7 => self.write(3, (self.read(1) < self.read(2)) as i64),
+                8 => self.write(3, (self.read(1) == self.read(2)) as i64),
+                9 => self.relative_base += self.read(1),
                 3 => {
                     if let Some(input) = self.inputs.pop_front() {
                         self.write(1, input);
@@ -55,31 +58,14 @@ impl IntCodeComputer
                 }
                 4 => self.outputs.push_back(self.read(1)),
                 5 | 6 => {}
-                7 => self.write(3, (self.read(1) < self.read(2)) as i64),
-                8 => self.write(3, (self.read(1) == self.read(2)) as i64),
-                9 => self.relative_base += self.read(1),
                 _ => panic!("Invalid opcode"),
             }
 
             match opcode {
                 1 | 2 | 7 | 8 => self.pointer += 4,
                 3 | 4 | 9 => self.pointer += 2,
-                5 => {
-                    self.pointer = if self.read(1) != 0 {
-                        self.read(2)
-                    }
-                    else {
-                        self.pointer + 3
-                    }
-                }
-                6 => {
-                    self.pointer = if self.read(1) == 0 {
-                        self.read(2)
-                    }
-                    else {
-                        self.pointer + 3
-                    }
-                }
+                5 => self.pointer = if self.read(1) != 0 { self.read(2) } else { self.pointer + 3 },
+                6 => self.pointer = if self.read(1) == 0 { self.read(2) } else { self.pointer + 3 },
                 _ => panic!("Invalid opcode"),
             }
         }
