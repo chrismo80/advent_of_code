@@ -3,6 +3,7 @@ pub mod day05;
 pub mod day07;
 pub mod day09;
 pub mod day11;
+pub mod day13;
 pub mod intcode_computer;
 
 static YEAR: &str = "2019";
