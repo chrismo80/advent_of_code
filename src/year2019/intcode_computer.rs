@@ -15,6 +15,7 @@ pub struct IntCodeComputer
     pub inputs: VecDeque<i64>,
     pub outputs: VecDeque<i64>,
     relative_base: i64,
+    parameter_modes: Vec<i64>,
 }
 
 impl IntCodeComputer
@@ -40,7 +41,10 @@ impl IntCodeComputer
     pub fn run(&mut self) -> State
     {
         while self.memory[&self.pointer] != 99 {
-            let opcode = self.memory[&self.pointer] % 100;
+            let cmd = self.memory[&self.pointer];
+            let opcode = cmd % 100;
+
+            self.parameter_modes = vec![cmd / 100 % 10, cmd / 1000 % 10, cmd / 10000 % 10];
 
             match opcode {
                 1 => self.write(3, self.read(1) + self.read(2)),
@@ -85,9 +89,7 @@ impl IntCodeComputer
 
     fn parameter(&self, offset: i64) -> i64
     {
-        let mode = (self.memory[&self.pointer] as u32 / 10u32.pow(1 + offset as u32)) % 10;
-
-        match mode {
+        match self.parameter_modes[offset as usize - 1] {
             0 => *self.memory.get(&(self.pointer + offset)).unwrap_or(&0),
             1 => self.pointer + offset,
             2 => *self.memory.get(&(self.pointer + offset)).unwrap_or(&0) + self.relative_base,

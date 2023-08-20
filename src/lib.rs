@@ -13,7 +13,7 @@ pub fn run()
 
     year2019::run_all();
 
-    // run_all();
+    //run_all();
 
     end(start, "Total");
 }
