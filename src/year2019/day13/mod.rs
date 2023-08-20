@@ -20,7 +20,7 @@ pub fn solve() -> (usize, usize)
     let x_max = screen.clone().map(|tile| tile.0).max().unwrap();
     let y_max = screen.clone().map(|tile| tile.1).max().unwrap();
 
-    let mut board: Vec<Vec<i64>> = (0..=y_max + 1).map(|_| vec![0; (x_max + 1) as usize]).collect();
+    let mut board: Vec<Vec<i64>> = (0..=y_max).map(|_| vec![0; (x_max + 1) as usize]).collect();
 
     memory.insert(0, 2);
 
@@ -28,12 +28,10 @@ pub fn solve() -> (usize, usize)
 
     let (mut paddle, mut score, mut ball) = (0, 0, 0);
 
-    while game.run() == State::Waiting {
+    while game.run() == State::Waiting || game.outputs.len() >= 3 {
         let x = game.get_output().unwrap();
         let y = game.get_output().unwrap();
         let tile = game.get_output().unwrap();
-
-        println!("{} {} {}", x, y, tile);
 
         if x >= 0 {
             board[y as usize][x as usize] = tile;
@@ -42,22 +40,23 @@ pub fn solve() -> (usize, usize)
             score = tile;
         }
 
-        if x == 3 {
-            paddle = y;
+        if tile == 3 {
+            ball = x;
         }
 
-        if x == 4 {
-            ball = y;
+        if tile == 4 {
+            paddle = x;
         }
 
-        let input = if (paddle - ball).abs() > 0 {
-            (paddle - ball).signum()
-        }
-        else {
-            0
+        let input = match (paddle - ball).abs() {
+            0 => 0,
+            _ => (paddle - ball).signum(),
         };
 
-        game.add_input(input);
+        if game.outputs.is_empty() {
+            game.add_input(input);
+            //print_board(&board);
+        }
     }
 
     let result2 = score as usize;
@@ -65,6 +64,26 @@ pub fn solve() -> (usize, usize)
     println!("13\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
+}
+
+fn print_board(board: &Vec<Vec<i64>>)
+{
+    for row in board {
+        for tile in row {
+            print!(
+                "{}",
+                match tile {
+                    1 => '|',
+                    2 => '#',
+                    3 => '-',
+                    4 => 'o',
+                    _ => '.',
+                }
+            );
+        }
+        println!();
+    }
+    std::thread::sleep(std::time::Duration::from_millis(100));
 }
 
 #[cfg(test)]

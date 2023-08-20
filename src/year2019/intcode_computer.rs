@@ -1,6 +1,6 @@
 use std::collections::*;
 
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum State
 {
     Done,
