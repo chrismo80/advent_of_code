@@ -1,5 +1,7 @@
 use std::collections::*;
 
+use serde::__private::de;
+
 #[derive(Debug, PartialEq)]
 pub enum State
 {
@@ -7,7 +9,7 @@ pub enum State
     Waiting,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct IntCodeComputer
 {
     memory: HashMap<i64, i64>,
@@ -23,10 +25,7 @@ impl IntCodeComputer
     {
         Self {
             memory,
-            pointer: 0,
-            inputs: VecDeque::new(),
-            outputs: VecDeque::new(),
-            relative_base: 0,
+            ..Default::default()
         }
     }
 
@@ -102,7 +101,7 @@ impl IntCodeComputer
 
     fn parameter(&self, offset: i64) -> i64
     {
-        let left_pad = format!("{:0>5}", self.memory.get(&(self.pointer)).unwrap());
+        let left_pad = format!("{:0>5}", self.memory[&self.pointer]);
         let mode: u32 = left_pad.chars().nth(3 - offset as usize).unwrap().to_digit(10).unwrap();
 
         match mode {
