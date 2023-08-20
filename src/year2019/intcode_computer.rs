@@ -85,8 +85,7 @@ impl IntCodeComputer
 
     fn parameter(&self, offset: i64) -> i64
     {
-        let left_pad = format!("{:0>5}", self.memory[&self.pointer]);
-        let mode: u32 = left_pad.chars().nth(3 - offset as usize).unwrap().to_digit(10).unwrap();
+        let mode = (self.memory[&self.pointer] as u32 / 10u32.pow(1 + offset as u32)) % 10;
 
         match mode {
             0 => *self.memory.get(&(self.pointer + offset)).unwrap_or(&0),
