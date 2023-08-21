@@ -124,12 +124,8 @@ impl std::str::FromStr for Passport
     }
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (260, 153));
-    }
+    assert_eq!(solve(), (260, 153));
 }

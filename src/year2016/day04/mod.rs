@@ -47,12 +47,8 @@ fn shift(name: &[String], sector_id: usize) -> String
     name.iter().map(|n| n.chars().map(calc).collect::<String>()).join(" ")
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (245102, 324));
-    }
+    assert_eq!(solve(), (245102, 324));
 }

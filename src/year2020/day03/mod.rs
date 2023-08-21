@@ -29,12 +29,8 @@ fn count_trees(slope: (usize, usize), forest: &Vec<&str>) -> usize
     c
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (278, 9709761600));
-    }
+    assert_eq!(solve(), (278, 9709761600));
 }

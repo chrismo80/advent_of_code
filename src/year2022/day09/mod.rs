@@ -64,12 +64,8 @@ fn done(prev: (i32, i32), next: (i32, i32)) -> bool
     (prev.0 - next.0).abs() < 2 && (prev.1 - next.1).abs() < 2
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (6067, 2471));
-    }
+    assert_eq!(solve(), (6067, 2471));
 }

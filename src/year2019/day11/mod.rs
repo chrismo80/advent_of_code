@@ -89,12 +89,8 @@ fn print_hull(hull: &HashSet<(i64, i64)>)
     println!();
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (2415, "BFPUZUPC"));
-    }
+    assert_eq!(solve(), (2415, "BFPUZUPC"));
 }

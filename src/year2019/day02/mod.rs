@@ -1,9 +1,6 @@
 pub fn solve() -> (i32, i32)
 {
-    let input: Vec<i32> = include_str!("input.txt")
-        .split(',')
-        .map(|x| x.parse().unwrap())
-        .collect();
+    let input: Vec<i32> = include_str!("input.txt").split(',').map(|x| x.parse().unwrap()).collect();
 
     let result1 = run_program(&mut input.clone(), 12, 2);
     let mut result2 = 0;
@@ -44,12 +41,8 @@ fn run_program(program: &mut [i32], noun: i32, verb: i32) -> i32
     -1
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (5534943, 7603));
-    }
+    assert_eq!(solve(), (5534943, 7603));
 }

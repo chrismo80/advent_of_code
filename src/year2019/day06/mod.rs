@@ -39,12 +39,8 @@ fn count(map: &std::collections::HashMap<&str, &str>, item: &str) -> usize
     map.get(item).map(|item| count(map, item) + 1).unwrap_or(0)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (117672, 277));
-    }
+    assert_eq!(solve(), (117672, 277));
 }

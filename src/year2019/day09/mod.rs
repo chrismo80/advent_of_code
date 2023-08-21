@@ -22,12 +22,8 @@ pub fn solve() -> (i64, i64)
     (result1, result2)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (3454977209, 50120));
-    }
+    assert_eq!(solve(), (3454977209, 50120));
 }

@@ -37,12 +37,8 @@ fn convert_to(value: i64, base: &str, offset: i64) -> String
     text
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), "2=0-2-1-0=20-01-2-20");
-    }
+    assert_eq!(solve(), "2=0-2-1-0=20-01-2-20");
 }

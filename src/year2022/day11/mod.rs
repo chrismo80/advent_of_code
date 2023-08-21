@@ -97,12 +97,8 @@ fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
     }
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (100345, 28537348205));
-    }
+    assert_eq!(solve(), (100345, 28537348205));
 }

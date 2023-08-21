@@ -99,12 +99,8 @@ fn build_walls(lines: &Vec<&str>) -> HashSet<(usize, usize)>
     walls
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (1068, 27936));
-    }
+    assert_eq!(solve(), (1068, 27936));
 }

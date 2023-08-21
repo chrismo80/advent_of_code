@@ -54,12 +54,8 @@ fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
     amps.last_mut().unwrap().get_output().unwrap()
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (17440, 27561242));
-    }
+    assert_eq!(solve(), (17440, 27561242));
 }

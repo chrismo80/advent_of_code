@@ -46,12 +46,8 @@ fn signal_strength(cycles: i32, x: &[i32]) -> i32
     x[(cycles - 1) as usize] * cycles
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (12740, "RBPARAGF".to_string()));
-    }
+    assert_eq!(solve(), (12740, "RBPARAGF".to_string()));
 }

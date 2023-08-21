@@ -66,12 +66,8 @@ fn view_r(forest: &[Vec<char>], x: usize, y: usize) -> impl ExactSizeIterator<It
     (y..forest[0].len()).map(move |i| forest[x][i]).skip(1)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (1845, 230112));
-    }
+    assert_eq!(solve(), (1845, 230112));
 }

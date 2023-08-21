@@ -76,12 +76,8 @@ fn mover_9001(stacks: &mut HashMap<usize, Vec<char>>, count: usize, from: usize,
     bulk.iter().for_each(|item| stacks.entry(to).or_default().push(*item));
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), ("SHMSDGZVC".to_string(), "VRZGHDFBQ".to_string()));
-    }
+    assert_eq!(solve(), ("SHMSDGZVC".to_string(), "VRZGHDFBQ".to_string()));
 }

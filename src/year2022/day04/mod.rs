@@ -36,12 +36,8 @@ fn overlap_fully(min1: i32, max1: i32, min2: i32, max2: i32) -> bool
     min1 <= min2 && max1 >= max2 || min2 <= min1 && max2 >= max1
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (556, 876));
-    }
+    assert_eq!(solve(), (556, 876));
 }

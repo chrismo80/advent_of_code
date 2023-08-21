@@ -17,12 +17,8 @@ pub fn solve() -> u64
     code
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), 8997277);
-    }
+    assert_eq!(solve(), 8997277);
 }

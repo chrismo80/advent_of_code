@@ -33,12 +33,8 @@ pub fn solve() -> (usize, usize)
     (result1, result2)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (437931, 157667328));
-    }
+    assert_eq!(solve(), (437931, 157667328));
 }

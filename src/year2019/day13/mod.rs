@@ -86,12 +86,8 @@ fn print_board(board: &Vec<Vec<i64>>)
     std::thread::sleep(std::time::Duration::from_millis(100));
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (320, 15156));
-    }
+    assert_eq!(solve(), (320, 15156));
 }

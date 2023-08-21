@@ -36,12 +36,8 @@ pub fn solve() -> (String, String)
     (result1, result2)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), ("33444".to_string(), "446A6".to_string()));
-    }
+    assert_eq!(solve(), ("33444".to_string(), "446A6".to_string()));
 }

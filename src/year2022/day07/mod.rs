@@ -25,9 +25,7 @@ pub fn solve() -> (isize, isize)
             files.push((
                 dir.join("/"),
                 line.split_whitespace().collect::<Vec<&str>>()[1].to_string(),
-                line.split_whitespace().collect::<Vec<&str>>()[0]
-                    .parse::<isize>()
-                    .unwrap(),
+                line.split_whitespace().collect::<Vec<&str>>()[0].parse::<isize>().unwrap(),
             ));
         }
     }
@@ -37,12 +35,7 @@ pub fn solve() -> (isize, isize)
         .map(|f| f.0.clone())
         .collect::<HashSet<String>>()
         .iter()
-        .map(|d| {
-            (
-                d.clone(),
-                files.iter().filter(|f| f.0.starts_with(d)).map(|f| f.2).sum(),
-            )
-        })
+        .map(|d| (d.clone(), files.iter().filter(|f| f.0.starts_with(d)).map(|f| f.2).sum()))
         .collect::<Vec<(String, isize)>>();
 
     folders.sort();
@@ -62,12 +55,8 @@ pub fn solve() -> (isize, isize)
     (result1, result2)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve().0, 1513699);
-    }
+    assert_eq!(solve().0, 1513699);
 }

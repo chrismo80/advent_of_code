@@ -5,9 +5,8 @@ pub fn solve() -> (usize, usize)
         .map(|line| line.split_whitespace().map(|n| n.parse::<usize>().unwrap()).collect())
         .collect();
 
-    let is_triangle = |sides: &[usize]| {
-        sides[0] + sides[1] > sides[2] && sides[0] + sides[2] > sides[1] && sides[1] + sides[2] > sides[0]
-    };
+    let is_triangle =
+        |sides: &[usize]| sides[0] + sides[1] > sides[2] && sides[0] + sides[2] > sides[1] && sides[1] + sides[2] > sides[0];
 
     let result1 = input.iter().filter(|sides| is_triangle(sides)).count();
 
@@ -26,12 +25,8 @@ pub fn solve() -> (usize, usize)
     (result1, result2)
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(super::solve(), (993, 1849));
-    }
+    assert_eq!(solve(), (993, 1849));
 }
