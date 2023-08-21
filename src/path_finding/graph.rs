@@ -1,28 +1,9 @@
 use std::collections::*;
 
-pub fn main()
-{
-    let mut g: Graph<&str> = Graph::new();
-
-    g.add_edge(&"0", &"1", 1);
-    g.add_edge(&"0", &"2", 1);
-    g.add_edge(&"1", &"2", 1);
-    g.add_edge(&"1", &"3", 1);
-    g.add_edge(&"4", &"3", 1);
-    g.add_edge(&"4", &"2", 1);
-
-    if let Some(path) = g.bfs(&"0", &"3") {
-        println!("{:?}", path);
-    }
-    else {
-        println!("No path found");
-    }
-}
-
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Graph<T>
 {
-    nodes: HashMap<T, HashMap<T, i32>>,
+    pub nodes: HashMap<T, HashMap<T, i32>>,
     previous: HashMap<T, T>,
 }
 
@@ -38,25 +19,25 @@ where
         }
     }
 
-    pub fn add_edge(&mut self, from: &T, to: &T, distance: i32)
+    pub fn add_edge(&mut self, from: T, to: T, distance: i32)
     {
-        self.nodes.entry(*from).or_default().insert(*to, distance);
-        self.nodes.entry(*to).or_default().insert(*from, distance);
+        self.nodes.entry(from).or_default().insert(to, distance);
+        self.nodes.entry(to).or_default().insert(from, distance);
     }
 
-    pub fn bfs(&mut self, start: &T, end: &T) -> Option<Vec<T>>
+    pub fn bfs(&mut self, start: T, end: T) -> Option<Vec<T>>
     {
         self.previous.clear();
 
         let mut active = VecDeque::new();
-        active.push_back(*start);
+        active.push_back(start);
 
         while let Some(current) = active.pop_front() {
-            if current == *end {
+            if current == end {
                 let mut path = Vec::new();
-                let mut node = *end;
+                let mut node = end;
 
-                while node != *start {
+                while node != start {
                     path.push(node);
                     node = self.previous[&node];
                 }

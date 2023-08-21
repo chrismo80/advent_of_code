@@ -1,22 +1,20 @@
 use crate::path_finding::graph::Graph;
+use rayon::prelude::*;
 
-pub fn solve() -> (i64, i64)
+pub fn solve() -> (usize, usize)
 {
-    let input: Vec<Vec<&str>> = include_str!("test.txt").lines().map(|l| l.split(')').collect()).collect();
+    let input: Vec<Vec<&str>> = include_str!("input.txt").lines().map(|l| l.split(')').collect()).collect();
 
     let mut graph: Graph<&str> = Graph::new();
 
     input.iter().for_each(|planet| {
-        graph.add_edge(&planet[0], &planet[1], 1);
+        graph.add_edge(planet[0], planet[1], 1);
     });
 
-    let left: Vec<&str> = input.iter().map(|l| l[0]).collect();
-    let right: Vec<&str> = input.iter().map(|l| l[1]).collect();
+    let planets: Vec<&str> = graph.nodes.keys().copied().collect();
 
-    let com = right.iter().find(|&l| !left.contains(l)).unwrap().to_string();
-
-    let result1 = 0;
-    let result2 = 0;
+    let result1 = planets.par_iter().map(|p| graph.clone().bfs("COM", p).unwrap().len()).sum();
+    let result2 = graph.bfs("YOU", "SAN").unwrap().len() - 2;
 
     println!("6\t{result1:<20}\t{result2:<20}");
 
