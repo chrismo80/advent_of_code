@@ -42,8 +42,8 @@ fn permute<T: Clone>(count: usize, values: &mut [T]) -> Vec<Vec<T>>
 #[test]
 fn test()
 {
-    let input = "ABC";
-    let result = input.chars().collect::<Vec<char>>().permutations();
+    let input = vec!['A', 'B', 'C'];
+    let result = input.permutations();
 
     assert_eq!(result.len(), 6);
     assert_eq!(result[0], vec!['A', 'B', 'C']);
