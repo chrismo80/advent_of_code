@@ -13,11 +13,11 @@ pub fn solve() -> (usize, &'static str)
 
     paint(memory.clone(), &mut hull);
 
-    print_hull(&hull);
-
     let result2 = "BFPUZUPC";
 
     println!("11\t{result1:<20}\t{result2:<20}");
+
+    print_hull(&hull);
 
     (result1, result2)
 }
