@@ -20,17 +20,19 @@ pub fn solve() -> (usize, usize)
         locations.insert(to);
     }
 
-    let total_distance = |route: &[&str]| {
+    let locations = locations.iter().collect_vec();
+
+    let total_distance = |route: &Vec<&&str>| {
         (0..route.len() - 1)
-            .map(|i| distances[&(route[i], route[i + 1])])
+            .map(|i| distances[&(*route[i], *route[i + 1])])
             .sum::<usize>()
     };
 
     let mut result1 = usize::MAX;
     let mut result2 = 0;
 
-    for p in permutations_of(&locations.iter().collect_vec()) {
-        let total = total_distance(&p.copied().copied().collect::<Vec<&str>>());
+    for p in permute(locations).iter() {
+        let total = total_distance(p);
         result1 = result1.min(total);
         result2 = result2.max(total);
     }
