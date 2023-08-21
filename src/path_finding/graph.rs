@@ -47,15 +47,11 @@ where
                 return Some(path);
             }
 
-            let neighbors: Vec<T> = self.nodes[&current]
-                .keys()
-                .copied()
-                .filter(|node| !self.previous.contains_key(node))
-                .collect();
-
-            for neighbor in neighbors {
-                self.previous.insert(neighbor, current);
-                active.push_back(neighbor);
+            for &neighbor in self.nodes[&current].keys() {
+                if let hash_map::Entry::Vacant(entry) = self.previous.entry(neighbor) {
+                    entry.insert(current);
+                    active.push_back(neighbor);
+                }
             }
         }
 

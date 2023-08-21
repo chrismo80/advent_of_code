@@ -1,5 +1,4 @@
 use crate::path_finding::graph::Graph;
-use rayon::prelude::*;
 
 pub fn solve() -> (usize, usize)
 {
@@ -13,7 +12,7 @@ pub fn solve() -> (usize, usize)
 
     let planets: Vec<&str> = graph.nodes.keys().copied().collect();
 
-    let result1 = planets.par_iter().map(|p| graph.clone().bfs("COM", p).unwrap().len()).sum();
+    let result1 = planets.iter().map(|planet| graph.bfs("COM", planet).unwrap().len()).sum();
     let result2 = graph.bfs("YOU", "SAN").unwrap().len() - 2;
 
     println!("6\t{result1:<20}\t{result2:<20}");
