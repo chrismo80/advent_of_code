@@ -25,3 +25,14 @@ where
         map
     }
 }
+
+#[test]
+fn test()
+{
+    let v = vec![1, 2, 4, 2, 3, 4, 3, 4, 3, 4];
+    let map = v.count_items();
+    assert_eq!(map[&1], 1);
+    assert_eq!(map[&2], 2);
+    assert_eq!(map[&3], 3);
+    assert_eq!(map[&4], 4);
+}
