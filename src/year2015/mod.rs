@@ -9,6 +9,7 @@ pub fn run_all()
 {
     let start = super::begin();
 
+    day09::solve();
     day14::solve();
     day16::solve();
     day25::solve();
