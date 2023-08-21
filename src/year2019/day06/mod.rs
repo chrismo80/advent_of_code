@@ -1,4 +1,5 @@
 use crate::path_finding::graph::Graph;
+use std::collections::HashMap;
 
 pub fn solve() -> (usize, usize)
 {
@@ -17,7 +18,25 @@ pub fn solve() -> (usize, usize)
 
     println!("6\t{result1:<20}\t{result2:<20}");
 
+    //println!("Alternative: {:?}", alternative(input));
+
     (result1, result2)
+}
+
+fn alternative(input: Vec<Vec<&str>>) -> usize
+{
+    let mut hash_map = HashMap::new();
+
+    for line in input.iter() {
+        hash_map.insert(line[1], line[0]);
+    }
+
+    hash_map.keys().map(|key| count(&hash_map, key)).sum()
+}
+
+fn count(map: &HashMap<&str, &str>, item: &str) -> usize
+{
+    map.get(item).map(|item| count(map, item) + 1).unwrap_or(0)
 }
 
 #[cfg(test)]
