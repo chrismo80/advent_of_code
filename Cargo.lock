@@ -25,7 +25,6 @@ dependencies = [
  "iter_tools",
  "lazy_static",
  "mexe",
- "permute",
  "rayon",
  "regex",
  "reqwest",
@@ -678,12 +677,6 @@ name = "percent-encoding"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b2a4787296e9989611394c33f193f676704af1686e70b8f8033ab5ba9a35a94"
-
-[[package]]
-name = "permute"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fddb8f2cf68c74002bde337a2472e18c870e3464b1f637cc9718f51687e88ca"
 
 [[package]]
 name = "pin-project-lite"

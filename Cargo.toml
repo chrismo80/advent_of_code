@@ -8,7 +8,6 @@ authors = ["Christian Moldenhauer"]
 chrono = "0.4"
 mexe = "0.2.0"
 rayon = "1.7.0"
-permute = "0.2.1"
 iter_tools = "0.1.4"
 regex = "1.9.3"
 lazy_static = "1.4.0"

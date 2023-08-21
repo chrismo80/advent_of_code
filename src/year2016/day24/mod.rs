@@ -1,3 +1,4 @@
+use crate::extensions::permutations::*;
 use std::collections::*;
 
 pub fn solve() -> (usize, usize)
@@ -38,8 +39,8 @@ pub fn solve() -> (usize, usize)
     let total_distance = |route: Vec<usize>| -> usize { route.windows(2).map(|w| distances[&(w[0], w[1])]).sum() };
 
     // get all node permutations except node 0 (append/prepend it later as start/end points)
-    for permutation in permute::permutations_of(&locations) {
-        let mut route: VecDeque<usize> = permutation.copied().collect();
+    for permutation in locations.permutations().iter() {
+        let mut route: VecDeque<usize> = permutation.iter().copied().collect();
 
         route.push_back(0);
         routes1.push(total_distance(route.clone().into_iter().collect()));

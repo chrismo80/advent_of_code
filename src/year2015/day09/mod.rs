@@ -1,5 +1,5 @@
+use crate::extensions::permutations::*;
 use iter_tools::Itertools;
-use permute::*;
 use std::collections::*;
 
 pub fn solve() -> (usize, usize)
@@ -31,7 +31,7 @@ pub fn solve() -> (usize, usize)
     let mut result1 = usize::MAX;
     let mut result2 = 0;
 
-    for p in permute(locations).iter() {
+    for p in locations.permutations().iter() {
         let total = total_distance(p);
         result1 = result1.min(total);
         result2 = result2.max(total);

@@ -1,3 +1,5 @@
+use crate::extensions::permutations::*;
+
 use super::intcode_computer::*;
 use std::collections::*;
 
@@ -8,8 +10,12 @@ pub fn solve() -> (i64, i64)
     let memory: HashMap<i64, i64> = input.enumerate().map(|(i, x)| (i as i64, x.parse().unwrap())).collect();
 
     let result = |phase_setting: &str| {
-        permute::permutations_of(&phase_setting.chars().collect::<Vec<char>>())
-            .map(|setting| amplifier_chain(memory.clone(), setting.copied().collect()))
+        phase_setting
+            .chars()
+            .collect::<Vec<char>>()
+            .permutations()
+            .iter()
+            .map(|setting| amplifier_chain(memory.clone(), setting.clone()))
             .max()
     };
 
@@ -23,10 +29,7 @@ pub fn solve() -> (i64, i64)
 
 fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
 {
-    let mut amps: Vec<IntCodeComputer> = phases
-        .iter()
-        .map(|phase| IntCodeComputer::new(memory.clone()))
-        .collect();
+    let mut amps: Vec<IntCodeComputer> = phases.iter().map(|phase| IntCodeComputer::new(memory.clone())).collect();
 
     for i in 0..phases.len() {
         amps[i].add_input(phases[i].to_digit(10).unwrap() as i64);
