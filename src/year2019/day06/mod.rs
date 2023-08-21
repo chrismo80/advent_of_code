@@ -2,7 +2,7 @@ use crate::path_finding::graph::Graph;
 
 pub fn solve() -> (i64, i64)
 {
-    let input: Vec<Vec<&str>> = include_str!("input.txt").lines().map(|l| l.split(')').collect()).collect();
+    let input: Vec<Vec<&str>> = include_str!("test.txt").lines().map(|l| l.split(')').collect()).collect();
 
     let mut graph: Graph<&str> = Graph::new();
 
