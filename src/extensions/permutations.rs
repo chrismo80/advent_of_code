@@ -24,13 +24,8 @@ fn permute<T: Clone>(values: &mut [T]) -> Vec<Vec<T>>
 
     while i < values.len() {
         if c[i] < i {
-            match i % 2 {
-                0 => values.swap(0, i),
-                _ => values.swap(c[i], i),
-            }
-
+            values.swap((i % 2) * c[i], i);
             variations.push(values.to_vec());
-
             c[i] += 1;
             i = 1;
         }
@@ -56,11 +51,7 @@ fn permute_recursive<T: Clone>(count: usize, values: &mut [T]) -> Vec<Vec<T>>
     variations.append(&mut permute_recursive(count - 1, values));
 
     for i in 0..(count - 1) {
-        match count % 2 {
-            0 => values.swap(i, count - 1),
-            _ => values.swap(0, count - 1),
-        }
-
+        values.swap(i - (i * (count % 2)), count - 1);
         variations.append(&mut permute_recursive(count - 1, values));
     }
 
@@ -81,7 +72,7 @@ fn test()
     assert_eq!(result[4], vec!['B', 'C', 'A']);
     assert_eq!(result[5], vec!['C', 'B', 'A']);
 
-    let input = (1..9).collect::<Vec<_>>();
+    let input = (1..10).collect::<Vec<_>>();
 
     assert_eq!(
         permute(&mut input.clone()),
