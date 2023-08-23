@@ -10,6 +10,7 @@ impl<T: Clone> Permutations for Vec<T>
     fn permutations(&self) -> Vec<Vec<T>>
     {
         permute(&mut self.clone())
+        //permute_recursive(self.len(), &mut self.clone())
     }
 }
 
@@ -38,6 +39,7 @@ fn permute<T: Clone>(values: &mut [T]) -> Vec<Vec<T>>
     variations
 }
 
+// https://en.wikipedia.org/wiki/Heap%27s_algorithm
 fn permute_recursive<T: Clone>(count: usize, values: &mut [T]) -> Vec<Vec<T>>
 {
     let mut variations = Vec::new();
@@ -78,4 +80,24 @@ fn test()
         permute(&mut input.clone()),
         permute_recursive(input.len(), &mut input.clone())
     );
+}
+
+#[test]
+fn test_performance()
+{
+    let input = (1..10).collect::<Vec<_>>();
+
+    let input = vec!['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+    let start = std::time::Instant::now();
+
+    let result = permute_recursive(input.len(), &mut input.clone());
+
+    println!("permute recursive: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
+
+    let start = std::time::Instant::now();
+
+    let result = permute(&mut input.clone());
+
+    println!("permute: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
 }
