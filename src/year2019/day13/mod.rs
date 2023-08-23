@@ -28,33 +28,26 @@ pub fn solve() -> (usize, usize)
 
     let (mut paddle, mut score, mut ball) = (0, 0, 0);
 
-    while game.run() == State::Waiting || game.outputs.len() >= 3 {
+    while game.run() == State::Waiting || !game.outputs.is_empty() {
         let x = game.get_output().unwrap();
         let y = game.get_output().unwrap();
         let tile = game.get_output().unwrap();
 
-        if x >= 0 {
-            board[y as usize][x as usize] = tile;
+        match tile {
+            3 => ball = x,
+            4 => paddle = x,
+            _ => {}
         }
-        else {
+
+        if x < 0 {
             score = tile;
         }
-
-        if tile == 3 {
-            ball = x;
+        else {
+            board[y as usize][x as usize] = tile;
         }
-
-        if tile == 4 {
-            paddle = x;
-        }
-
-        let input = match (paddle - ball).abs() {
-            0 => 0,
-            _ => (paddle - ball).signum(),
-        };
 
         if game.outputs.is_empty() {
-            game.add_input(input);
+            game.add_input((paddle - ball).signum());
             //print_board(&board);
         }
     }
@@ -83,7 +76,7 @@ fn print_board(board: &Vec<Vec<i64>>)
         }
         println!();
     }
-    std::thread::sleep(std::time::Duration::from_millis(100));
+    std::thread::sleep(std::time::Duration::from_millis(50));
 }
 
 #[test]
