@@ -11,9 +11,9 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    year2015::day01::solve();
+    //year2015::day02::solve();
 
-    //run_all();
+    run_all();
 
     end(start, "Total");
 }
