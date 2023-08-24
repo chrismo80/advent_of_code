@@ -33,17 +33,15 @@ pub fn solve() -> (usize, usize)
         let y = game.get_output().unwrap();
         let tile = game.get_output().unwrap();
 
+        match x < 0 {
+            true => score = tile,
+            false => board[y as usize][x as usize] = tile,
+        }
+
         match tile {
             3 => ball = x,
             4 => paddle = x,
             _ => {}
-        }
-
-        if x < 0 {
-            score = tile;
-        }
-        else {
-            board[y as usize][x as usize] = tile;
         }
 
         if game.outputs.is_empty() {
