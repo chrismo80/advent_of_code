@@ -9,11 +9,14 @@ pub fn solve() -> (usize, i64)
 
     let mut beam = HashSet::<(i64, i64)>::new();
 
-    let (mut x, mut y, mut last, mut start_x, ship) = (0, 0, 0, 0, 100);
+    let (mut x, mut y) = (0, 0);
+    let (mut last, mut start_x, mut step_size) = (0, 0, 1);
+    let ship = 100;
 
     let mut beam_histogram_x = HashMap::<i64, usize>::new();
     let mut beam_histogram_y = HashMap::<i64, usize>::new();
 
+    let mut result1 = 0;
     let mut result2 = 0;
 
     while result2 == 0 {
@@ -40,7 +43,7 @@ pub fn solve() -> (usize, i64)
         }
 
         if (value == 0 && last == 1) || (beam_x == 0 && x > 10) {
-            y += 1;
+            y += step_size;
             x = (start_x - 5).max(0);
         }
 
@@ -48,11 +51,13 @@ pub fn solve() -> (usize, i64)
             start_x = x;
         }
 
-        x += 1;
+        x += step_size;
         last = value;
-    }
 
-    let result1 = beam.len();
+        if x < 50 && y < 50 {
+            result1 = beam.len();
+        }
+    }
 
     //print(&beam);
 
