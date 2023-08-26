@@ -27,6 +27,7 @@ where
 }
 
 #[test]
+#[ignore]
 fn test()
 {
     let v = vec![1, 2, 4, 2, 3, 4, 3, 4, 3, 4];

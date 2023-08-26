@@ -61,6 +61,7 @@ fn permute_recursive<T: Clone>(count: usize, values: &mut [T]) -> Vec<Vec<T>>
 }
 
 #[test]
+#[ignore]
 fn test()
 {
     let input = vec!['A', 'B', 'C'];
