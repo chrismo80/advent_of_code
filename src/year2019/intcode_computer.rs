@@ -1,3 +1,7 @@
+use std::mem;
+
+use iter_tools::Itertools;
+
 #[derive(Debug, PartialEq)]
 pub enum State
 {
@@ -8,7 +12,7 @@ pub enum State
 #[derive(Clone, Default)]
 pub struct IntCodeComputer
 {
-    memory: std::collections::HashMap<i64, i64>,
+    memory: Vec<i64>,
     pointer: i64,
     pub inputs: std::collections::VecDeque<i64>,
     pub outputs: std::collections::VecDeque<i64>,
@@ -20,8 +24,14 @@ impl IntCodeComputer
 {
     pub fn new(memory: std::collections::HashMap<i64, i64>) -> Self
     {
+        let mut v = vec![0; memory.len()];
+
+        let s = memory.into_iter().sorted_by_key(|(k, _)| *k).map(|kv| kv.1).collect_vec();
+
+        v[..s.len()].copy_from_slice(&s[..]);
+
         Self {
-            memory,
+            memory: v,
             ..Default::default()
         }
     }
@@ -38,8 +48,8 @@ impl IntCodeComputer
 
     pub fn run(&mut self) -> State
     {
-        while self.memory[&self.pointer] != 99 {
-            let cmd = self.memory[&self.pointer];
+        while self.memory[self.pointer as usize] != 99 {
+            let cmd = self.memory[self.pointer as usize];
             let opcode = cmd % 100;
 
             self.parameter_modes = vec![cmd / 100 % 10, cmd / 1000 % 10, cmd / 10000 % 10];
@@ -77,20 +87,28 @@ impl IntCodeComputer
 
     fn read(&self, offset: i64) -> i64
     {
-        *self.memory.get(&self.parameter(offset)).unwrap_or(&0)
+        *self.memory.get(self.parameter(offset) as usize).unwrap_or(&0)
     }
 
     fn write(&mut self, offset: i64, value: i64)
     {
-        self.memory.insert(self.parameter(offset), value);
+        let pos = self.parameter(offset) as usize;
+
+        if pos >= self.memory.len() {
+            let mut new = vec![0; pos + 1];
+            new[..self.memory.len()].copy_from_slice(&self.memory[..]);
+            self.memory = new;
+        }
+
+        self.memory[pos] = value;
     }
 
     fn parameter(&self, offset: i64) -> i64
     {
         match self.parameter_modes[offset as usize - 1] {
-            0 => *self.memory.get(&(self.pointer + offset)).unwrap_or(&0),
+            0 => *self.memory.get((self.pointer + offset) as usize).unwrap_or(&0),
             1 => self.pointer + offset,
-            2 => *self.memory.get(&(self.pointer + offset)).unwrap_or(&0) + self.relative_base,
+            2 => *self.memory.get((self.pointer + offset) as usize).unwrap_or(&0) + self.relative_base,
             _ => panic!("Invalid parameter mode"),
         }
     }

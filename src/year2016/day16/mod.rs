@@ -30,15 +30,8 @@ fn get_check_sum(data: &str, disk_length: usize) -> String
         .collect::<String>()
 }
 
-#[cfg(test)]
-mod tests
+#[test]
+fn test()
 {
-    #[test]
-    fn solve()
-    {
-        assert_eq!(
-            super::solve(),
-            ("10100011010101011".to_string(), "01010001101011001".to_string())
-        );
-    }
+    assert_eq!(solve(), ("10100011010101011".to_string(), "01010001101011001".to_string()));
 }
