@@ -81,23 +81,3 @@ fn test()
         permute_recursive(input.len(), &mut input.clone())
     );
 }
-
-#[test]
-fn test_performance()
-{
-    let input = (1..10).collect::<Vec<_>>();
-
-    let input = vec!['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-
-    let start = std::time::Instant::now();
-
-    let result = permute_recursive(input.len(), &mut input.clone());
-
-    println!("permute recursive: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
-
-    let start = std::time::Instant::now();
-
-    let result = permute(&mut input.clone());
-
-    println!("permute: {:.1} ms", start.elapsed().as_micros() as f32 / 1000.0);
-}
