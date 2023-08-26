@@ -1,3 +1,4 @@
+#![allow(warnings)]
 pub mod count_items;
 pub mod errors;
 pub mod http_request;

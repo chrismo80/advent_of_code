@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 pub mod examples;
 pub mod extensions;
 pub mod path_finding;
@@ -11,7 +12,7 @@ pub fn run()
 {
     let start = std::time::Instant::now();
 
-    //year2019::day13::solve();
+    //year2019::day05::solve();
 
     run_all();
 
