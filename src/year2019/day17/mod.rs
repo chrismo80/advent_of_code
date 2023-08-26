@@ -6,31 +6,30 @@ pub fn solve() -> (i32, i64)
     let input = include_str!("input.txt").split(',');
 
     let mut memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
-
     memory[0] = 2;
+
     let mut robot = IntCodeComputer::new(&memory);
 
-    let mut scaffold: HashSet<(i32, i32)> = HashSet::new();
-    let (mut x, mut y) = (0, 0);
-
     let commands = [
-        "A,B,A,C,A,B,C,B,C,B",
-        "R,8,L,10,L,12,R,4",
-        "R,8,L,12,R,4,R,4",
-        "R,8,L,10,R,8",
-        "n",
+        "A,B,A,C,A,B,C,B,C,B\n",
+        "R,8,L,10,L,12,R,4\n",
+        "R,8,L,12,R,4,R,4\n",
+        "R,8,L,10,R,8\n",
+        "n\n",
     ];
 
     for command in commands.iter() {
         for c in command.chars() {
             robot.add_input(c as i64);
         }
-        robot.add_input(10);
     }
 
     robot.run();
 
-    let mut result2 = 0;
+    let mut scaffold: HashSet<(i32, i32)> = HashSet::new();
+    let (mut x, mut y) = (0, 0);
+
+    let result2 = *robot.outputs.iter().last().unwrap();
 
     while let Some(value) = robot.get_output() {
         match value {
@@ -43,7 +42,7 @@ pub fn solve() -> (i32, i64)
                     scaffold.insert((x, y));
                 }
             }
-            _ => result2 = value,
+            _ => {}
         }
 
         x += 1;
@@ -62,8 +61,7 @@ pub fn solve() -> (i32, i64)
 
 fn is_intersection(scaffold: &HashSet<(i32, i32)>, x: i32, y: i32) -> bool
 {
-    scaffold.contains(&(x, y))
-        && scaffold.contains(&(x + 1, y))
+    scaffold.contains(&(x + 1, y))
         && scaffold.contains(&(x - 1, y))
         && scaffold.contains(&(x, y + 1))
         && scaffold.contains(&(x, y - 1))
