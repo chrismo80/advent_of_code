@@ -7,10 +7,8 @@ pub fn solve() -> (usize, i64)
 
     let memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
 
-    let mut beam = HashSet::<(i64, i64)>::new();
-
     let (mut x, mut y) = (0, 0);
-    let (mut last, mut start_x, mut step_size) = (0, 0, 1);
+    let (mut last, mut start_x) = (0, 0);
     let ship = 100;
 
     let mut beam_histogram_x = HashMap::<i64, usize>::new();
@@ -30,7 +28,10 @@ pub fn solve() -> (usize, i64)
         let value = drone_system.get_output().unwrap();
 
         if value == 1 {
-            beam.insert((x, y));
+            if x < 50 && y < 50 {
+                result1 += 1;
+            }
+
             *beam_histogram_x.entry(x).or_insert(0) += 1;
             *beam_histogram_y.entry(y).or_insert(0) += 1;
         }
@@ -43,7 +44,7 @@ pub fn solve() -> (usize, i64)
         }
 
         if (value == 0 && last == 1) || (beam_x == 0 && x > 10) {
-            y += step_size;
+            y += 1;
             x = (start_x - 5).max(0);
         }
 
@@ -51,17 +52,25 @@ pub fn solve() -> (usize, i64)
             start_x = x;
         }
 
-        x += step_size;
+        x += 1;
         last = value;
-
-        if x < 50 && y < 50 {
-            result1 = beam.len();
-        }
     }
 
     //print(&beam);
 
     (result1, result2)
+}
+
+fn get_value(memory: &[i64], x: i64, y: i64) -> i64
+{
+    let mut drone_system = IntCodeComputer::new(memory);
+
+    drone_system.add_input(x);
+    drone_system.add_input(y);
+
+    drone_system.run();
+
+    drone_system.get_output().unwrap()
 }
 
 fn print(beam: &HashSet<(i64, i64)>)
