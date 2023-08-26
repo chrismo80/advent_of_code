@@ -5,6 +5,7 @@ pub mod day07;
 pub mod day09;
 pub mod day11;
 pub mod day13;
+pub mod day17;
 pub mod intcode_computer;
 
 static YEAR: &str = "2019";
@@ -20,6 +21,7 @@ pub fn run_all()
     day09::solve();
     day11::solve();
     day13::solve();
+    day17::solve();
 
     super::end(start, YEAR);
 }
