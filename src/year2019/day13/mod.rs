@@ -1,13 +1,12 @@
 use super::intcode_computer::*;
-use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
     let input = include_str!("input.txt").split(',');
 
-    let mut memory: HashMap<i64, i64> = input.enumerate().map(|(i, x)| (i as i64, x.parse().unwrap())).collect();
+    let mut memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
 
-    let mut icc = IntCodeComputer::new(memory.clone());
+    let mut icc = IntCodeComputer::new(&memory);
 
     icc.run();
 
@@ -22,9 +21,9 @@ pub fn solve() -> (usize, usize)
 
     let mut board: Vec<Vec<i64>> = (0..=y_max).map(|_| vec![0; (x_max + 1) as usize]).collect();
 
-    memory.insert(0, 2);
+    memory[0] = 2;
 
-    let mut game = IntCodeComputer::new(memory);
+    let mut game = IntCodeComputer::new(&memory);
 
     let (mut paddle, mut score, mut ball) = (0, 0, 0);
 

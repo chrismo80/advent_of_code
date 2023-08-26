@@ -5,7 +5,7 @@ pub fn solve() -> (usize, &'static str)
 {
     let input = include_str!("input.txt").split(',');
 
-    let memory: HashMap<i64, i64> = input.enumerate().map(|(i, x)| (i as i64, x.parse().unwrap())).collect();
+    let memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
 
     let result1 = paint(memory.clone(), &mut HashSet::new());
 
@@ -22,9 +22,9 @@ pub fn solve() -> (usize, &'static str)
     (result1, result2)
 }
 
-fn paint(memory: HashMap<i64, i64>, hull: &mut HashSet<(i64, i64)>) -> usize
+fn paint(memory: Vec<i64>, hull: &mut HashSet<(i64, i64)>) -> usize
 {
-    let mut robot = IntCodeComputer::new(memory.clone());
+    let mut robot = IntCodeComputer::new(&memory);
 
     let mut trail: HashSet<(i64, i64)> = HashSet::new();
 

@@ -1,7 +1,3 @@
-use std::mem;
-
-use iter_tools::Itertools;
-
 #[derive(Debug, PartialEq)]
 pub enum State
 {
@@ -22,16 +18,10 @@ pub struct IntCodeComputer
 
 impl IntCodeComputer
 {
-    pub fn new(memory: std::collections::HashMap<i64, i64>) -> Self
+    pub fn new(memory: &[i64]) -> Self
     {
-        let mut v = vec![0; memory.len()];
-
-        let s = memory.into_iter().sorted_by_key(|(k, _)| *k).map(|kv| kv.1).collect_vec();
-
-        v[..s.len()].copy_from_slice(&s[..]);
-
         Self {
-            memory: v,
+            memory: memory.into(),
             ..Default::default()
         }
     }
@@ -70,7 +60,7 @@ impl IntCodeComputer
                 }
                 4 => self.outputs.push_back(self.read(1)),
                 5 | 6 => {}
-                _ => panic!("Invalid opcode"),
+                _ => panic!("Invalid opcode: {opcode}"),
             }
 
             match opcode {
@@ -78,7 +68,7 @@ impl IntCodeComputer
                 3 | 4 | 9 => self.pointer += 2,
                 5 => self.pointer = if self.read(1) != 0 { self.read(2) } else { self.pointer + 3 },
                 6 => self.pointer = if self.read(1) == 0 { self.read(2) } else { self.pointer + 3 },
-                _ => panic!("Invalid opcode"),
+                _ => panic!("Invalid opcode: {opcode}"),
             }
         }
 

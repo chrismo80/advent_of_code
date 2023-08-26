@@ -1,13 +1,11 @@
-use crate::extensions::permutations::*;
-
 use super::intcode_computer::*;
-use std::collections::*;
+use crate::extensions::permutations::*;
 
 pub fn solve() -> (i64, i64)
 {
     let input = include_str!("input.txt").split(',');
 
-    let memory: HashMap<i64, i64> = input.enumerate().map(|(i, x)| (i as i64, x.parse().unwrap())).collect();
+    let memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
 
     let result = |phase_setting: &str| {
         phase_setting
@@ -27,12 +25,12 @@ pub fn solve() -> (i64, i64)
     (result1, result2)
 }
 
-fn amplifier_chain(memory: HashMap<i64, i64>, phases: Vec<char>) -> i64
+fn amplifier_chain(memory: Vec<i64>, phases: Vec<char>) -> i64
 {
     let mut amps = Vec::<IntCodeComputer>::new();
 
     for i in 0..phases.len() {
-        amps.push(IntCodeComputer::new(memory.clone()));
+        amps.push(IntCodeComputer::new(&memory));
         amps[i].add_input(phases[i].to_digit(10).unwrap() as i64);
     }
     amps[0].add_input(0);
