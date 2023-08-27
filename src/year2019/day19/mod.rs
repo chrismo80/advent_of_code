@@ -31,9 +31,9 @@ pub fn solve() -> (usize, i64)
         horizontal = !horizontal;
     }
 
-    let start = std::time::Instant::now();
     let result2 = part_2(&memory, x, y);
-    println!("Part 2: {} [{:?}]", result2, start.elapsed());
+
+    println!("19\t{result1:<20}\t{result2:<20}");
 
     //print(&beam);
 
