@@ -7,37 +7,59 @@ pub fn solve() -> (usize, i64)
 
     let memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
 
-    let (mut x, mut y) = (0, 0);
-    let (mut last, mut start_x) = (0, 0);
+    let result1 = part_1(&memory);
+
+    let (mut x, mut y, mut distance) = (0, 50, 0);
+    let mut horizontal = true;
+
+    while distance < 135 || horizontal {
+        distance = 0;
+
+        while get_value(&memory, x, y) == 0 {
+            match horizontal {
+                true => x += 1,
+                false => y += 1,
+            }
+        }
+        while get_value(&memory, x, y) == 1 {
+            match horizontal {
+                true => x += 1,
+                false => y += 1,
+            }
+            distance += 1;
+        }
+        horizontal = !horizontal;
+    }
+
+    let start = std::time::Instant::now();
+    let result2 = part_2(&memory, x, y);
+    println!("Part 2: {} [{:?}]", result2, start.elapsed());
+
+    //print(&beam);
+
+    (result1, result2)
+}
+
+fn part_2(memory: &[i64], mut x: i64, mut y: i64) -> i64
+{
+    let (mut last, mut start_x) = (0, x);
     let ship = 100;
 
     let mut beam_histogram_x = HashMap::<i64, usize>::new();
     let mut beam_histogram_y = HashMap::<i64, usize>::new();
 
-    let mut result1 = 0;
     let mut result2 = 0;
 
     while result2 == 0 {
-        let mut drone_system = IntCodeComputer::new(&memory);
-
-        drone_system.add_input(x);
-        drone_system.add_input(y);
-
-        drone_system.run();
-
-        let value = drone_system.get_output().unwrap();
+        let value = get_value(memory, x, y);
 
         if value == 1 {
-            if x < 50 && y < 50 {
-                result1 += 1;
-            }
-
             *beam_histogram_x.entry(x).or_insert(0) += 1;
             *beam_histogram_y.entry(y).or_insert(0) += 1;
         }
 
-        let beam_x = beam_histogram_x.get(&x).copied().unwrap_or(0);
-        let beam_y = beam_histogram_y.get(&y).copied().unwrap_or(0);
+        let beam_x = *beam_histogram_x.get(&x).unwrap_or(&0);
+        let beam_y = *beam_histogram_y.get(&y).unwrap_or(&0);
 
         if beam_x >= ship && beam_y >= ship {
             result2 = ((x - ship as i64 + 1) * 10000) + (y - ship as i64 + 1);
@@ -45,7 +67,49 @@ pub fn solve() -> (usize, i64)
 
         if (value == 0 && last == 1) || (beam_x == 0 && x > 10) {
             y += 1;
-            x = (start_x - 5).max(0);
+            x = (start_x - 1).max(0);
+        }
+
+        if value == 1 && last == 0 {
+            start_x = x;
+
+            let known = *beam_histogram_y.get(&(y - 1)).unwrap_or(&0) / 2;
+            *beam_histogram_y.entry(y).or_insert(0) += known;
+            x += known as i64;
+        }
+
+        x += 1;
+        last = value;
+    }
+
+    result2
+}
+
+fn part_1(memory: &[i64]) -> usize
+{
+    let (mut x, mut y) = (0, 0);
+    let (mut last, mut start_x) = (0, 0);
+
+    let mut beam_histogram_x = HashMap::<i64, usize>::new();
+    let mut beam_histogram_y = HashMap::<i64, usize>::new();
+
+    let mut result1 = 0;
+
+    while x < 50 && y < 50 {
+        let value = get_value(memory, x, y);
+
+        if value == 1 {
+            result1 += 1;
+
+            *beam_histogram_x.entry(x).or_insert(0) += 1;
+            *beam_histogram_y.entry(y).or_insert(0) += 1;
+        }
+
+        let beam_x = beam_histogram_x.get(&x).copied().unwrap_or(0);
+
+        if (value == 0 && last == 1) || (beam_x == 0 && x > 10) {
+            y += 1;
+            x = (start_x - 1).max(0);
         }
 
         if value == 1 && last == 0 {
@@ -56,9 +120,7 @@ pub fn solve() -> (usize, i64)
         last = value;
     }
 
-    //print(&beam);
-
-    (result1, result2)
+    result1
 }
 
 fn get_value(memory: &[i64], x: i64, y: i64) -> i64
