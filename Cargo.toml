@@ -2,14 +2,10 @@
 name = "advent_of_code"
 version = "0.1.0"
 edition = "2021"
-authors = ["Christian Moldenhauer"]
+authors = ["Chris Mo"]
 
 [dependencies]
-chrono = "0.4"
-mexe = "0.2.0"
 rayon = "1.7.0"
 iter_tools = "0.1.4"
 regex = "1.9.3"
 lazy_static = "1.4.0"
-reqwest = { version = "0.11.18", features = ["blocking", "json"] }
-serde = { version = "1.0.130", features = ["derive"] }

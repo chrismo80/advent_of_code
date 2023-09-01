@@ -1,5 +1,4 @@
 #![allow(dead_code)]
-pub mod examples;
 pub mod extensions;
 pub mod path_finding;
 pub mod year2015;
