@@ -6,10 +6,14 @@ pub fn solve() -> (i64, i64)
         .map(|code| 8 * position(&code[..7], 'B', 128) + position(&code[7..], 'R', 8))
         .collect();
 
+    let result1 = *seat_ids.iter().max().unwrap();
+
     seat_ids.sort();
 
-    let result1 = *seat_ids.iter().max().unwrap();
-    let result2 = first_empty(&seat_ids);
+    let result2 = seat_ids.iter().fold(seat_ids[0], |last, current| match current - last {
+        1 => *current,
+        _ => last,
+    }) + 1;
 
     println!("5\t{result1:<20}\t{result2:<20}");
 
@@ -19,22 +23,11 @@ pub fn solve() -> (i64, i64)
 fn position(code: &str, direction: char, end: i64) -> i64
 {
     code.chars()
-        .fold((0, end), |(min, max), value| {
-            let mid = min + ((max - min) / 2);
-            match value == direction {
-                true => (mid, max),
-                false => (min, mid),
-            }
+        .fold((0, end), |(min, max), current| match current == direction {
+            true => (min + ((max - min) / 2), max),
+            false => (min, min + ((max - min) / 2)),
         })
         .0
-}
-
-fn first_empty(seat_ids: &[i64]) -> i64
-{
-    seat_ids.iter().fold(seat_ids[0], |prev, &seat_id| match seat_id - prev {
-        1 => seat_id,
-        _ => prev,
-    }) + 1
 }
 
 #[test]
