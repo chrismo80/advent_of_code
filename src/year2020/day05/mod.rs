@@ -6,14 +6,10 @@ pub fn solve() -> (i64, i64)
         .map(|code| 8 * position(&code[..7], 'B', 128) + position(&code[7..], 'R', 8))
         .collect();
 
-    let result1 = *seat_ids.iter().max().unwrap();
-
     seat_ids.sort();
 
-    let result2 = seat_ids.iter().fold(seat_ids[0], |last, current| match current - last {
-        1 => *current,
-        _ => last,
-    }) + 1;
+    let result1 = *seat_ids.iter().max().unwrap();
+    let result2 = seat_ids.as_slice().windows(2).find(|&seats| seats[1] - seats[0] > 1).unwrap()[0] + 1;
 
     println!("5\t{result1:<20}\t{result2:<20}");
 
