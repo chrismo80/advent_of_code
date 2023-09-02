@@ -3,6 +3,7 @@ pub mod extensions;
 pub mod path_finding;
 pub mod year2015;
 pub mod year2016;
+pub mod year2017;
 pub mod year2019;
 pub mod year2020;
 pub mod year2022;
@@ -20,6 +21,7 @@ fn run_all()
 {
     year2015::run_all();
     year2016::run_all();
+    year2017::run_all();
     year2019::run_all();
     year2020::run_all();
     year2022::run_all();
