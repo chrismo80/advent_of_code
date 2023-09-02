@@ -3,7 +3,7 @@ pub fn solve() -> (i32, i32)
     let input = include_str!("input.txt").lines();
 
     let mut seat_ids: Vec<i32> = input
-        .map(|code| 8 * position(&code[..7], 'B') + position(&code[7..], 'R'))
+        .map(|code| 8 * position(&code[..7], 'F') + position(&code[7..], 'L'))
         .collect();
 
     seat_ids.sort();
@@ -22,7 +22,7 @@ fn position(code: &str, direction: char) -> i32
     let mut size = current / 2;
 
     for c in code.chars() {
-        if c != direction {
+        if c == direction {
             current -= size;
         }
         size /= 2;
