@@ -1,9 +1,9 @@
-pub fn solve() -> (i64, i64)
+pub fn solve() -> (i32, i32)
 {
     let input = include_str!("input.txt").lines();
 
-    let mut seat_ids: Vec<i64> = input
-        .map(|code| 8 * position(&code[..7], 'B', 128) + position(&code[7..], 'R', 8))
+    let mut seat_ids: Vec<i32> = input
+        .map(|code| 8 * position(&code[..7], 'B') + position(&code[7..], 'R'))
         .collect();
 
     seat_ids.sort();
@@ -16,14 +16,19 @@ pub fn solve() -> (i64, i64)
     (result1, result2)
 }
 
-fn position(code: &str, direction: char, end: i64) -> i64
+fn position(code: &str, direction: char) -> i32
 {
-    code.chars()
-        .fold((0, end), |(min, max), current| match current == direction {
-            true => (min + ((max - min) / 2), max),
-            false => (min, min + ((max - min) / 2)),
-        })
-        .0
+    let mut current = 2_i32.pow(code.len() as u32);
+    let mut size = current / 2;
+
+    for c in code.chars() {
+        if c != direction {
+            current -= size;
+        }
+        size /= 2;
+    }
+
+    current - 1
 }
 
 #[test]
