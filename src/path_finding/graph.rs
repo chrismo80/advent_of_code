@@ -1,6 +1,6 @@
 use std::collections::*;
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 pub struct Graph<T>
 {
     pub nodes: HashMap<T, HashMap<T, i32>>,
