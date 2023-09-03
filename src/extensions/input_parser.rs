@@ -29,8 +29,9 @@ impl SimpleParser for &str
 
 pub trait GenericParser
 {
-    fn to_vec_multiline<T: std::str::FromStr>(&self) -> Vec<T>
+    fn to_vec_multiline<T>(&self) -> Vec<T>
     where
+        T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug;
 
     fn to_vec<T: std::str::FromStr>(&self) -> Vec<T>
@@ -40,23 +41,26 @@ pub trait GenericParser
 
 impl GenericParser for &str
 {
-    fn to_vec<T: std::str::FromStr>(&self) -> Vec<T>
+    fn to_vec<T>(&self) -> Vec<T>
     where
+        T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
         parse(self, "\n")
     }
 
-    fn to_vec_multiline<T: std::str::FromStr>(&self) -> Vec<T>
+    fn to_vec_multiline<T>(&self) -> Vec<T>
     where
+        T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
         parse(self, "\n\n")
     }
 }
 
-fn parse<T: std::str::FromStr>(me: &str, delimiter: &str) -> Vec<T>
+fn parse<T>(me: &str, delimiter: &str) -> Vec<T>
 where
+    T: std::str::FromStr,
     <T as std::str::FromStr>::Err: std::fmt::Debug,
 {
     me.split(delimiter).map(|line| line.parse::<T>().unwrap()).collect()
