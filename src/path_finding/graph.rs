@@ -4,7 +4,6 @@ use std::collections::*;
 pub struct Graph<T>
 {
     pub nodes: HashMap<T, HashMap<T, i32>>,
-    previous: HashMap<T, T>,
 }
 
 impl<T> Graph<T>
@@ -13,10 +12,7 @@ where
 {
     pub fn new() -> Self
     {
-        Graph {
-            nodes: HashMap::new(),
-            previous: HashMap::new(),
-        }
+        Graph { nodes: HashMap::new() }
     }
 
     pub fn add_edge(&mut self, from: T, to: T, distance: i32)
@@ -27,34 +23,30 @@ where
 
     pub fn bfs(&mut self, start: T, end: T) -> Option<Vec<T>>
     {
-        self.previous.clear();
-
+        let mut previous = HashMap::new();
         let mut active = VecDeque::new();
+
         active.push_back(start);
 
-        while let Some(current) = active.pop_front() {
+        while let Some(mut current) = active.pop_front() {
             if current == end {
-                let mut path = Vec::new();
-                let mut node = end;
+                active.clear();
 
-                while node != start {
-                    path.push(node);
-                    node = self.previous[&node];
+                while current != start {
+                    active.push_front(current);
+                    current = previous[&current];
                 }
 
-                path.reverse();
-
-                return Some(path);
+                return Some(active.into());
             }
 
             for &neighbor in self.nodes[&current].keys() {
-                if let hash_map::Entry::Vacant(entry) = self.previous.entry(neighbor) {
+                if let hash_map::Entry::Vacant(entry) = previous.entry(neighbor) {
                     entry.insert(current);
                     active.push_back(neighbor);
                 }
             }
         }
-
         None
     }
 }
