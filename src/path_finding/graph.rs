@@ -21,7 +21,7 @@ where
         self.nodes.entry(to).or_default().insert(from, distance);
     }
 
-    pub fn bfs(&mut self, start: T, end: T) -> Option<Vec<T>>
+    pub fn bfs(&self, start: T, end: T) -> Option<Vec<T>>
     {
         let mut previous = HashMap::new();
         let mut active = VecDeque::new();
