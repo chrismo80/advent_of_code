@@ -1,6 +1,6 @@
 pub mod day01;
 
-static YEAR: &str = "2018";
+static YEAR: &str = "2021";
 
 pub fn run_all()
 {
