@@ -1,3 +1,5 @@
+use crate::extensions::input_parser::*;
+
 use iter_tools::Itertools;
 
 struct Monkey
@@ -58,10 +60,8 @@ impl std::str::FromStr for Monkey
 
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<&str> = include_str!("input.txt").split("\n\n").collect();
-
-    let result1 = play(input.iter().map(|m| m.parse::<Monkey>().unwrap()).collect(), 20);
-    let result2 = play(input.iter().map(|m| m.parse::<Monkey>().unwrap()).collect(), 10_000);
+    let result1 = play(include_str!("input.txt").to_vec_multiline::<Monkey>(), 20);
+    let result2 = play(include_str!("input.txt").to_vec_multiline::<Monkey>(), 10_000);
 
     println!("11\t{result1:<20}\t{result2:<20}");
 
