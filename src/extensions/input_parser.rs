@@ -2,6 +2,7 @@ pub trait SimpleParser
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>;
     fn to_int_grid(&self) -> Vec<Vec<u32>>;
+    fn to_vec_of_vec(&self) -> Vec<Vec<i64>>;
 }
 
 impl SimpleParser for &str
@@ -15,6 +16,13 @@ impl SimpleParser for &str
     {
         self.lines()
             .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
+            .collect()
+    }
+
+    fn to_vec_of_vec(&self) -> Vec<Vec<i64>>
+    {
+        self.split("\n\n")
+            .map(|lines| lines.lines().map(|line| line.parse::<i64>().unwrap()).collect())
             .collect()
     }
 }

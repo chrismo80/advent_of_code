@@ -1,12 +1,10 @@
+use crate::extensions::input_parser::*;
 use crate::path_finding::grid::*;
 use rayon::prelude::*;
 
 pub fn solve() -> (usize, usize)
 {
-    let mut map = include_str!("input.txt")
-        .lines()
-        .map(|l| l.chars().collect::<Vec<char>>())
-        .collect::<Vec<Vec<char>>>();
+    let mut map = include_str!("input.txt").to_char_grid();
 
     let mut start = (0, 0);
     let mut end = (0, 0);
