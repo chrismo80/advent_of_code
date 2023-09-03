@@ -1,5 +1,4 @@
 use crate::extensions::input_parser::*;
-
 use iter_tools::Itertools;
 
 struct Monkey

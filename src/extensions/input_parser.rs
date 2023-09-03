@@ -1,6 +1,22 @@
 pub trait SimpleParser
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>;
+    fn to_int_grid(&self) -> Vec<Vec<u32>>;
+}
+
+impl SimpleParser for &str
+{
+    fn to_char_grid(&self) -> Vec<Vec<char>>
+    {
+        self.lines().map(|line| line.chars().collect()).collect()
+    }
+
+    fn to_int_grid(&self) -> Vec<Vec<u32>>
+    {
+        self.lines()
+            .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
+            .collect()
+    }
 }
 
 pub trait GenericParser
@@ -14,27 +30,26 @@ pub trait GenericParser
         <T as std::str::FromStr>::Err: std::fmt::Debug;
 }
 
-impl SimpleParser for &str
-{
-    fn to_char_grid(&self) -> Vec<Vec<char>>
-    {
-        self.lines().map(|line| line.chars().collect()).collect()
-    }
-}
-
 impl GenericParser for &str
 {
     fn to_vec<T: std::str::FromStr>(&self) -> Vec<T>
     where
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
-        self.lines().map(|line| line.parse::<T>().unwrap()).collect()
+        parse(self, "\n")
     }
 
     fn to_vec_multiline<T: std::str::FromStr>(&self) -> Vec<T>
     where
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
-        self.split("\n\n").map(|line| line.parse::<T>().unwrap()).collect()
+        parse(self, "\n\n")
     }
+}
+
+fn parse<T: std::str::FromStr>(me: &str, delimiter: &str) -> Vec<T>
+where
+    <T as std::str::FromStr>::Err: std::fmt::Debug,
+{
+    me.split(delimiter).map(|line| line.parse::<T>().unwrap()).collect()
 }
