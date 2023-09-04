@@ -59,8 +59,8 @@ impl std::str::FromStr for Monkey
 
 pub fn solve() -> (usize, usize)
 {
-    let result1 = play(include_str!("input.txt").to_vec_multiline::<Monkey>(), 20);
-    let result2 = play(include_str!("input.txt").to_vec_multiline::<Monkey>(), 10_000);
+    let result1 = play(include_str!("input.txt").to_vec::<Monkey>("\n\n"), 20);
+    let result2 = play(include_str!("input.txt").to_vec::<Monkey>("\n\n"), 10_000);
 
     println!("11\t{result1:<20}\t{result2:<20}");
 

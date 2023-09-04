@@ -54,7 +54,7 @@ impl std::str::FromStr for Sue
 pub fn solve() -> (usize, usize)
 {
     //let input: Vec<Sue> = include_str!("input.txt").lines().map(|l| l.parse().unwrap()).collect();
-    let input = include_str!("input.txt").to_vec::<Sue>();
+    let input = include_str!("input.txt").to_vec::<Sue>("\n");
 
     let result1 = input
         .iter()

@@ -2,7 +2,7 @@ use crate::extensions::input_parser::*;
 
 pub fn solve() -> (i64, i64)
 {
-    let input = include_str!("input.txt").to_vec::<i64>();
+    let input = include_str!("input.txt").to_vec::<i64>("\n");
 
     let result1 = input.iter().map(|mass| mass / 3 - 2).sum();
     let result2 = input.iter().map(|mass| get_total_fuel(*mass)).sum();

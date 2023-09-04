@@ -1,11 +1,19 @@
-pub trait SimpleParser
+pub trait Parser
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>;
+
     fn to_int_grid(&self) -> Vec<Vec<u32>>;
-    fn to_vec_of_vec(&self) -> Vec<Vec<i64>>;
+
+    fn to_vec<T: std::str::FromStr>(&self, delim: &str) -> Vec<T>
+    where
+        <T as std::str::FromStr>::Err: std::fmt::Debug;
+
+    fn to_vec_of_vec<T: std::str::FromStr>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>
+    where
+        <T as std::str::FromStr>::Err: std::fmt::Debug;
 }
 
-impl SimpleParser for &str
+impl Parser for &str
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>
     {
@@ -19,49 +27,21 @@ impl SimpleParser for &str
             .collect()
     }
 
-    fn to_vec_of_vec(&self) -> Vec<Vec<i64>>
+    fn to_vec<T>(&self, delim: &str) -> Vec<T>
+    where
+        T: std::str::FromStr,
+        <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
-        self.split("\n\n")
-            .map(|lines| lines.lines().map(|line| line.parse::<i64>().unwrap()).collect())
+        self.split(delim).map(|line| line.parse::<T>().unwrap()).collect()
+    }
+
+    fn to_vec_of_vec<T>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>
+    where
+        T: std::str::FromStr,
+        <T as std::str::FromStr>::Err: std::fmt::Debug,
+    {
+        self.split(delim1)
+            .map(|line| line.split(delim2).map(|e| e.parse::<T>().unwrap()).collect())
             .collect()
     }
-}
-
-pub trait GenericParser
-{
-    fn to_vec_multiline<T>(&self) -> Vec<T>
-    where
-        T: std::str::FromStr,
-        <T as std::str::FromStr>::Err: std::fmt::Debug;
-
-    fn to_vec<T: std::str::FromStr>(&self) -> Vec<T>
-    where
-        <T as std::str::FromStr>::Err: std::fmt::Debug;
-}
-
-impl GenericParser for &str
-{
-    fn to_vec<T>(&self) -> Vec<T>
-    where
-        T: std::str::FromStr,
-        <T as std::str::FromStr>::Err: std::fmt::Debug,
-    {
-        parse(self, "\n")
-    }
-
-    fn to_vec_multiline<T>(&self) -> Vec<T>
-    where
-        T: std::str::FromStr,
-        <T as std::str::FromStr>::Err: std::fmt::Debug,
-    {
-        parse(self, "\n\n")
-    }
-}
-
-fn parse<T>(me: &str, delimiter: &str) -> Vec<T>
-where
-    T: std::str::FromStr,
-    <T as std::str::FromStr>::Err: std::fmt::Debug,
-{
-    me.split(delimiter).map(|line| line.parse::<T>().unwrap()).collect()
 }
