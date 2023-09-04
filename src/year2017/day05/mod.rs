@@ -7,7 +7,7 @@ pub fn solve() -> (usize, usize)
     let mut program = input.clone();
     let mut pointer = 0;
     let mut steps = 0;
-    let mut change = 1;
+    let change = 1;
 
     while pointer < program.len() as i32 {
         program[pointer as usize] += change;
@@ -17,14 +17,14 @@ pub fn solve() -> (usize, usize)
 
     let result1 = steps;
 
-    program = input.clone();
+    program = input;
     pointer = 0;
     steps = 0;
 
     while pointer < program.len() as i32 {
-        change = if program[pointer as usize] >= 3 { -1 } else { 1 };
-        program[pointer as usize] += change;
-        pointer += program[pointer as usize] - change;
+        let current = &mut program[pointer as usize];
+        pointer += *current;
+        *current += if *current >= 3 { -1 } else { 1 };
         steps += 1;
     }
 
