@@ -4,12 +4,14 @@ pub trait Parser
 
     fn to_int_grid(&self) -> Vec<Vec<u32>>;
 
-    fn to_vec<T: std::str::FromStr>(&self, delim: &str) -> Vec<T>
+    fn to_vec<T>(&self, delim: &str) -> Vec<T>
     where
+        T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug;
 
-    fn to_vec_of_vec<T: std::str::FromStr>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>
+    fn to_vec_of_vec<T>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>
     where
+        T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug;
 }
 
