@@ -4,7 +4,7 @@ use std::collections::HashSet;
 
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<Vec<String>> = include_str!("input.txt").to_vec_of_vec::<String>("\n", " ");
+    let input = include_str!("input.txt").to_vec_of_vec::<String>("\n", " ");
 
     let result1 = input
         .iter()
