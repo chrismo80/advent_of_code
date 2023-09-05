@@ -1,4 +1,4 @@
-use crate::extensions::input_parser::*;
+use crate::extensions::converter::*;
 use iter_tools::Itertools;
 use std::collections::HashSet;
 

@@ -1,4 +1,4 @@
-pub trait Parser
+pub trait Converter
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>;
 
@@ -15,7 +15,7 @@ pub trait Parser
         <T as std::str::FromStr>::Err: std::fmt::Debug;
 }
 
-impl Parser for &str
+impl Converter for &str
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>
     {

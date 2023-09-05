@@ -1,4 +1,4 @@
-use crate::extensions::input_parser::Parser;
+use crate::extensions::converter::Converter;
 
 pub fn solve() -> (usize, usize)
 {
