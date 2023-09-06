@@ -44,7 +44,7 @@ impl Decoder
 
     fn decode_segment(&self, s: &str) -> char
     {
-        match (s.len(), self.common_with(&self.one, s), self.common_with(&self.four, s)) {
+        match (s.len(), self.intersect(&self.one, s), self.intersect(&self.four, s)) {
             (2, _, _) => '1',
             (5, _, 2) => '2',
             (5, 2, _) => '3',
@@ -59,7 +59,7 @@ impl Decoder
         }
     }
 
-    fn common_with(&self, number: &[char], segment: &str) -> usize
+    fn intersect(&self, number: &[char], segment: &str) -> usize
     {
         number.iter().filter(|c| segment.contains(**c)).count()
     }
