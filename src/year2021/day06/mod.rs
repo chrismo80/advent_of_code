@@ -7,7 +7,7 @@ pub fn solve() -> (usize, usize)
     let result1 = population_after(&input, 80);
     let result2 = population_after(&input, 256);
 
-    println!("6\t{:<20}\t{:<20}", result1, result2);
+    println!("6\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

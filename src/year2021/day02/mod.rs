@@ -36,7 +36,7 @@ pub fn solve() -> (usize, usize)
     let result1 = part1.0 * part1.1;
     let result2 = part2.0 * part2.1;
 
-    println!("2\t{:<20}\t{:<20}", result1, result2);
+    println!("2\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

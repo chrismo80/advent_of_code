@@ -22,7 +22,7 @@ pub fn solve() -> (usize, usize)
         .filter(|words| words.len() == words.iter().collect::<HashSet<_>>().len())
         .count();
 
-    println!("4\t{:<20}\t{:<20}", result1, result2);
+    println!("4\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

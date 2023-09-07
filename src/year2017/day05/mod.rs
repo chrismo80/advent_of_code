@@ -30,7 +30,7 @@ pub fn solve() -> (usize, usize)
 
     let result2 = steps;
 
-    println!("5\t{:<20}\t{:<20}", result1, result2);
+    println!("5\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

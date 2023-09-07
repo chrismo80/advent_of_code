@@ -19,7 +19,7 @@ pub fn solve() -> (i32, i32)
 
     let result2 = frequency;
 
-    println!("1\t{:<20}\t{:<20}", result1, result2);
+    println!("1\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

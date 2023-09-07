@@ -12,7 +12,7 @@ pub fn solve() -> (usize, usize)
 
     let result2 = input.iter().map(|l| Decoder::new(l[0].as_str()).decode(l[1].as_str())).sum();
 
-    println!("8\t{:<20}\t{:<20}", result1, result2);
+    println!("8\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

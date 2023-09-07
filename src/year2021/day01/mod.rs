@@ -9,7 +9,7 @@ pub fn solve() -> (usize, usize)
     let result1 = action(&input);
     let result2 = action(&windows);
 
-    println!("1\t{:<20}\t{:<20}", result1, result2);
+    println!("1\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

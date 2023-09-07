@@ -8,7 +8,7 @@ pub fn solve() -> (i32, String)
     let result1 = count(&input, 2) * count(&input, 3);
     let result2 = find_similar(&input);
 
-    println!("2\t{:<20}\t{:<20}", result1, result2);
+    println!("2\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

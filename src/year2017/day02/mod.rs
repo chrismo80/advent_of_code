@@ -8,7 +8,7 @@ pub fn solve() -> (i32, i32)
     let result1 = input.iter().map(|l| l.iter().max().unwrap() - l.iter().min().unwrap()).sum();
     let result2 = input.iter().map(|l| find_numers(l)).sum();
 
-    println!("2\t{:<20}\t{:<20}", result1, result2);
+    println!("2\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

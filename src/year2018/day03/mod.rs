@@ -32,7 +32,7 @@ pub fn solve() -> (usize, usize)
         .unwrap()
         .0[0];
 
-    println!("3\t{:<20}\t{:<20}", result1, result2);
+    println!("3\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

@@ -23,7 +23,7 @@ pub fn solve() -> (i64, i64)
     let result1 = calc(&input, closure1);
     let result2 = calc(&input, closure2);
 
-    println!("7\t{:<20}\t{:<20}", result1, result2);
+    println!("7\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }
