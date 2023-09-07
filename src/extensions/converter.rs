@@ -13,6 +13,11 @@ pub trait Converter
     where
         T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug;
+
+    fn to_vec_of_vec_of_vec<T>(&self, delim1: &str, delim2: &str, delim3: &str) -> Vec<Vec<Vec<T>>>
+    where
+        T: std::str::FromStr,
+        <T as std::str::FromStr>::Err: std::fmt::Debug;
 }
 
 impl Converter for &str
@@ -44,6 +49,21 @@ impl Converter for &str
     {
         self.split(delim1)
             .map(|line| line.split(delim2).map(|e| e.parse::<T>().unwrap()).collect())
+            .collect()
+    }
+
+    fn to_vec_of_vec_of_vec<T>(&self, delim1: &str, delim2: &str, delim3: &str) -> Vec<Vec<Vec<T>>>
+    where
+        T: std::str::FromStr,
+        <T as std::str::FromStr>::Err: std::fmt::Debug,
+    {
+        self.split(delim1)
+            .map(|item1| {
+                item1
+                    .split(delim2)
+                    .map(|item2| item2.split(delim3).map(|e| e.parse::<T>().unwrap()).collect())
+                    .collect()
+            })
             .collect()
     }
 }
