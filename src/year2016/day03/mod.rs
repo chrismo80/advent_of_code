@@ -4,10 +4,6 @@ pub fn solve() -> (usize, usize)
 {
     let input = include_str!("input.txt").to_vec_of_vec::<usize>("\n", " ");
 
-    for l in input.iter() {
-        println!("{:?}", l);
-    }
-
     let is_triangle =
         |sides: &[usize]| sides[0] + sides[1] > sides[2] && sides[0] + sides[2] > sides[1] && sides[1] + sides[2] > sides[0];
 
