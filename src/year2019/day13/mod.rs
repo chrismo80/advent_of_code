@@ -1,10 +1,10 @@
+use crate::extensions::converter::Converter;
+
 use super::intcode_computer::*;
 
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt").split(',');
-
-    let mut memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
+    let mut memory = include_str!("input.txt").to_vec::<i64>(",");
 
     let mut icc = IntCodeComputer::new(&memory);
 

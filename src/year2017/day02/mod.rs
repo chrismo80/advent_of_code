@@ -1,9 +1,8 @@
+use crate::extensions::converter::Converter;
+
 pub fn solve() -> (i32, i32)
 {
-    let input: Vec<Vec<i32>> = include_str!("input.txt")
-        .lines()
-        .map(|line| line.split('\t').map(|item| item.parse().unwrap()).collect())
-        .collect();
+    let input = include_str!("input.txt").to_vec_of_vec::<i32>("\n", "\t");
 
     let result1 = input.iter().map(|l| l.iter().max().unwrap() - l.iter().min().unwrap()).sum();
     let result2 = input.iter().map(|l| find_numers(l)).sum();

@@ -1,14 +1,14 @@
-use crate::path_finding::graph::Graph;
+use crate::{extensions::converter::Converter, path_finding::graph::Graph};
 use rayon::prelude::*;
 
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<Vec<&str>> = include_str!("input.txt").lines().map(|l| l.split(')').collect()).collect();
+    let input = include_str!("input.txt").to_vec_of_vec::<String>("\r\n", ")");
 
     let mut graph: Graph<&str> = Graph::new();
 
     input.iter().for_each(|planet| {
-        graph.add_edge(planet[0], planet[1], 1);
+        graph.add_edge(planet[0].as_str(), planet[1].as_str(), 1);
     });
 
     let planets: Vec<&str> = graph.nodes.keys().copied().collect();

@@ -1,9 +1,9 @@
-use crate::extensions::permutations::*;
+use crate::extensions::{converter::Converter, permutations::*};
 use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
-    let map: Vec<Vec<char>> = include_str!("input.txt").lines().map(|l| l.chars().collect()).collect();
+    let map = include_str!("input.txt").to_char_grid();
 
     let grid = crate::path_finding::grid::Grid::new(&map, Box::new(|_, next| *next != '#'));
 

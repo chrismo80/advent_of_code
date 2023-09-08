@@ -1,9 +1,12 @@
+use crate::extensions::converter::Converter;
+
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<Vec<usize>> = include_str!("input.txt")
-        .lines()
-        .map(|line| line.split_whitespace().map(|n| n.parse::<usize>().unwrap()).collect())
-        .collect();
+    let input = include_str!("input.txt").to_vec_of_vec::<usize>("\n", " ");
+
+    for l in input.iter() {
+        println!("{:?}", l);
+    }
 
     let is_triangle =
         |sides: &[usize]| sides[0] + sides[1] > sides[2] && sides[0] + sides[2] > sides[1] && sides[1] + sides[2] > sides[0];

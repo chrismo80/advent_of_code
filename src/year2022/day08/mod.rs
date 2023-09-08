@@ -1,9 +1,8 @@
+use crate::extensions::converter::Converter;
+
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt")
-        .lines()
-        .map(|l| l.chars().collect::<Vec<char>>())
-        .collect::<Vec<Vec<char>>>();
+    let input = include_str!("input.txt").to_char_grid();
 
     let mut result1 = 0;
     let mut result2 = 0;
