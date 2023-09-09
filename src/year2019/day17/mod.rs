@@ -1,11 +1,11 @@
 use super::intcode_computer::*;
+use crate::extensions::converter::Converter;
 use std::collections::*;
 
 pub fn solve() -> (i32, i64)
 {
-    let input = include_str!("input.txt").split(',');
+    let mut memory = include_str!("input.txt").to_vec::<i64>(",");
 
-    let mut memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
     memory[0] = 2;
 
     let mut robot = IntCodeComputer::new(&memory);

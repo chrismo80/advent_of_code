@@ -1,3 +1,5 @@
+use crate::extensions::converter::Converter;
+
 struct ListEntry
 {
     left: usize,
@@ -42,7 +44,7 @@ impl ListEntry
 
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<ListEntry> = include_str!("input.txt").lines().map(|l| l.parse().unwrap()).collect();
+    let input = include_str!("input.txt").to_vec::<ListEntry>("\n");
 
     let result1 = input.iter().filter(|e| e.is_valid_old_policy()).count();
     let result2 = input.iter().filter(|e| e.is_valid_new_policy()).count();

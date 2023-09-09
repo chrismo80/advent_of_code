@@ -1,6 +1,8 @@
 use lazy_static::lazy_static;
 use regex::Regex;
 
+use crate::extensions::converter::Converter;
+
 lazy_static! {
     static ref REG_HGT: Regex = Regex::new(r"^(?<value>\d+)(?<unit>cm|in)$").unwrap();
     static ref REG_HCL: Regex = Regex::new(r"^#[0-9a-f]{6}$").unwrap();
@@ -10,12 +12,10 @@ lazy_static! {
 
 pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt").split("\n\n");
+    let input = include_str!("input.txt").to_vec::<Passport>("\n\n");
 
-    let passports: Vec<Passport> = input.map(|passport| passport.parse::<Passport>().unwrap()).collect();
-
-    let result1 = passports.iter().filter(|passport| passport.has_all_fields()).count();
-    let result2 = passports.iter().filter(|passport| passport.is_valid()).count();
+    let result1 = input.iter().filter(|passport| passport.has_all_fields()).count();
+    let result2 = input.iter().filter(|passport| passport.is_valid()).count();
 
     println!("4\t{result1:<20}\t{result2:<20}");
 

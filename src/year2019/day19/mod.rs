@@ -1,13 +1,12 @@
 use super::intcode_computer::*;
+use crate::extensions::converter::Converter;
 use std::collections::*;
 
 pub fn solve() -> (usize, i64)
 {
-    let input = include_str!("input.txt").split(',');
+    let input = include_str!("input.txt").to_vec::<i64>(",");
 
-    let memory: Vec<i64> = input.map(|x| x.parse().unwrap()).collect();
-
-    let result1 = part_1(&memory);
+    let result1 = part_1(&input);
 
     let (mut x, mut y, mut distance) = (0, 50, 0);
     let mut horizontal = true;
@@ -15,13 +14,13 @@ pub fn solve() -> (usize, i64)
     while distance < 135 || horizontal {
         distance = 0;
 
-        while get_value(&memory, x, y) == 0 {
+        while get_value(&input, x, y) == 0 {
             match horizontal {
                 true => x += 1,
                 false => y += 1,
             }
         }
-        while get_value(&memory, x, y) == 1 {
+        while get_value(&input, x, y) == 1 {
             match horizontal {
                 true => x += 1,
                 false => y += 1,
@@ -31,7 +30,7 @@ pub fn solve() -> (usize, i64)
         horizontal = !horizontal;
     }
 
-    let result2 = part_2(&memory, x, y);
+    let result2 = part_2(&input, x, y);
 
     println!("19\t{result1:<20}\t{result2:<20}");
 

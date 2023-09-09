@@ -1,6 +1,8 @@
+use crate::extensions::converter::Converter;
+
 pub fn solve() -> (i32, i32)
 {
-    let input: Vec<i32> = include_str!("input.txt").split(',').map(|x| x.parse().unwrap()).collect();
+    let input = include_str!("input.txt").to_vec::<i32>(",");
 
     let result1 = run_program(&mut input.clone(), 12, 2);
     let mut result2 = 0;

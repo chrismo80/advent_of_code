@@ -1,6 +1,8 @@
+use crate::extensions::converter::Converter;
+
 pub fn solve() -> (usize, usize)
 {
-    let input: Vec<usize> = include_str!("input.txt").lines().map(|l| l.parse().unwrap()).collect();
+    let input = include_str!("input.txt").to_vec::<usize>("\n");
 
     let mut result1 = 0;
     let mut result2 = 0;
