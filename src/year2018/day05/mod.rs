@@ -1,33 +1,15 @@
+use rayon::prelude::*;
 use regex::Regex;
 
 pub fn solve() -> (usize, usize)
 {
     let input = include_str!("input.txt");
 
-    let reactions = (b'a'..=b'z')
-        .map(|c| format!("{}{}", c as char, (c as char).to_uppercase()))
-        .chain((b'A'..=b'Z').map(|c| format!("{}{}", c as char, (c as char).to_ascii_lowercase())))
-        .collect::<Vec<String>>()
-        .join("|");
+    let result1 = react(input.to_string());
 
-    let regex = Regex::new(reactions.as_str()).unwrap();
-
-    let result1 = react(input.to_string(), &regex);
-    let result1 = polymere(input.chars().map(|c| c as u8));
-
-    // let result2 = (b'a'..=b'z')
-    //     .map(|c| react(input.replace([c as char, (c.to_ascii_uppercase()) as char], ""), &regex))
-    //     .min()
-    //     .unwrap();
     let result2 = (b'a'..=b'z')
-        .map(|c| {
-            polymere(
-                input
-                    .replace([c as char, (c.to_ascii_uppercase()) as char], "")
-                    .chars()
-                    .map(|c| c as u8),
-            )
-        })
+        .into_par_iter()
+        .map(|c| react(input.replace([c as char, (c.to_ascii_uppercase()) as char], "")))
         .min()
         .unwrap();
 
@@ -36,8 +18,16 @@ pub fn solve() -> (usize, usize)
     (result1, result2)
 }
 
-fn react(mut polymer: String, regex: &Regex) -> usize // slow
+fn react(mut polymer: String) -> usize // slow
 {
+    let reactions = (b'a'..=b'z')
+        .map(|c| format!("{}{}", c as char, (c as char).to_uppercase()))
+        .chain((b'A'..=b'Z').map(|c| format!("{}{}", c as char, (c as char).to_ascii_lowercase())))
+        .collect::<Vec<String>>()
+        .join("|");
+
+    let regex = Regex::new(reactions.as_str()).unwrap();
+
     let mut length = 0;
 
     while length != polymer.len() {
@@ -49,11 +39,28 @@ fn react(mut polymer: String, regex: &Regex) -> usize // slow
 }
 
 // https://www.reddit.com/r/adventofcode/comments/a3912m/comment/eb5h4qk
-fn polymere(input: impl Iterator<Item = u8>) -> usize // fast
+// A is 0x41, a is 0x61
+// B is 0x42, b is 0x62
+// etc.
+//
+// For units to pass the comparison, their "letter part" must be equal,
+// and their "case part" mut be different.
+//
+// Using the result of the bitwise XOR:
+//
+//        vvvv- same letter
+// 0b0010_0000
+//   ^^^^------ not the same case
+//
+// This is much faster than using the `to_lowercase` function, since Rust's
+// awesome UTF-8 support uses a big conversion table, *and* needs to support
+// multiple-characters lowercase.
+// (left as u8) ^ (right as u8) == 0b0010_0000
+fn polymere(input: String) -> usize // fast
 {
     let mut output: Vec<u8> = Vec::new();
 
-    for ch in input {
+    for ch in input.chars().map(|c| c as u8) {
         if output.last().map(|&l| l ^ ch == 32).unwrap_or(false) {
             output.pop();
         }

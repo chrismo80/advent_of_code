@@ -1,3 +1,5 @@
+use crate::extensions::converter::Converter;
+
 struct Reindeer
 {
     name: String,
@@ -69,7 +71,7 @@ impl Race
 
 pub fn solve() -> (usize, usize)
 {
-    let reindeers: Vec<Reindeer> = include_str!("input.txt").lines().map(|l| l.parse().unwrap()).collect();
+    let reindeers = include_str!("input.txt").to_vec::<Reindeer>("\n");
 
     let mut race = Race::new(reindeers);
 
