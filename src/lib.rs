@@ -41,7 +41,13 @@ fn begin() -> std::time::Instant
 fn end(start: std::time::Instant, scope: &str)
 {
     print_line();
-    println!("{scope}: {:.1} ms\n\n", start.elapsed().as_micros() as f32 / 1000.0);
+
+    if scope == "Total" {
+        println!("{scope}: {:.1} s\n\n", start.elapsed().as_millis() as f32 / 1000.0);
+        return;
+    }
+
+    println!("{scope}: {:.0} ms\n\n", start.elapsed().as_micros() as f32 / 1000.0);
 }
 
 fn print_line()
