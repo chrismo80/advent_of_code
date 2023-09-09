@@ -1,39 +1,18 @@
-pub fn solve() -> (i32, i32)
+use crate::extensions::converter::Converter;
+
+pub fn solve() -> (usize, usize)
 {
-    let input = include_str!("input.txt").lines().collect::<Vec<&str>>();
+    let input = include_str!("input.txt").to_vec_of_vec_of_vec::<i32>("\n", ",", "-");
 
-    let mut result1 = 0;
-    let mut result2 = 0;
+    let fully = |min1: i32, max1: i32, min2: i32, max2: i32| min1 <= min2 && max1 >= max2 || min2 <= min1 && max2 >= max1;
+    let partially = |min1: i32, max1: i32, min2: i32, max2: i32| min1 <= max2 && max1 >= min2;
 
-    for line in &input {
-        let split = line.split(',').collect::<Vec<&str>>();
-
-        let left = split[0].split('-').collect::<Vec<&str>>();
-        let right = split[1].split('-').collect::<Vec<&str>>();
-
-        let left_min = left[0].parse::<i32>().unwrap();
-        let left_max = left[1].parse::<i32>().unwrap();
-
-        let right_min = right[0].parse::<i32>().unwrap();
-        let right_max = right[1].parse::<i32>().unwrap();
-
-        result1 += overlap_fully(left_min, left_max, right_min, right_max) as i32;
-        result2 += overlap_at_all(left_min, left_max, right_min, right_max) as i32;
-    }
+    let result1 = input.iter().filter(|l| fully(l[0][0], l[0][1], l[1][0], l[1][1])).count();
+    let result2 = input.iter().filter(|l| partially(l[0][0], l[0][1], l[1][0], l[1][1])).count();
 
     println!("4\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
-}
-
-fn overlap_at_all(min1: i32, max1: i32, min2: i32, max2: i32) -> bool
-{
-    min1 <= max2 && max1 >= min2
-}
-
-fn overlap_fully(min1: i32, max1: i32, min2: i32, max2: i32) -> bool
-{
-    min1 <= min2 && max1 >= max2 || min2 <= min1 && max2 >= max1
 }
 
 #[test]
