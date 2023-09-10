@@ -1,5 +1,5 @@
 use crate::extensions::converter::Converter;
-use std::{cmp::Ordering, collections::*};
+use std::collections::*;
 
 pub fn solve() -> (usize, usize)
 {
@@ -7,23 +7,19 @@ pub fn solve() -> (usize, usize)
 
     let get_total_distance_to = |x: i32, y: i32| -> i32 { input.iter().map(|p| (p[0] - x).abs() + (p[1] - y).abs()).sum() };
     let get_closest_index_to = |x: i32, y: i32| -> i32 {
-        let mut min = std::i32::MAX;
-        let mut index = -1;
+        let mut distances: Vec<(i32, usize)> = input
+            .iter()
+            .enumerate()
+            .map(|(i, p)| ((p[0] - x).abs() + (p[1] - y).abs(), i))
+            .collect();
 
-        for (i, p) in input.iter().enumerate() {
-            let distance = (p[0] - x).abs() + (p[1] - y).abs();
+        distances.sort();
 
-            match distance.cmp(&min) {
-                Ordering::Less => {
-                    min = distance;
-                    index = i as i32;
-                }
-                Ordering::Equal => index = -1,
-                _ => {}
-            }
+        if distances[0].0 == distances[1].0 {
+            return -1;
         }
 
-        index
+        distances[0].1 as i32
     };
 
     let mut points: HashMap<i32, HashSet<(i32, i32)>> = HashMap::new();
