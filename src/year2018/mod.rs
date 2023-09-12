@@ -4,6 +4,7 @@ pub mod day03;
 pub mod day04;
 pub mod day05;
 pub mod day06;
+pub mod day08;
 
 static YEAR: &str = "2018";
 
@@ -17,6 +18,7 @@ pub fn run_all()
     day04::solve();
     day05::solve();
     day06::solve();
+    day08::solve();
 
     super::end(start, YEAR);
 }
