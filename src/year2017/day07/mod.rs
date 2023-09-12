@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use crate::extensions::converter::Converter;
 
 pub fn solve() -> (String, i32)
@@ -101,13 +99,13 @@ impl Disc
 
     fn is_balanced(&self, discs: &[Disc]) -> bool
     {
-        let weights: HashSet<i32> = discs
+        discs
             .iter()
             .filter(|disc| disc.parent == Some(self.name.clone()))
             .map(|disc| disc.total_weight(discs))
-            .collect();
-
-        self.children.is_empty() || weights.len() == 1
+            .collect::<std::collections::HashSet<i32>>()
+            .len()
+            <= 1
     }
 }
 
