@@ -12,36 +12,30 @@ pub fn solve() -> (String, i32)
 
             discs
                 .iter_mut()
-                .find(|d| d.name == child_name)
+                .find(|disc| disc.name == child_name)
                 .unwrap()
                 .set_parent(&parent_name);
         }
     }
 
     // find unbalanced discs
-    let mut unbalanced = discs.iter().filter(|d| !d.is_balanced(&discs)).collect::<Vec<_>>();
+    let mut unbalanced: Vec<&Disc> = discs.iter().filter(|disc| !disc.is_balanced(&discs)).collect();
 
     // get unbalanced disc with most parents
-    unbalanced.sort_by_key(|d| d.count_parents(&discs));
+    unbalanced.sort_by_key(|disc| disc.count_parents(&discs));
 
-    let unbalanced_disc_name = unbalanced.last().unwrap().name.clone();
+    let disc_name = unbalanced.last().unwrap().name.clone();
 
     // get  children of found disc
-    let mut unbalanced_children = discs
-        .iter()
-        .filter(|d| d.parent == Some(unbalanced_disc_name.clone()))
-        .collect::<Vec<_>>();
+    let mut children: Vec<&Disc> = discs.iter().filter(|disc| disc.parent == Some(disc_name.clone())).collect();
 
     // sort children by total weight to find max / min
-    unbalanced_children.sort_by_key(|d| d.total_weight(&discs));
+    children.sort_by_key(|disc| disc.total_weight(&discs));
 
-    let diff =
-        unbalanced_children.last().unwrap().total_weight(&discs) - unbalanced_children.first().unwrap().total_weight(&discs);
+    let diff = children.last().unwrap().total_weight(&discs) - children.first().unwrap().total_weight(&discs);
 
-    let root = discs.iter().find(|d| d.parent.is_none()).unwrap().name.clone();
-
-    let result1 = root;
-    let result2 = unbalanced_children.last().unwrap().weight - diff;
+    let result1 = discs.iter().find(|d| d.parent.is_none()).unwrap().name.clone();
+    let result2 = children.last().unwrap().weight - diff;
 
     println!("7\t{result1:<20}\t{result2:<20}");
 
@@ -82,7 +76,6 @@ impl Disc
     fn count_parents(&self, discs: &[Disc]) -> usize
     {
         let mut count = 0;
-
         let mut parent = self.parent.clone();
 
         while let Some(p) = parent {
@@ -112,7 +105,7 @@ impl Disc
             weights.push(discs.iter().find(|d| d.name == *child).unwrap().total_weight(discs));
         }
 
-        weights.iter().all(|w| w == &weights[0])
+        weights.iter().all(|&w| w == weights[0])
     }
 }
 
@@ -124,7 +117,7 @@ impl std::str::FromStr for Disc
     {
         let mut parts = s.split(" -> ");
 
-        let name_weight = parts.next().unwrap().split(' ').collect::<Vec<_>>();
+        let name_weight: Vec<&str> = parts.next().unwrap().split(' ').collect();
 
         let name = name_weight[0];
         let weight = name_weight[1].trim_matches(|c| c == '(' || c == ')').parse().unwrap();
