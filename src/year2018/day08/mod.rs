@@ -54,7 +54,7 @@ impl Node
 
         self.metadata
             .iter()
-            .filter(|&m| m - 1 < self.children.len())
+            .filter(|&m| m <= &self.children.len())
             .map(|&m| self.children[m - 1].value())
             .sum()
     }
