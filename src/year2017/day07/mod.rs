@@ -1,98 +1,139 @@
-use std::collections::*;
+use crate::extensions::converter::Converter;
 
-pub fn solve() -> (String, i64)
+pub fn solve() -> (String, i32)
 {
-    let input: Vec<(&str, i64, Option<&str>)> = include_str!("input.txt")
-        .lines()
-        .map(|l| {
-            (
-                l.split(' ').next().unwrap(),
-                l.split(['(', ')']).nth(1).unwrap().parse().unwrap(),
-                l.split(" -> ").nth(1),
-            )
-        })
-        .collect();
+    let mut discs = include_str!("input.txt").to_vec::<Disc>("\n");
 
-    let mut discs = HashMap::new();
+    for d in 0..discs.len() {
+        let parent_name = discs[d].name.clone();
 
-    for line in &input {
-        if let Some(children) = line.2 {
-            discs.insert(line.0, (line.1, children.split(", ").collect()));
-        }
-        else {
-            discs.insert(line.0, (line.1, Vec::new()));
+        for c in 0..discs[d].children.len() {
+            let child_name = discs[d].children[c].clone();
+
+            let child_disc = discs.iter_mut().find(|d| d.name == child_name).unwrap();
+
+            child_disc.set_parent(&parent_name);
         }
     }
 
-    let mut unbalanced: Vec<(usize, &str)> = discs
-        .keys()
-        .filter(|name| !balanced(&discs, name))
-        .map(|&name| (get_parents_count(&discs, name), name))
-        .collect();
+    // find unbalanced discs
+    let mut unbalanced = discs.iter().filter(|d| !d.is_balanced(&discs)).collect::<Vec<_>>();
 
-    unbalanced.sort();
+    // get unbalanced disc with most parents
+    unbalanced.sort_by_key(|d| d.count_parents(&discs));
 
-    let mut last_children: Vec<(i64, &str)> = discs[unbalanced.last().unwrap().1]
-        .1
+    let unbalanced_disc_name = unbalanced.last().unwrap().name.clone();
+
+    // get  children of found disc
+    let mut unbalanced_children = discs
         .iter()
-        .map(|&child| (total_weight(&discs, child), child))
-        .collect();
+        .filter(|d| d.parent == Some(unbalanced_disc_name.clone()))
+        .collect::<Vec<_>>();
 
-    last_children.sort();
+    // sort children by total weight to find max / min
+    unbalanced_children.sort_by_key(|d| d.total_weight(&discs));
 
-    let diff = last_children.last().unwrap().0 - last_children.first().unwrap().0;
+    let diff =
+        unbalanced_children.last().unwrap().total_weight(&discs) - unbalanced_children.first().unwrap().total_weight(&discs);
 
-    let result1 = discs
-        .keys()
-        .find(|name| get_parents_count(&discs, name) == 0)
-        .unwrap()
-        .to_string();
-    let result2 = discs[last_children.last().unwrap().1].0 - diff;
+    let root = discs.iter().find(|d| d.parent.is_none()).unwrap().name.clone();
+
+    let result1 = root;
+    let result2 = unbalanced_children.last().unwrap().weight - diff;
 
     println!("7\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }
 
-fn balanced(discs: &HashMap<&str, (i64, Vec<&str>)>, name: &str) -> bool
-{
-    if discs[name].1.is_empty() {
-        return true;
-    }
-
-    let mut weights = Vec::new();
-
-    for child in &discs[name].1 {
-        weights.push(total_weight(discs, child));
-    }
-
-    weights.iter().all(|w| w == &weights[0])
-}
-
-fn total_weight(discs: &HashMap<&str, (i64, Vec<&str>)>, name: &str) -> i64
-{
-    let mut weight = discs[name].0;
-
-    for child in &discs[name].1 {
-        weight += total_weight(discs, child);
-    }
-
-    weight
-}
-
-fn get_parents_count(discs: &HashMap<&str, (i64, Vec<&str>)>, name: &str) -> usize
-{
-    let mut parents = 0;
-
-    if let Some(parent) = discs.iter().find(|&disc| disc.1 .1.contains(&name)) {
-        parents += 1 + get_parents_count(discs, parent.0);
-    }
-
-    parents
-}
-
 #[test]
 fn test()
 {
     assert_eq!(solve(), ("cyrupz".to_string(), 193));
+}
+
+struct Disc
+{
+    name: String,
+    weight: i32,
+    children: Vec<String>,
+    parent: Option<String>,
+}
+
+impl Disc
+{
+    fn new(name: &str, weight: i32, children: Vec<String>) -> Disc
+    {
+        Disc {
+            name: name.to_string(),
+            weight,
+            children,
+            parent: None,
+        }
+    }
+
+    fn set_parent(&mut self, parent: &str)
+    {
+        self.parent = Some(parent.to_string());
+    }
+
+    fn count_parents(&self, discs: &[Disc]) -> usize
+    {
+        let mut count = 0;
+
+        let mut parent = self.parent.clone();
+
+        while let Some(p) = parent {
+            count += 1;
+            parent = discs.iter().find(|d| d.name == p).unwrap().parent.clone();
+        }
+
+        count
+    }
+
+    fn total_weight(&self, discs: &[Disc]) -> i32
+    {
+        let mut weight = self.weight;
+
+        for child in &self.children {
+            weight += discs.iter().find(|d| d.name == *child).unwrap().total_weight(discs);
+        }
+
+        weight
+    }
+
+    fn is_balanced(&self, discs: &[Disc]) -> bool
+    {
+        let mut weights = Vec::new();
+
+        for child in &self.children {
+            weights.push(discs.iter().find(|d| d.name == *child).unwrap().total_weight(discs));
+        }
+
+        weights.iter().all(|w| w == &weights[0])
+    }
+}
+
+impl std::str::FromStr for Disc
+{
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err>
+    {
+        let mut parts = s.split(" -> ");
+
+        let name_weight = parts.next().unwrap().split(' ').collect::<Vec<_>>();
+
+        let name = name_weight[0];
+        let weight = name_weight[1].trim_matches(|c| c == '(' || c == ')').parse().unwrap();
+
+        let children = if let Some(children) = parts.next() {
+            children.split(", ").map(|c| c.to_string()).collect()
+        }
+        else {
+            Vec::new()
+        };
+
+        Ok(Disc::new(name, weight, children))
+    }
 }
