@@ -48,15 +48,15 @@ impl Node
 
     fn value(&self) -> usize
     {
-        if self.children.is_empty() {
-            return self.metadata.iter().sum();
+        match self.children.is_empty() {
+            true => self.metadata.iter().sum(),
+            false => self
+                .metadata
+                .iter()
+                .filter(|&m| m <= &self.children.len())
+                .map(|&m| self.children[m - 1].value())
+                .sum(),
         }
-
-        self.metadata
-            .iter()
-            .filter(|&m| m <= &self.children.len())
-            .map(|&m| self.children[m - 1].value())
-            .sum()
     }
 }
 
