@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::extensions::converter::Converter;
 
 pub fn solve() -> (String, i32)
@@ -91,7 +93,7 @@ impl Disc
         let mut weight = self.weight;
 
         for child in &self.children {
-            weight += discs.iter().find(|d| d.name == *child).unwrap().total_weight(discs);
+            weight += discs.iter().find(|disc| disc.name == *child).unwrap().total_weight(discs);
         }
 
         weight
@@ -99,13 +101,13 @@ impl Disc
 
     fn is_balanced(&self, discs: &[Disc]) -> bool
     {
-        let mut weights = Vec::new();
+        let weights: HashSet<i32> = discs
+            .iter()
+            .filter(|disc| disc.parent == Some(self.name.clone()))
+            .map(|disc| disc.total_weight(discs))
+            .collect();
 
-        for child in &self.children {
-            weights.push(discs.iter().find(|d| d.name == *child).unwrap().total_weight(discs));
-        }
-
-        weights.iter().all(|&w| w == weights[0])
+        self.children.is_empty() || weights.len() == 1
     }
 }
 
