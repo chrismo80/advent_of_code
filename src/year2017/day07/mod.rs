@@ -24,8 +24,6 @@ pub fn solve() -> (String, i64)
         }
     }
 
-    let all_children: Vec<&str> = discs.values().flat_map(|v| v.1.clone()).collect();
-
     let mut unbalanced: Vec<(usize, &str)> = discs
         .keys()
         .filter(|name| !balanced(&discs, name))
@@ -33,6 +31,10 @@ pub fn solve() -> (String, i64)
         .collect();
 
     unbalanced.sort();
+
+    for name in unbalanced.iter() {
+        println!("{}: {}", name.1, name.0);
+    }
 
     let mut last_children: Vec<(i64, &str)> = discs[unbalanced.last().unwrap().1]
         .1
@@ -44,7 +46,11 @@ pub fn solve() -> (String, i64)
 
     let diff = last_children.last().unwrap().0 - last_children.first().unwrap().0;
 
-    let result1 = discs.keys().find(|k| !all_children.contains(k)).unwrap().to_string();
+    let result1 = discs
+        .keys()
+        .find(|name| get_parents_count(&discs, name) == 0)
+        .unwrap()
+        .to_string();
     let result2 = discs[last_children.last().unwrap().1].0 - diff;
 
     println!("7\t{result1:<20}\t{result2:<20}");
@@ -54,6 +60,10 @@ pub fn solve() -> (String, i64)
 
 fn balanced(discs: &HashMap<&str, (i64, Vec<&str>)>, name: &str) -> bool
 {
+    if discs[name].1.is_empty() {
+        return true;
+    }
+
     let mut weights = Vec::new();
 
     for child in &discs[name].1 {
@@ -74,14 +84,12 @@ fn total_weight(discs: &HashMap<&str, (i64, Vec<&str>)>, name: &str) -> i64
     weight
 }
 
-fn get_parents_count(discs: &HashMap<&str, (i64, Vec<&str>)>, disc: &str) -> usize
+fn get_parents_count(discs: &HashMap<&str, (i64, Vec<&str>)>, name: &str) -> usize
 {
     let mut parents = 0;
 
-    for value in discs.values() {
-        if value.1.contains(&disc) {
-            parents += 1;
-        }
+    if let Some(parent) = discs.iter().find(|&disc| disc.1 .1.contains(&name)) {
+        parents += 1 + get_parents_count(discs, parent.0);
     }
 
     parents
