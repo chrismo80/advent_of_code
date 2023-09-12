@@ -10,9 +10,11 @@ pub fn solve() -> (String, i32)
         for c in 0..discs[d].children.len() {
             let child_name = discs[d].children[c].clone();
 
-            let child_disc = discs.iter_mut().find(|d| d.name == child_name).unwrap();
-
-            child_disc.set_parent(&parent_name);
+            discs
+                .iter_mut()
+                .find(|d| d.name == child_name)
+                .unwrap()
+                .set_parent(&parent_name);
         }
     }
 
