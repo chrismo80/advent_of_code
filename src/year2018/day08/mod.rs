@@ -33,7 +33,7 @@ impl Node
         (0..c).for_each(|_| children.push(Node::new(input)));
         (0..m).for_each(|_| metadata.push(input.remove(0)));
 
-        Node { metadata, children }
+        Node { children, metadata }
     }
 
     fn count(&self) -> usize
