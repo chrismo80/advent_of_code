@@ -32,10 +32,6 @@ pub fn solve() -> (String, i64)
 
     unbalanced.sort();
 
-    for name in unbalanced.iter() {
-        println!("{}: {}", name.1, name.0);
-    }
-
     let mut last_children: Vec<(i64, &str)> = discs[unbalanced.last().unwrap().1]
         .1
         .iter()
