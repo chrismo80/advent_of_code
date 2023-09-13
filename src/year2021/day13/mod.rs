@@ -17,16 +17,17 @@ pub fn solve() -> (usize, String)
         .map(|e| (e[0].chars().last().unwrap(), e[1].parse::<i64>().unwrap()))
         .collect();
 
-    let mut result1 = 0;
-    let result2 = "ECFHLHZF".to_string();
-
-    for (axis, line) in instructions {
-        paper = fold(paper, axis, line);
-
-        if result1 == 0 {
-            result1 = paper.len();
-        }
+    for (axis, line) in instructions.iter().take(1) {
+        paper = fold(paper, *axis, *line);
     }
+
+    let result1 = paper.len();
+
+    for (axis, line) in instructions.iter().skip(1) {
+        paper = fold(paper, *axis, *line);
+    }
+
+    let result2 = "ECFHLHZF".to_string();
 
     println!("13\t{result1:<20}\t{result2:<20}");
 
