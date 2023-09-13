@@ -30,7 +30,7 @@ pub fn solve() -> (usize, String)
 
     println!("13\t{result1:<20}\t{result2:<20}");
 
-    print(paper.clone());
+    print(&paper);
 
     (result1, result2)
 }
@@ -48,7 +48,7 @@ fn fold(paper: HashSet<(i64, i64)>, axis: char, line: i64) -> HashSet<(i64, i64)
         .collect::<HashSet<(i64, i64)>>()
 }
 
-fn print(paper: HashSet<(i64, i64)>)
+fn print(paper: &HashSet<(i64, i64)>)
 {
     let min_x = paper.iter().map(|p| p.0).min().unwrap();
     let max_x = paper.iter().map(|p| p.0).max().unwrap();
