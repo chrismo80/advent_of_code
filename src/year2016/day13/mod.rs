@@ -1,4 +1,5 @@
-use crate::{extensions::converter::Converter, path_finding::grid::Grid};
+use crate::extensions::converter::Converter;
+use crate::path_finding::grid::Grid;
 
 pub fn solve() -> (usize, usize)
 {
@@ -27,7 +28,7 @@ pub fn solve() -> (usize, usize)
     let result2 = positions
         .iter()
         .filter(|pos| grid[pos.1][pos.0] != '#')
-        .filter_map(|&p| search.bfs((1, 1), p))
+        .filter_map(|&pos| search.bfs((1, 1), pos))
         .filter(|path| path.len() <= 50)
         .count();
 
