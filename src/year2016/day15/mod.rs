@@ -3,7 +3,7 @@ pub fn solve() -> (usize, usize)
     let mut discs: Vec<Vec<usize>> = include_str!("input.txt")
         .lines()
         .map(|line| {
-            line.split([' ', '#', '.'].as_ref())
+            line.split([' ', '#', '.'])
                 .filter_map(|word| word.parse().ok())
                 .collect::<Vec<usize>>()
         })

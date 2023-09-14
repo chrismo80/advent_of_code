@@ -39,10 +39,7 @@ impl Converter for &str
         T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
-        self.split(delim)
-            .filter(|e| !e.is_empty())
-            .map(|e| e.parse::<T>().unwrap())
-            .collect()
+        self.split(delim).filter_map(|e| e.parse::<T>().ok()).collect()
     }
 
     fn to_vec_of_vec<T>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>
@@ -50,10 +47,7 @@ impl Converter for &str
         T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
-        self.split(delim1)
-            .filter(|e| !e.is_empty())
-            .map(|e| e.to_vec::<T>(delim2))
-            .collect()
+        self.split(delim1).map(|e| e.to_vec::<T>(delim2)).collect()
     }
 
     fn to_vec_of_vec_of_vec<T>(&self, delim1: &str, delim2: &str, delim3: &str) -> Vec<Vec<Vec<T>>>
@@ -61,9 +55,6 @@ impl Converter for &str
         T: std::str::FromStr,
         <T as std::str::FromStr>::Err: std::fmt::Debug,
     {
-        self.split(delim1)
-            .filter(|e| !e.is_empty())
-            .map(|e| e.to_vec_of_vec::<T>(delim2, delim3))
-            .collect()
+        self.split(delim1).map(|e| e.to_vec_of_vec::<T>(delim2, delim3)).collect()
     }
 }
