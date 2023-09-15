@@ -32,10 +32,10 @@ pub fn solve() -> (usize, usize)
 fn new_house(last_house: &(i32, i32), direction: &char) -> (i32, i32)
 {
     match direction {
-        '>' => (last_house.0, last_house.1 + 1),
-        '<' => (last_house.0, last_house.1 - 1),
-        'v' => (last_house.0 + 1, last_house.1),
-        '^' => (last_house.0 - 1, last_house.1),
+        'v' => (last_house.0, last_house.1 + 1),
+        '^' => (last_house.0, last_house.1 - 1),
+        '>' => (last_house.0 + 1, last_house.1),
+        '<' => (last_house.0 - 1, last_house.1),
         _ => panic!("Invalid direction"),
     }
 }
