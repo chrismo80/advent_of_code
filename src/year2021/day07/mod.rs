@@ -8,16 +8,8 @@ pub fn solve() -> (i64, i64)
 
     let closure1 = |t: i64, x: i64| (t - x).abs();
     let closure2 = |t: i64, x: i64| {
-        let mut sum = 0;
-        let mut i = 1;
         let end = (t - x).abs();
-
-        while i <= end {
-            sum += i;
-            i += 1;
-        }
-
-        sum
+        (end * (end + 1)) / 2 // 1+2+3+4+5+...+n = (n*(n+1))/2
     };
 
     let result1 = calc(&input, closure1);
