@@ -5,28 +5,24 @@ pub fn solve() -> (usize, usize)
         .map(|l| l.split([' ', ',']).filter_map(|e| e.parse().ok()).collect())
         .collect();
 
-    let mut done = vec![false; input.len()];
-    let mut group = Vec::new();
-    let mut groups = Vec::new();
-    let mut count;
+    let mut groups = vec![0; input.len()];
+    let mut active = Vec::new();
+    let mut current = 0;
 
-    while done.iter().any(|p| !p) {
-        count = 0;
-        group.push(done.iter().position(|p| !p).unwrap());
+    while groups.iter().any(|&g| g == 0) {
+        active.push(groups.iter().position(|&g| g == 0).unwrap());
+        current += 1;
 
-        while let Some(i) = group.pop() {
-            if !done[i] {
-                done[i] = true;
-                count += 1;
-                group.extend(input[i].iter().filter(|&p| !done[*p]));
+        while let Some(p) = active.pop() {
+            if groups[p] == 0 {
+                groups[p] = current;
+                active.extend(input[p].iter().filter(|&g| groups[*g] == 0));
             }
         }
-
-        groups.push(count);
     }
 
-    let result1 = *groups.first().unwrap();
-    let result2 = groups.len();
+    let result1 = groups.iter().filter(|&g| g == &1).count();
+    let result2 = *groups.iter().max().unwrap();
 
     println!("12\t{result1:<20}\t{result2:<20}");
 
