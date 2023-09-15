@@ -30,11 +30,17 @@ impl Converter for &str
 
     fn to_vec_of_vec<T: FromStr>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>
     {
-        self.split(delim1).map(|e| e.to_vec::<T>(delim2)).collect()
+        self.split(delim1)
+            .map(|e| e.to_vec::<T>(delim2))
+            .filter(|e| !e.is_empty())
+            .collect()
     }
 
     fn to_vec_of_vec_of_vec<T: FromStr>(&self, delim1: &str, delim2: &str, delim3: &str) -> Vec<Vec<Vec<T>>>
     {
-        self.split(delim1).map(|e| e.to_vec_of_vec::<T>(delim2, delim3)).collect()
+        self.split(delim1)
+            .map(|e| e.to_vec_of_vec::<T>(delim2, delim3))
+            .filter(|e| !e.is_empty())
+            .collect()
     }
 }

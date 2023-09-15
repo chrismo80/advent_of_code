@@ -2,6 +2,7 @@ pub mod day01;
 pub mod day02;
 pub mod day03;
 pub mod day05;
+pub mod day06;
 pub mod day09;
 pub mod day14;
 pub mod day16;
@@ -17,6 +18,7 @@ pub fn run_all()
     day02::solve();
     day03::solve();
     day05::solve();
+    day06::solve();
     day09::solve();
     day14::solve();
     day16::solve();
