@@ -26,23 +26,23 @@ pub fn solve() -> (usize, i64)
         });
     }
 
-    let mut grid1 = vec![vec![0; 1000]; 1000];
-    let mut grid2 = grid1.clone();
+    let mut grid1 = vec![vec![false; 1000]; 1000];
+    let mut grid2 = vec![vec![0; 1000]; 1000];
 
     for command in input {
         for x in command.x1..=command.x2 {
             for y in command.y1..=command.y2 {
                 match command.action.as_str() {
                     "toggle" => {
-                        grid1[x][y] = 1 - grid1[x][y];
+                        grid1[x][y] = !grid1[x][y];
                         grid2[x][y] += 2;
                     }
                     "turn on" => {
-                        grid1[x][y] = 1;
+                        grid1[x][y] = true;
                         grid2[x][y] += 1;
                     }
                     "turn off" => {
-                        grid1[x][y] = 0;
+                        grid1[x][y] = false;
                         grid2[x][y] -= 1;
 
                         if grid2[x][y] < 0 {
@@ -55,7 +55,7 @@ pub fn solve() -> (usize, i64)
         }
     }
 
-    let result1 = grid1.iter().flatten().filter(|&x| *x > 0).count();
+    let result1 = grid1.iter().flatten().filter(|&x| *x).count();
     let result2 = grid2.iter().flatten().sum::<i64>();
 
     println!("6\t{result1:<20}\t{result2:<20}");
