@@ -90,9 +90,11 @@ impl Disc
     {
         let mut weight = self.weight;
 
-        for child in &self.children {
-            weight += discs.iter().find(|disc| disc.name == *child).unwrap().total_weight(discs);
-        }
+        weight += discs
+            .iter()
+            .filter(|disc| self.children.contains(&disc.name))
+            .map(|disc| disc.total_weight(discs))
+            .sum::<i32>();
 
         weight
     }

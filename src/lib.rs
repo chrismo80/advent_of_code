@@ -49,3 +49,14 @@ fn print_line()
 {
     println!("--------------------------------------------------------------");
 }
+
+fn start_watch() -> std::time::Instant
+{
+    std::time::Instant::now()
+}
+
+fn stop_watch(start: std::time::Instant) -> std::time::Instant
+{
+    println!("{:.1} ms\n\n", start.elapsed().as_micros() as f32 / 1000.0);
+    std::time::Instant::now()
+}
