@@ -6,19 +6,23 @@ pub fn solve() -> (usize, usize)
 
     let mut houses1 = vec![(0, 0)];
     let mut houses2 = vec![(0, 0)];
+    let mut current = (0, 0);
 
-    for step in input.iter() {
-        houses1.push(new_house(houses1.last().unwrap(), step));
+    for direction in input.iter() {
+        next(&mut current, direction);
+        houses1.push(current);
     }
 
-    for step in input.iter().step_by(2) {
-        houses2.push(new_house(houses2.last().unwrap(), step));
+    current = (0, 0);
+    for direction in input.iter().step_by(2) {
+        next(&mut current, direction);
+        houses2.push(current);
     }
 
-    houses2.push((0, 0));
-
-    for step in input.iter().skip(1).step_by(2) {
-        houses2.push(new_house(houses2.last().unwrap(), step));
+    current = (0, 0);
+    for direction in input.iter().skip(1).step_by(2) {
+        next(&mut current, direction);
+        houses2.push(current);
     }
 
     let result1 = houses1.iter().collect::<HashSet<_>>().len();
@@ -29,15 +33,15 @@ pub fn solve() -> (usize, usize)
     (result1, result2)
 }
 
-fn new_house(last_house: &(i32, i32), direction: &char) -> (i32, i32)
+fn next(current: &mut (i32, i32), direction: &char)
 {
     match direction {
-        'v' => (last_house.0, last_house.1 + 1),
-        '^' => (last_house.0, last_house.1 - 1),
-        '>' => (last_house.0 + 1, last_house.1),
-        '<' => (last_house.0 - 1, last_house.1),
+        'v' => current.1 += 1,
+        '^' => current.1 -= 1,
+        '>' => current.0 += 1,
+        '<' => current.0 -= 1,
         _ => panic!("Invalid direction"),
-    }
+    };
 }
 
 #[test]
