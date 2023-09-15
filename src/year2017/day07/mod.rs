@@ -18,6 +18,12 @@ pub fn solve() -> (String, i32)
         }
     }
 
+    // set total weight for each disc
+    for d in 0..discs.len() {
+        let total_weight = discs[d].total_weight(&discs);
+        discs[d].set_total_weight(total_weight);
+    }
+
     // find unbalanced discs
     let mut unbalanced: Vec<&Disc> = discs.iter().filter(|disc| !disc.is_balanced(&discs)).collect();
 
@@ -52,6 +58,7 @@ struct Disc
 {
     name: String,
     weight: i32,
+    total_weight: i32,
     children: Vec<String>,
     parent: Option<String>,
 }
@@ -63,6 +70,7 @@ impl Disc
         Disc {
             name: name.to_string(),
             weight,
+            total_weight: 0,
             children,
             parent: None,
         }
@@ -86,8 +94,17 @@ impl Disc
         count
     }
 
+    fn set_total_weight(&mut self, weight: i32)
+    {
+        self.total_weight = weight;
+    }
+
     fn total_weight(&self, discs: &[Disc]) -> i32
     {
+        if self.total_weight > 0 {
+            return self.total_weight;
+        }
+
         let mut weight = self.weight;
 
         weight += discs
