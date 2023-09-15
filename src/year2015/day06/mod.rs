@@ -43,10 +43,9 @@ pub fn solve() -> (usize, i64)
                     }
                     "turn off" => {
                         grid1[x][y] = false;
-                        grid2[x][y] -= 1;
 
-                        if grid2[x][y] < 0 {
-                            grid2[x][y] = 0;
+                        if grid2[x][y] > 0 {
+                            grid2[x][y] -= 1;
                         }
                     }
                     _ => {}
