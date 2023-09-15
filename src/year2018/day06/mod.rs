@@ -7,19 +7,19 @@ pub fn solve() -> (usize, usize)
 
     let get_total_distance_to = |x: i32, y: i32| -> i32 { input.iter().map(|p| (p[0] - x).abs() + (p[1] - y).abs()).sum() };
     let get_closest_index_to = |x: i32, y: i32| -> i32 {
-        let mut distances: Vec<(i32, usize)> = input
+        let distances = input
             .iter()
             .enumerate()
-            .map(|(i, p)| ((p[0] - x).abs() + (p[1] - y).abs(), i))
-            .collect();
+            .map(|(i, p)| ((p[0] - x).abs() + (p[1] - y).abs(), i));
 
-        distances.sort();
+        let min = distances.clone().min().unwrap();
+        let min2 = distances.filter(|&e| e != min).min().unwrap();
 
-        if distances[0].0 == distances[1].0 {
+        if min.0 == min2.0 {
             return -1;
         }
 
-        distances[0].1 as i32
+        min.1 as i32
     };
 
     let mut points: HashMap<i32, HashSet<(i32, i32)>> = HashMap::new();
