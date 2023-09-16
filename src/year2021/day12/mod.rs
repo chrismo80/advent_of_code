@@ -13,13 +13,13 @@ pub fn solve() -> (usize, usize)
     let condition1 = |_: &Vec<&str>, current: &str| current.chars().next().unwrap().is_uppercase();
     let condition2 = |path: &Vec<&str>, current: &str| {
         current.chars().next().unwrap().is_uppercase()
-            || path.iter().filter(|&e| e.chars().next().unwrap().is_lowercase()).all_unique() && current != "start"
+            || (path.iter().filter(|&e| e.chars().next().unwrap().is_lowercase()).all_unique() && current != "start")
     };
 
     let result1 = graph.all_paths_with_condition("start", "end", condition1, Vec::new()).len();
     let result2 = graph.all_paths_with_condition("start", "end", condition2, Vec::new()).len();
 
-    println!("11\t{result1:<20}\t{result2:<20}");
+    println!("12\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
 }

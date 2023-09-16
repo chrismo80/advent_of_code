@@ -8,7 +8,7 @@ pub struct Graph<T>
 
 impl<T> Graph<T>
 where
-    T: Copy + Clone + PartialEq + Eq + std::hash::Hash + std::fmt::Debug,
+    T: Copy + Clone + PartialEq + Eq + std::hash::Hash + std::fmt::Debug + std::fmt::Display,
 {
     pub fn new() -> Self
     {
@@ -73,7 +73,6 @@ where
 
         if current == end {
             paths.push(path);
-
             return paths;
         }
 
