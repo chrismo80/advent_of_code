@@ -58,7 +58,7 @@ where
     pub fn all_paths(&self, current: T, end: T) -> Vec<Vec<T>>
     {
         let path = Vec::new();
-        let condition = |_: &Vec<T>, _: T| true;
+        let condition = |_: &Vec<T>, _: T| false;
 
         self.all_paths_with_condition(current, end, condition, path)
     }
