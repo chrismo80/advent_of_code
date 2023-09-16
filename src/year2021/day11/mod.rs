@@ -10,14 +10,14 @@ pub fn solve() -> (usize, usize)
 
     input.iter().for_each(|l| graph.add_edge(l[0].as_str(), l[1].as_str(), 1));
 
-    let part1 = |_: &Vec<&str>, current: &str| current.chars().next().unwrap().is_uppercase();
-    let part2 = |path: &Vec<&str>, current: &str| {
+    let condition1 = |_: &Vec<&str>, current: &str| current.chars().next().unwrap().is_uppercase();
+    let condition2 = |path: &Vec<&str>, current: &str| {
         current.chars().next().unwrap().is_uppercase()
             || path.iter().filter(|&e| e.chars().next().unwrap().is_lowercase()).all_unique() && current != "start"
     };
 
-    let result1 = graph.all_paths_with_condition("start", "end", part1, Vec::new()).len();
-    let result2 = graph.all_paths_with_condition("start", "end", part2, Vec::new()).len();
+    let result1 = graph.all_paths_with_condition("start", "end", condition1, Vec::new()).len();
+    let result2 = graph.all_paths_with_condition("start", "end", condition2, Vec::new()).len();
 
     println!("11\t{result1:<20}\t{result2:<20}");
 

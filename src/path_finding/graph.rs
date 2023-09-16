@@ -43,16 +43,16 @@ where
             for neighbor in self.neighbors(&current) {
                 if let hash_map::Entry::Vacant(previous) = visited.entry(neighbor) {
                     previous.insert(current);
-                    active.push_back(neighbor);
+                    active.push_back(*neighbor);
                 }
             }
         }
         None
     }
 
-    pub fn neighbors(&self, node: &T) -> Vec<T>
+    pub fn neighbors(&self, node: &T) -> impl Iterator<Item = &T>
     {
-        self.nodes[&node].keys().copied().collect()
+        self.nodes[&node].keys()
     }
 
     pub fn all_paths(&self, current: T, end: T) -> Vec<Vec<T>>
@@ -81,7 +81,7 @@ where
         }
 
         for node in self.neighbors(&current) {
-            for sub_paths in self.all_paths_with_condition(node, end, condition.clone(), path.clone()) {
+            for sub_paths in self.all_paths_with_condition(*node, end, condition.clone(), path.clone()) {
                 paths.push(sub_paths);
             }
         }
