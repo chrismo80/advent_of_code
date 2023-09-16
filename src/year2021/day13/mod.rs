@@ -1,4 +1,4 @@
-use crate::extensions::converter::Converter;
+use crate::extensions::converter::Parser;
 use std::collections::HashSet;
 
 pub fn solve() -> (usize, String)

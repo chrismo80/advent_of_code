@@ -1,7 +1,7 @@
 use lazy_static::lazy_static;
 use regex::Regex;
 
-use crate::extensions::converter::Converter;
+use crate::extensions::converter::Parser;
 
 lazy_static! {
     static ref REG_HGT: Regex = Regex::new(r"^(?<value>\d+)(?<unit>cm|in)$").unwrap();

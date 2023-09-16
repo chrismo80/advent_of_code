@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::extensions::converter::Converter;
+use crate::extensions::converter::Parser;
 
 pub fn solve() -> (usize, usize)
 {

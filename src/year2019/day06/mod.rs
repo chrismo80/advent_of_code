@@ -1,4 +1,4 @@
-use crate::{extensions::converter::Converter, path_finding::graph::Graph};
+use crate::{extensions::converter::Parser, path_finding::graph::Graph};
 use rayon::prelude::*;
 
 pub fn solve() -> (usize, usize)

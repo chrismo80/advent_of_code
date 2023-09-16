@@ -1,4 +1,4 @@
-use crate::extensions::converter::Converter;
+use crate::extensions::converter::Parser;
 use crate::path_finding::grid::Grid;
 
 pub fn solve() -> (usize, usize)

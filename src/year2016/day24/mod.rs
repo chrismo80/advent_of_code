@@ -1,4 +1,4 @@
-use crate::extensions::{converter::Converter, permutations::*};
+use crate::extensions::{converter::Parser, permutations::*};
 use std::collections::*;
 
 pub fn solve() -> (usize, usize)

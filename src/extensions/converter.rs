@@ -18,7 +18,7 @@ impl<T: Copy> Matrix for Vec<Vec<T>>
             .collect()
     }
 }
-pub trait Converter
+pub trait Parser
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>;
     fn to_int_grid(&self) -> Vec<Vec<u32>>;
@@ -28,7 +28,7 @@ pub trait Converter
     fn to_vec_of_vec_of_vec<T: FromStr>(&self, delim1: &str, delim2: &str, delim3: &str) -> Vec<Vec<Vec<T>>>;
 }
 
-impl Converter for &str
+impl Parser for &str
 {
     fn to_char_grid(&self) -> Vec<Vec<char>>
     {

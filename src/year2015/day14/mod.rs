@@ -1,4 +1,4 @@
-use crate::extensions::converter::Converter;
+use crate::extensions::converter::Parser;
 
 struct Reindeer
 {

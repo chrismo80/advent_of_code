@@ -1,5 +1,5 @@
 use super::intcode_computer::*;
-use crate::extensions::{converter::Converter, permutations::*};
+use crate::extensions::{converter::Parser, permutations::*};
 
 pub fn solve() -> (i64, i64)
 {

@@ -1,5 +1,5 @@
 use super::intcode_computer::*;
-use crate::extensions::converter::Converter;
+use crate::extensions::converter::Parser;
 use std::collections::*;
 
 pub fn solve() -> (usize, i64)
