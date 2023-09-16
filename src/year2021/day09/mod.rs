@@ -1,6 +1,5 @@
-use std::collections::{HashSet, VecDeque};
-
 use crate::extensions::converter::Parser;
+use std::collections::{HashSet, VecDeque};
 
 pub fn solve() -> (u32, usize)
 {

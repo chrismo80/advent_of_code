@@ -1,4 +1,4 @@
-use std::collections::*;
+use std::{collections::*, path};
 
 #[derive(Default)]
 pub struct Graph<T>
@@ -40,7 +40,7 @@ where
                 return Some(active.into());
             }
 
-            for &neighbor in self.nodes[&current].keys() {
+            for neighbor in self.neighbors(&current) {
                 if let hash_map::Entry::Vacant(previous) = visited.entry(neighbor) {
                     previous.insert(current);
                     active.push_back(neighbor);
@@ -48,5 +48,45 @@ where
             }
         }
         None
+    }
+
+    pub fn neighbors(&self, node: &T) -> Vec<T>
+    {
+        self.nodes[&node].keys().copied().collect()
+    }
+
+    pub fn all_paths(&self, current: T, end: T) -> Vec<Vec<T>>
+    {
+        let path = Vec::new();
+        let condition = |path: Vec<T>, current: T| !path.contains(&current);
+
+        self.all_paths_with_condition(current, end, condition, path)
+    }
+
+    pub fn all_paths_with_condition<C>(&self, current: T, end: T, condition: C, path: Vec<T>) -> Vec<Vec<T>>
+    where
+        C: Fn(Vec<T>, T) -> bool + Clone,
+    {
+        let mut paths = Vec::new();
+        let mut path = path;
+
+        if path.contains(&current) && !condition(path.clone(), current) {
+            return paths;
+        }
+
+        path.push(current);
+
+        if current == end {
+            paths.push(path);
+            return paths;
+        }
+
+        for node in self.neighbors(&current) {
+            for sub_paths in self.all_paths_with_condition(node, end, condition.clone(), path.clone()) {
+                paths.push(sub_paths);
+            }
+        }
+
+        paths
     }
 }

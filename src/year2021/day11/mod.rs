@@ -1,0 +1,40 @@
+use crate::extensions::converter::Parser;
+use crate::extensions::count_items::CountItems;
+use crate::path_finding::graph::Graph;
+
+pub fn solve() -> (usize, usize)
+{
+    let input = include_str!("input.txt").to_vec_of_vec::<String>("\n", "-");
+
+    let mut graph = Graph::new();
+
+    input.iter().for_each(|l| graph.add_edge(l[0].as_str(), l[1].as_str(), 1));
+
+    let part1 = |_: Vec<&str>, current: &str| current.chars().all(|c| c.is_uppercase());
+    let part2 = |path: Vec<&str>, current: &str| {
+        current.chars().all(|c| {
+            c.is_uppercase()
+                || (path
+                    .iter()
+                    .filter(|v| v.chars().all(|c| c.is_lowercase()))
+                    .collect::<Vec<&&str>>()
+                    .count_items()
+                    .values()
+                    .all(|&c| c <= 1)
+                    && current != "start")
+        })
+    };
+
+    let result1 = graph.all_paths_with_condition("start", "end", part1, Vec::new()).len();
+    let result2 = graph.all_paths_with_condition("start", "end", part2, Vec::new()).len();
+
+    println!("11\t{result1:<20}\t{result2:<20}");
+
+    (result1, result2)
+}
+
+#[test]
+fn test()
+{
+    assert_eq!(solve(), (3510, 122880));
+}
