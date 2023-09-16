@@ -67,13 +67,9 @@ where
     where
         C: Fn(&Vec<T>, T) -> bool + Clone,
     {
-        let mut paths = Vec::new();
-
-        if path.contains(&current) && !condition(&path, current) {
-            return paths;
-        }
-
         path.push(current);
+
+        let mut paths = Vec::new();
 
         if current == end {
             paths.push(path);
@@ -81,7 +77,10 @@ where
             return paths;
         }
 
-        for &node in self.neighbors(&current) {
+        for &node in self
+            .neighbors(&current)
+            .filter(|&n| !path.contains(n) || condition(&path, *n))
+        {
             // each neighbor needs its own path clone to extend new paths in different directions
             for sub_paths in self.all_paths_with_condition(node, end, condition.clone(), path.clone()) {
                 paths.push(sub_paths);
