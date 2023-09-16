@@ -8,7 +8,7 @@ pub struct Graph<T>
 
 impl<T> Graph<T>
 where
-    T: Copy + Clone + PartialEq + Eq + std::hash::Hash,
+    T: Copy + Clone + PartialEq + Eq + std::hash::Hash + std::fmt::Debug,
 {
     pub fn new() -> Self
     {
@@ -77,11 +77,13 @@ where
 
         if current == end {
             paths.push(path);
+
             return paths;
         }
 
-        for node in self.neighbors(&current) {
-            for sub_paths in self.all_paths_with_condition(*node, end, condition.clone(), path.clone()) {
+        for &node in self.neighbors(&current) {
+            // each neighbor needs its own path clone to extend new paths in different directions
+            for sub_paths in self.all_paths_with_condition(node, end, condition.clone(), path.clone()) {
                 paths.push(sub_paths);
             }
         }
