@@ -1,4 +1,4 @@
-use std::{collections::*, path};
+use std::collections::*;
 
 #[derive(Default)]
 pub struct Graph<T>
@@ -58,19 +58,18 @@ where
     pub fn all_paths(&self, current: T, end: T) -> Vec<Vec<T>>
     {
         let path = Vec::new();
-        let condition = |path: Vec<T>, current: T| !path.contains(&current);
+        let condition = |_: &Vec<T>, _: T| true;
 
         self.all_paths_with_condition(current, end, condition, path)
     }
 
-    pub fn all_paths_with_condition<C>(&self, current: T, end: T, condition: C, path: Vec<T>) -> Vec<Vec<T>>
+    pub fn all_paths_with_condition<C>(&self, current: T, end: T, condition: C, mut path: Vec<T>) -> Vec<Vec<T>>
     where
-        C: Fn(Vec<T>, T) -> bool + Clone,
+        C: Fn(&Vec<T>, T) -> bool + Clone,
     {
         let mut paths = Vec::new();
-        let mut path = path;
 
-        if path.contains(&current) && !condition(path.clone(), current) {
+        if path.contains(&current) && !condition(&path, current) {
             return paths;
         }
 

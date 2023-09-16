@@ -1,6 +1,6 @@
 use crate::extensions::converter::Parser;
-use crate::extensions::count_items::CountItems;
 use crate::path_finding::graph::Graph;
+use iter_tools::Itertools;
 
 pub fn solve() -> (usize, usize)
 {
@@ -10,19 +10,10 @@ pub fn solve() -> (usize, usize)
 
     input.iter().for_each(|l| graph.add_edge(l[0].as_str(), l[1].as_str(), 1));
 
-    let part1 = |_: Vec<&str>, current: &str| current.chars().all(|c| c.is_uppercase());
-    let part2 = |path: Vec<&str>, current: &str| {
-        current.chars().all(|c| {
-            c.is_uppercase()
-                || (path
-                    .iter()
-                    .filter(|v| v.chars().all(|c| c.is_lowercase()))
-                    .collect::<Vec<&&str>>()
-                    .count_items()
-                    .values()
-                    .all(|&c| c <= 1)
-                    && current != "start")
-        })
+    let part1 = |_: &Vec<&str>, current: &str| current.chars().next().unwrap().is_uppercase();
+    let part2 = |path: &Vec<&str>, current: &str| {
+        current.chars().next().unwrap().is_uppercase()
+            || path.iter().filter(|&e| e.chars().next().unwrap().is_lowercase()).all_unique() && current != "start"
     };
 
     let result1 = graph.all_paths_with_condition("start", "end", part1, Vec::new()).len();
