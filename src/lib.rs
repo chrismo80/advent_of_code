@@ -9,6 +9,7 @@ pub mod year2019;
 pub mod year2020;
 pub mod year2021;
 pub mod year2022;
+pub mod year2023;
 
 pub fn run()
 {
@@ -29,6 +30,7 @@ fn run_all()
     year2020::run_all();
     year2021::run_all();
     year2022::run_all();
+    year2023::run_all();
 }
 
 fn begin() -> std::time::Instant
