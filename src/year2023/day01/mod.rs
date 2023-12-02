@@ -35,13 +35,13 @@ fn get_calibration_value(text: &str) -> i64
 
 fn get_real_calibration_value(text: &str, map: &HashMap<&str, &str>) -> i64
 {
-    let mut new_text = text.to_owned();
+    let mut replaced = text.to_owned();
 
     for (key, value) in map.iter() {
-        new_text = new_text.replace(key, value);
+        replaced = replaced.replace(key, value);
     }
 
-    get_calibration_value(new_text.as_str())
+    get_calibration_value(replaced.as_str())
 }
 
 #[test]
