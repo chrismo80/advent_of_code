@@ -15,11 +15,11 @@ impl std::str::FromStr for Game
     {
         let game = s.split_once(": ").unwrap();
         let id = game.0.split_once(' ').unwrap().1.parse::<usize>().unwrap();
+        let rounds: Vec<&str> = game.1.split("; ").collect();
         let mut sets = Vec::new();
-        let revelations: Vec<&str> = game.1.split("; ").collect();
 
-        for revelation in revelations {
-            let colors: Vec<&str> = revelation.split(", ").collect();
+        for round in rounds {
+            let colors: Vec<&str> = round.split(", ").collect();
 
             let mut r = 0;
             let mut g = 0;
