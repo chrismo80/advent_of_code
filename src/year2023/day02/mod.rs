@@ -27,10 +27,11 @@ impl std::str::FromStr for Game
 
             for color in colors {
                 let parts = color.split_once(' ').unwrap();
+                let count = parts.0.parse::<usize>().unwrap();
                 match parts.1 {
-                    "red" => r = parts.0.parse::<usize>().unwrap(),
-                    "green" => g = parts.0.parse::<usize>().unwrap(),
-                    "blue" => b = parts.0.parse::<usize>().unwrap(),
+                    "red" => r = count,
+                    "green" => g = count,
+                    "blue" => b = count,
                     _ => (),
                 }
             }
