@@ -6,10 +6,10 @@ pub fn solve() -> (usize, usize)
 
     let mut counters = vec![1; matches.len()];
 
-    for i in 0..matches.len() {
-        for j in i..i + matches[i] {
-            if j + 1 < counters.len() {
-                counters[j + 1] += counters[i];
+    for m in 0..matches.len() {
+        for i in m..m + matches[m] {
+            if i + 1 < counters.len() {
+                counters[i + 1] += counters[m];
             }
         }
     }
