@@ -34,12 +34,7 @@ impl std::str::FromStr for Card
         let matches = hand.iter().filter(|&n| wins.contains(n)).count();
         let points = 2_usize.pow(matches as u32) / 2;
 
-        Ok(Card {
-            wins,
-            hand,
-            matches,
-            points,
-        })
+        Ok(Card { wins, hand, matches, points })
     }
 }
 
