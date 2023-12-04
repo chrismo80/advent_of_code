@@ -31,7 +31,7 @@ impl std::str::FromStr for Card
         let mut sets = s.split(':').next_back().unwrap().split('|');
         let wins = sets.next().unwrap().to_vec::<usize>(" ");
         let hand = sets.next().unwrap().to_vec::<usize>(" ");
-        let matches = hand.iter().filter(|&x| wins.contains(x)).count();
+        let matches = hand.iter().filter(|&n| wins.contains(n)).count();
         let points = 2_usize.pow(matches as u32) / 2;
 
         Ok(Card {
