@@ -14,7 +14,7 @@ pub fn solve() -> (usize, usize)
         }
     }
 
-    let result1 = cards.iter().map(|card| card.points).sum();
+    let result1 = cards.iter().map(|card| 2_usize.pow(card.matches as u32) / 2).sum();
     let result2 = counters.iter().sum();
 
     println!("4\t{result1:<20}\t{result2:<20}");
@@ -32,9 +32,8 @@ impl std::str::FromStr for Card
         let wins = sets.next().unwrap().to_vec::<usize>(" ");
         let hand = sets.next().unwrap().to_vec::<usize>(" ");
         let matches = hand.iter().filter(|&n| wins.contains(n)).count();
-        let points = 2_usize.pow(matches as u32) / 2;
 
-        Ok(Card { wins, hand, matches, points })
+        Ok(Card { wins, hand, matches })
     }
 }
 
@@ -43,7 +42,6 @@ struct Card
     wins: Vec<usize>,
     hand: Vec<usize>,
     matches: usize,
-    points: usize,
 }
 
 #[test]
