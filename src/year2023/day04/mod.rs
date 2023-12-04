@@ -6,7 +6,7 @@ pub fn solve() -> (usize, usize)
 
     let mut counters = vec![1; matches.len()];
 
-    for i in 0..counters.len() {
+    for i in 0..matches.len() {
         for j in i..i + matches[i] {
             if j + 1 < counters.len() {
                 counters[j + 1] += counters[i];
@@ -25,6 +25,7 @@ pub fn solve() -> (usize, usize)
 fn get_matches(card: &str) -> usize
 {
     let mut sets = card.split(':').next_back().unwrap().split('|');
+
     let wins = sets.next().unwrap().to_vec::<usize>(" ");
     let hand = sets.next().unwrap().to_vec::<usize>(" ");
 
