@@ -6,9 +6,9 @@ pub fn solve() -> (usize, usize)
 
     let mut counts = vec![1; matches.len()];
 
-    for m in 0..counts.len() {
+    for m in 0..matches.len() {
         for i in m..m + matches[m] {
-            if i + 1 < counts.len() {
+            if i + 1 < matches.len() {
                 counts[i + 1] += counts[m];
             }
         }
