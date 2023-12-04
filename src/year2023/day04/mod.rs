@@ -4,18 +4,18 @@ pub fn solve() -> (usize, usize)
 {
     let matches: Vec<usize> = include_str!("input.txt").lines().map(get_matches).collect();
 
-    let mut counters = vec![1; matches.len()];
+    let mut counts = vec![1; matches.len()];
 
-    for m in 0..matches.len() {
+    for m in 0..counts.len() {
         for i in m..m + matches[m] {
-            if i + 1 < counters.len() {
-                counters[i + 1] += counters[m];
+            if i + 1 < counts.len() {
+                counts[i + 1] += counts[m];
             }
         }
     }
 
     let result1 = matches.iter().map(|&m| 2_usize.pow(m as u32) / 2).sum();
-    let result2 = counters.iter().sum();
+    let result2 = counts.iter().sum();
 
     println!("4\t{result1:<20}\t{result2:<20}");
 
