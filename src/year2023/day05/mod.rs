@@ -25,14 +25,29 @@ pub fn solve() -> (i64, i64)
         seed
     };
 
-    let mut mins = Vec::new();
+    let result1 = seeds.iter().map(|&s| get_location(s)).min().unwrap();
+
+    let get_min = |i: usize, step: usize| {
+        (seeds[i]..seeds[i] + seeds[i + 1])
+            .step_by(step)
+            .map(get_location)
+            .min()
+            .unwrap()
+    };
+
+    let mut best_range = 0;
+    let mut best_min = i64::MAX;
 
     for i in (0..seeds.len()).step_by(2) {
-        mins.push((seeds[i]..seeds[i] + seeds[i + 1]).map(get_location).min().unwrap());
+        let range_min = get_min(i, 1000);
+
+        if range_min < best_min {
+            best_min = range_min;
+            best_range = i;
+        }
     }
 
-    let result1 = seeds.iter().map(|&s| get_location(s)).min().unwrap();
-    let result2 = *mins.iter().min().unwrap();
+    let result2 = get_min(best_range, 1);
 
     println!("5\t{result1:<20}\t{result2:<20}");
 
