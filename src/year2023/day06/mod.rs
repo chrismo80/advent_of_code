@@ -22,10 +22,9 @@ fn merge(v: Vec<usize>) -> usize
 
 fn count(time: usize, record: usize) -> usize
 {
-    let start = (1..time).find(|speed| speed * (time - speed) > record).unwrap();
-    let end = (start..time).find(|speed| speed * (time - speed) < record).unwrap();
+    let last = (time / 2..time).find(|speed| speed * (time - speed) < record).unwrap();
 
-    end - start
+    2 * last - time - 1
 }
 
 #[test]
