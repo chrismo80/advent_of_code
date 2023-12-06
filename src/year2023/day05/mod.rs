@@ -5,11 +5,12 @@ pub fn solve() -> (i64, i64)
     let input = include_str!("input.txt").to_vec::<String>("\n\n");
 
     let mut input = input.iter();
-    let mut mappings = Vec::new();
+
+    let seeds = input.next().unwrap().split(':').next_back().unwrap().to_vec::<i64>(" ");
 
     let parse = |s: &String| s.split(':').next_back().unwrap().to_vec_of_vec::<i64>("\n", " ");
 
-    let seeds = input.next().unwrap().split(':').next_back().unwrap().to_vec::<i64>(" ");
+    let mut mappings = Vec::new();
 
     while input.len() > 0 {
         mappings.push(parse(input.next().unwrap()));
@@ -27,27 +28,26 @@ pub fn solve() -> (i64, i64)
 
     let result1 = seeds.iter().map(|&s| get_location(s)).min().unwrap();
 
-    let get_min = |i: usize, step: usize| {
-        (seeds[i]..seeds[i] + seeds[i + 1])
-            .step_by(step)
-            .map(get_location)
-            .min()
-            .unwrap()
+    let get_min = |start: i64, length: i64, step: usize| {
+        let locations: Vec<i64> = (start..start + length).step_by(step).map(get_location).collect();
+        let min = locations.iter().min().unwrap();
+
+        (start + (step * locations.iter().position(|l| l == min).unwrap()) as i64, *min)
     };
 
-    let mut best_range = 0;
+    let mut best_seed = 0;
     let mut best_min = i64::MAX;
 
     for i in (0..seeds.len()).step_by(2) {
-        let range_min = get_min(i, 1000);
+        let range_min = get_min(seeds[i], seeds[i + 1], 10000);
 
-        if range_min < best_min {
-            best_min = range_min;
-            best_range = i;
+        if range_min.1 < best_min {
+            best_seed = range_min.0;
+            best_min = range_min.1;
         }
     }
 
-    let result2 = get_min(best_range, 1);
+    let result2 = get_min(best_seed - 10000, 20000, 1).1;
 
     println!("5\t{result1:<20}\t{result2:<20}");
 
