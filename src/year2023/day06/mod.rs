@@ -7,15 +7,17 @@ pub fn solve() -> (usize, usize)
     let times = input.next().unwrap().to_vec::<usize>(" ");
     let distances = input.next().unwrap().to_vec::<usize>(" ");
 
-    let time = times.iter().map(|t| t.to_string()).collect::<String>();
-    let distance = distances.iter().map(|t| t.to_string()).collect::<String>();
-
     let result1 = (0..times.len()).map(|i| count(times[i], distances[i])).product();
-    let result2 = count(time.parse().unwrap(), distance.parse().unwrap());
+    let result2 = count(merge(times), merge(distances));
 
     println!("6\t{result1:<20}\t{result2:<20}");
 
     (result1, result2)
+}
+
+fn merge(v: Vec<usize>) -> usize
+{
+    v.iter().map(|x| x.to_string()).collect::<String>().parse::<usize>().unwrap()
 }
 
 fn count(time: usize, record: usize) -> usize
