@@ -26,6 +26,7 @@ pub trait Parser
     fn to_vec<T: FromStr>(&self, delim: &str) -> Vec<T>;
     fn to_vec_of_vec<T: FromStr>(&self, delim1: &str, delim2: &str) -> Vec<Vec<T>>;
     fn to_vec_of_vec_of_vec<T: FromStr>(&self, delim1: &str, delim2: &str, delim3: &str) -> Vec<Vec<Vec<T>>>;
+    fn to_vec_from_regex(&self, pattern: &str) -> Vec<Vec<&str>>;
 }
 
 impl Parser for &str
@@ -68,5 +69,20 @@ impl Parser for &str
             .map(|e| e.to_vec_of_vec(delim2, delim3))
             .filter(|e| !e.is_empty())
             .collect()
+    }
+
+    fn to_vec_from_regex(&self, pattern: &str) -> Vec<Vec<&str>>
+    {
+        let re = regex::Regex::new(pattern).unwrap();
+
+        let mut list = vec![];
+
+        for line in self.lines() {
+            if let Some(groups) = re.captures(line) {
+                list.push((1..groups.len()).map(|i| groups.get(i).unwrap().as_str()).collect());
+            }
+        }
+
+        list
     }
 }
