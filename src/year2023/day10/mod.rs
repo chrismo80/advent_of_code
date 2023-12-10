@@ -4,7 +4,7 @@ pub fn solve() -> (usize, usize)
 {
     let input = include_str!("input.txt").to_char_grid();
 
-    let mut current = (91, 40); // set last pipe manually
+    let mut current = (91, 40); // set first pipe next to S manually
     let mut last = (91, 41); // check manually where S is
     let mut distance = 1;
 
