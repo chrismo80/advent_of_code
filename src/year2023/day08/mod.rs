@@ -1,4 +1,5 @@
 use crate::extensions::converter::Parser;
+use crate::extensions::primes::Primes;
 
 pub fn solve() -> (usize, usize)
 {
@@ -13,7 +14,7 @@ pub fn solve() -> (usize, usize)
     let distances: Vec<usize> = starts.iter().map(|start| escape(&map, &instructions, start, "Z")).collect();
 
     let result1 = escape(&map, &instructions, "AAA", "ZZZ");
-    let result2 = lcm(&distances);
+    let result2 = distances.lcm();
 
     println!("8\t{result1:<20}\t{result2:<20}");
 
@@ -45,37 +46,6 @@ fn go<'a>(map: &[Vec<&'a str>], instructions: &[char], distance: &mut usize, pos
 
     *position = map.iter().position(|m| m[0] == *location).unwrap();
     *distance += 1;
-}
-
-fn lcm(values: &[usize]) -> usize
-{
-    let gcf = gcf(values);
-
-    gcf * values.iter().map(|value| value / gcf).product::<usize>()
-}
-
-fn gcf(values: &[usize]) -> usize
-{
-    let mut gcf = values[0];
-
-    for value in values {
-        gcf = find_gcf(gcf, *value);
-
-        if gcf == 1 {
-            return 1;
-        }
-    }
-
-    gcf
-}
-
-fn find_gcf(a: usize, b: usize) -> usize
-{
-    if a == 0 {
-        return b;
-    }
-
-    find_gcf(b % a, a)
 }
 
 #[test]
