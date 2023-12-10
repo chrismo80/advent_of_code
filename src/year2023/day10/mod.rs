@@ -48,5 +48,5 @@ fn get_next_pipe(map: &[Vec<char>], current: (usize, usize), last: (usize, usize
 #[test]
 fn test()
 {
-    assert_eq!(solve(), (0, 0));
+    assert_eq!(solve(), (6828, 0));
 }
