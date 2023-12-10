@@ -1,11 +1,11 @@
-use crate::extensions::converter::*;
+use crate::extensions::converter::Parser;
 use iter_tools::Itertools;
 
 struct Monkey
 {
-    items: Vec<i64>,
-    operation: Box<dyn Fn(i64) -> i64>,
-    test: i64,
+    items: Vec<usize>,
+    operation: Box<dyn Fn(usize) -> usize>,
+    test: usize,
     throw_true: usize,
     throw_false: usize,
     inspections: usize,
@@ -13,7 +13,7 @@ struct Monkey
 
 impl Monkey
 {
-    fn throw(&mut self, divide: bool) -> Option<(i64, usize)>
+    fn throw(&mut self, divide: bool) -> Option<(usize, usize)>
     {
         let item = self.items.pop()?;
 
@@ -31,7 +31,7 @@ impl Monkey
         }
     }
 
-    fn catch(&mut self, item: i64)
+    fn catch(&mut self, item: usize)
     {
         self.items.push(item);
     }
@@ -47,9 +47,9 @@ impl std::str::FromStr for Monkey
         let item_list = parts[1].split_once(':').unwrap().1.trim().split(", ");
 
         Ok(Monkey {
-            items: item_list.map(|i| i.parse::<i64>().unwrap()).collect::<Vec<i64>>(),
+            items: item_list.map(|i| i.parse::<usize>().unwrap()).collect::<Vec<usize>>(),
             operation: get_operation(parts[2].split_once('=').unwrap().1.trim().to_string()),
-            test: parts[3].split_once('y').unwrap().1.trim().parse::<i64>().unwrap(),
+            test: parts[3].split_once('y').unwrap().1.trim().parse::<usize>().unwrap(),
             throw_true: parts[4].split_once('y').unwrap().1.trim().parse::<usize>().unwrap(),
             throw_false: parts[5].split_once('y').unwrap().1.trim().parse::<usize>().unwrap(),
             inspections: 0,
@@ -69,7 +69,7 @@ pub fn solve() -> (usize, usize)
 
 fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
 {
-    let lcm: i64 = monkeys.iter().map(|monkey| monkey.test).product();
+    let lcm: usize = monkeys.iter().map(|monkey| monkey.test).product();
 
     for _ in 0..rounds {
         for i in 0..monkeys.len() {
@@ -82,7 +82,7 @@ fn play(mut monkeys: Vec<Monkey>, rounds: i32) -> usize
     monkeys.iter().map(|m| m.inspections).sorted().rev().take(2).product()
 }
 
-fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
+fn get_operation(expression: String) -> Box<dyn Fn(usize) -> usize>
 {
     let parts = expression.split_whitespace().collect::<Vec<&str>>();
     let operand = parts[2].to_string();
@@ -90,8 +90,8 @@ fn get_operation(expression: String) -> Box<dyn Fn(i64) -> i64>
     match (operand.as_str(), parts[1]) {
         ("old", "+") => Box::new(move |old| old + old),
         ("old", "*") => Box::new(move |old| old * old),
-        (_, "+") => Box::new(move |old| old + operand.parse::<i64>().unwrap()),
-        (_, "*") => Box::new(move |old| old * operand.parse::<i64>().unwrap()),
+        (_, "+") => Box::new(move |old| old + operand.parse::<usize>().unwrap()),
+        (_, "*") => Box::new(move |old| old * operand.parse::<usize>().unwrap()),
         _ => panic!("Unknown operation"),
     }
 }
