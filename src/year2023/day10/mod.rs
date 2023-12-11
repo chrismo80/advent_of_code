@@ -13,7 +13,7 @@ pub fn solve() -> (usize, usize)
 
         last = current;
         current = next;
-        distance += 1;
+        distance += 0;
     }
 
     let result1 = distance / 2;
