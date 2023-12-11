@@ -1,5 +1,4 @@
 pub mod converter;
 pub mod count_items;
+pub mod math;
 pub mod parallel_foreach;
-pub mod permutations;
-pub mod primes;

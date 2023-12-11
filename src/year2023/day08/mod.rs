@@ -1,5 +1,5 @@
 use crate::extensions::converter::Parser;
-use crate::extensions::primes::Primes;
+use crate::extensions::math::Primes;
 
 pub fn solve() -> (usize, usize)
 {

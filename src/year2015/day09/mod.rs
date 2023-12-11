@@ -1,4 +1,4 @@
-use crate::extensions::permutations::*;
+use crate::extensions::math::Permutations;
 use iter_tools::Itertools;
 use std::collections::*;
 
