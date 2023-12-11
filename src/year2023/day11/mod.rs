@@ -28,19 +28,19 @@ pub fn solve() -> (usize, usize)
 
     let galaxies: Vec<(usize, usize)> = (0..input.len())
         .flat_map(|y| (0..input[0].len()).map(move |x| (x, y)))
-        .filter(|(x, y)| input[*y][*x] == '#')
+        .filter(|&(x, y)| input[y][x] == '#')
         .collect();
 
     let mut result1 = 0;
     let mut result2 = 0;
 
-    for (from, to) in galaxies
+    for (&from, &to) in galaxies
         .iter()
         .flat_map(|f| galaxies.iter().map(move |t| (f, t)))
         .filter(|(f, t)| f < t)
     {
-        result1 += distance(*from, *to, 2);
-        result2 += distance(*from, *to, 1_000_000);
+        result1 += distance(from, to, 2);
+        result2 += distance(from, to, 1_000_000);
     }
 
     println!("11\t{result1:<20}\t{result2:<20}");
