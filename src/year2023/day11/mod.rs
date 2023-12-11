@@ -8,15 +8,19 @@ pub fn solve() -> (usize, usize)
     let empty_rows = empty_space(&input);
     let empty_cols = empty_space(&input.transpose());
 
+    let get_expansion = |empty: &[usize], high: &usize, low: &usize, expansion: usize| {
+        high - low + empty.iter().filter(|&i| i > low && i < high).count() * (expansion - 1)
+    };
+
     let distance = |a: (usize, usize), b: (usize, usize), expansion: usize| {
         let x = match a.0 < b.0 {
-            true => b.0 - a.0 + empty_cols.iter().filter(|&i| i > &a.0 && i < &b.0).count() * (expansion - 1),
-            false => a.0 - b.0 + empty_cols.iter().filter(|&i| i > &b.0 && i < &a.0).count() * (expansion - 1),
+            true => get_expansion(&empty_cols, &b.0, &a.0, expansion),
+            false => get_expansion(&empty_cols, &a.0, &b.0, expansion),
         };
 
         let y = match a.1 < b.1 {
-            true => b.1 - a.1 + empty_rows.iter().filter(|&i| i > &a.1 && i < &b.1).count() * (expansion - 1),
-            false => a.1 - b.1 + empty_rows.iter().filter(|&i| i > &b.1 && i < &a.1).count() * (expansion - 1),
+            true => get_expansion(&empty_rows, &b.1, &a.1, expansion),
+            false => get_expansion(&empty_rows, &a.1, &b.1, expansion),
         };
 
         x + y
