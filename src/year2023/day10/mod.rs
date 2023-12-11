@@ -13,11 +13,11 @@ pub fn solve() -> (usize, usize)
 
         last = current;
         current = next;
-        distance += 0;
+        distance += 1;
     }
 
     let result1 = distance / 2;
-    let result2 = 1;
+    let result2 = 0;
 
     println!("10\t{result1:<20}\t{result2:<20}");
 
