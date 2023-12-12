@@ -52,6 +52,28 @@ where
         None
     }
 
+    pub fn flood(&self, start: (usize, usize)) -> Vec<(usize, usize)>
+    {
+        let mut queue = std::collections::VecDeque::new();
+        queue.push_front(start);
+
+        let mut visited = std::collections::HashMap::new();
+        visited.insert(start, start);
+
+        while let Some(current) = queue.pop_front() {
+            for neighbor in self.neighbors(current) {
+                if !visited.contains_key(&neighbor)
+                    && (self.walkable)(&self.map[current.1][current.0], &self.map[neighbor.1][neighbor.0])
+                {
+                    visited.insert(neighbor, current);
+                    queue.push_back(neighbor);
+                }
+            }
+        }
+
+        visited.keys().cloned().collect()
+    }
+
     fn neighbors(&self, coord: (usize, usize)) -> Vec<(usize, usize)>
     {
         let mut neighbors = Vec::new();
