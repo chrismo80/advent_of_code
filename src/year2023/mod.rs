@@ -9,6 +9,7 @@ pub mod day08;
 pub mod day09;
 pub mod day10;
 pub mod day11;
+pub mod day13;
 
 static YEAR: &str = "2023";
 
@@ -27,6 +28,7 @@ pub fn run_all()
     day09::solve();
     day10::solve();
     day11::solve();
+    day13::solve();
 
     super::end(start, YEAR);
 }
