@@ -5,17 +5,40 @@ pub trait Matrix
     type Item;
 
     fn transpose(&self) -> Vec<Vec<Self::Item>>;
+    fn rotate(&self) -> Vec<Vec<Self::Item>>;
+    fn flip(&self) -> Vec<Vec<Self::Item>>;
+    fn print(&self);
 }
 
-impl<T: Copy> Matrix for Vec<Vec<T>>
+impl<T: Copy + std::fmt::Display> Matrix for Vec<Vec<T>>
 {
     type Item = T;
 
     fn transpose(&self) -> Vec<Vec<T>>
     {
-        (0..self[0].len())
-            .map(|i| self.iter().map(|inner| inner[i]).collect())
-            .collect()
+        (0..self[0].len()).map(|i| self.iter().map(|col| col[i]).collect()).collect()
+    }
+
+    fn rotate(&self) -> Vec<Vec<T>>
+    {
+        self.transpose().iter().map(|r| r.iter().rev().copied().collect()).collect()
+    }
+
+    fn flip(&self) -> Vec<Vec<T>>
+    {
+        self.iter().map(|r| r.iter().rev().copied().collect()).collect()
+    }
+
+    fn print(&self)
+    {
+        println!();
+        for row in self {
+            for item in row {
+                print!("{}", item);
+            }
+            println!();
+        }
+        println!();
     }
 }
 pub trait Parser
