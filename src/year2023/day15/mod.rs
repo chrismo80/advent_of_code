@@ -24,9 +24,9 @@ pub fn solve() -> (usize, usize)
 
     let mut result2 = 0;
 
-    for (b, box_item) in boxes.iter().enumerate() {
-        for l in 0..box_item.len() {
-            let label = box_item.keys().nth(l).unwrap();
+    for (b, _box) in boxes.iter().enumerate() {
+        for l in 0.._box.len() {
+            let label = _box.keys().nth(l).unwrap();
             result2 += (b + 1) * (l + 1) * boxes[b][label] as usize;
         }
     }
